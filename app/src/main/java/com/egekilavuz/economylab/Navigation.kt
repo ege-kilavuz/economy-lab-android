@@ -105,7 +105,10 @@ fun AppNavigation() {
             composable(BottomTab.Simulations.route) {
                 SimulationsScreen(
                     content = content,
-                    onSimulationClick = { id -> navController.navigate("simulation/$id") }
+                    onSimulationClick = { id ->
+                        if (id.startsWith("sim-")) navController.navigate("simulation/$id")
+                        else navController.navigate("minigame/$id")
+                    }
                 )
             }
             composable(BottomTab.Game.route) {
@@ -120,6 +123,17 @@ fun AppNavigation() {
                     "sim-2" -> CentralBankSimulation { navController.popBackStack() }
                     "sim-3" -> BESSimulation { navController.popBackStack() }
                     else -> InflationSimulation { navController.popBackStack() }
+                }
+            }
+            composable(route = "minigame/{gameId}") { entry ->
+                val gid = entry.arguments?.getString("gameId") ?: ""
+                when (gid) {
+                    "candle" -> CandleGame { navController.popBackStack() }
+                    "card-escape" -> CardEscapeGame { navController.popBackStack() }
+                    "budget-tetris" -> BudgetTetrisGame { navController.popBackStack() }
+                    "news-noise" -> NewsNoiseGame { navController.popBackStack() }
+                    "scam-radar" -> ScamRadarGame { navController.popBackStack() }
+                    else -> CandleGame { navController.popBackStack() }
                 }
             }
             composable(
