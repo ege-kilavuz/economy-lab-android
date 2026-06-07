@@ -326,7 +326,7 @@ fun ItemCard(
                         },
                         modifier = Modifier.fillMaxWidth().padding(top = 4.dp)
                     ) {
-                        Icon(Icons.Default.OpenInNew, contentDescription = null, modifier = Modifier.size(16.dp))
+                        Icon(Icons.Default.OpenInNew, contentDescription = "Video ac", modifier = Modifier.size(16.dp))
                         Spacer(Modifier.width(4.dp))
                         Text("🎥 ${video.title}", fontSize = 12.sp)
                     }
