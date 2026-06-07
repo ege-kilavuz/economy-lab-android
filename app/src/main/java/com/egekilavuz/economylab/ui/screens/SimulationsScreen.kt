@@ -56,7 +56,7 @@ fun SimulationsScreen(
         Spacer(Modifier.height(12.dp))
 
         LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
+            columns = GridCells.Fixed(2),
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(max = 400.dp),

@@ -50,7 +50,7 @@ fun HomeScreen(
         Spacer(Modifier.height(12.dp))
 
         LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
+            columns = GridCells.Fixed(2),
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(max = 1000.dp),

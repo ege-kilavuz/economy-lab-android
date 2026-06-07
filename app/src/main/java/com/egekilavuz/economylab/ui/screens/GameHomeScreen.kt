@@ -109,12 +109,17 @@ fun GameHomeScreen(
 
 @Composable
 fun StatChips(g: GameState) {
-    Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
-        StatChip("Gün ${minOf(g.day, 30)}/30", MaterialTheme.colorScheme.primary)
-        StatChip("Nakit: ${g.cash}", MaterialTheme.colorScheme.secondary)
-        StatChip("Kart: ${g.cardDebt}", if (g.cardDebt > 0) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant)
-        StatChip("Dolap: ${g.fridge}%", when { g.fridge < 30 -> MaterialTheme.colorScheme.error; g.fridge < 50 -> MaterialTheme.colorScheme.tertiary; else -> MaterialTheme.colorScheme.secondary })
-        StatChip("Moral: ${g.mood}%", when { g.mood < 45 -> MaterialTheme.colorScheme.error; else -> MaterialTheme.colorScheme.secondary })
+    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            StatChip("Gün ${minOf(g.day, 30)}/30", MaterialTheme.colorScheme.primary)
+            StatChip("Nakit: ${g.cash}", MaterialTheme.colorScheme.secondary)
+            StatChip("Kart: ${g.cardDebt}", if (g.cardDebt > 0) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            StatChip("Dolap: ${g.fridge}%", when { g.fridge < 30 -> MaterialTheme.colorScheme.error; g.fridge < 50 -> MaterialTheme.colorScheme.tertiary; else -> MaterialTheme.colorScheme.secondary })
+            StatChip("Moral: ${g.mood}%", when { g.mood < 45 -> MaterialTheme.colorScheme.error; else -> MaterialTheme.colorScheme.secondary })
+            StatChip("Enerji: ${g.energy}%", MaterialTheme.colorScheme.primary)
+        }
     }
 }
 
@@ -122,7 +127,7 @@ fun StatChips(g: GameState) {
 fun StatChip(text: String, color: androidx.compose.ui.graphics.Color) {
     SuggestionChip(
         onClick = {},
-        label = { Text(text, fontSize = 10.sp, fontWeight = FontWeight.Bold) },
+        label = { Text(text, fontSize = 12.sp, fontWeight = FontWeight.Bold) },
         colors = SuggestionChipDefaults.suggestionChipColors(
             containerColor = color.copy(alpha = 0.15f),
             labelColor = color
@@ -151,47 +156,33 @@ fun StatusTips(g: GameState) {
 @Composable
 fun AppIconGrid(g: GameState, vm: GameViewModel, onNavigate: (String) -> Unit) {
     val apps = listOf(
-        "Banka" to "🏦",
-        "Market" to "🛒",
-        "Yatırım" to "📈",
-        "Haber" to "📰",
-        "Kart" to "💳",
-        "Bütçe" to "🧩",
-        "Gürültü" to "📢",
-        "Radar" to "🛡️",
-        "Borsa" to "📊",
-        "Uyku" to "🌙",
+        Triple("Banka", "bank", "🏦"),
+        Triple("Market", "market", "🛒"),
+        Triple("Yatırım", "invest", "📈"),
+        Triple("Haber", "news", "📰"),
+        Triple("Kart", "card-escape", "💳"),
+        Triple("Bütçe", "budget-tetris", "🧩"),
+        Triple("Gürültü", "news-noise", "📢"),
+        Triple("Radar", "scam-radar", "🛡️"),
+        Triple("Borsa", "candle", "📊"),
+        Triple("Uyku", "sleep", "🌙"),
     )
 
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
+    // 5 columns, 2 rows
+    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         apps.chunked(5).forEach { row ->
-            Column(
-                modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                row.forEach { (label, emoji) ->
-                    val screen = when (label) {
-                        "Banka" -> "bank"
-                        "Market" -> "market"
-                        "Yatırım" -> "invest"
-                        "Haber" -> "news"
-                        "Kart" -> "card-escape"
-                        "Bütçe" -> "budget-tetris"
-                        "Gürültü" -> "news-noise"
-                        "Radar" -> "scam-radar"
-                        "Borsa" -> "candle"
-                        "Uyku" -> "sleep"
-                        else -> "home"
-                    }
+                row.forEach { (label, screenId, emoji) ->
                     AppIconButton(
                         emoji = emoji,
                         label = label,
+                        modifier = Modifier.weight(1f),
                         onClick = {
-                            if (screen == "sleep") vm.advanceDay()
-                            else onNavigate(screen)
+                            if (screenId == "sleep") vm.advanceDay()
+                            else onNavigate(screenId)
                         }
                     )
                 }
@@ -201,21 +192,21 @@ fun AppIconGrid(g: GameState, vm: GameViewModel, onNavigate: (String) -> Unit) {
 }
 
 @Composable
-fun AppIconButton(emoji: String, label: String, onClick: () -> Unit) {
+fun AppIconButton(emoji: String, label: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
     OutlinedCard(
         onClick = onClick,
-        modifier = Modifier.padding(2.dp),
+        modifier = modifier.padding(2.dp),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.outlinedCardColors(
             containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.3f)
         )
     ) {
         Column(
-            modifier = Modifier.padding(6.dp).widthIn(min = 60.dp),
+            modifier = Modifier.padding(8.dp).fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(emoji, fontSize = 22.sp)
-            Text(label, fontSize = 9.sp, maxLines = 1, color = MaterialTheme.colorScheme.onSurface)
+            Text(emoji, fontSize = 28.sp)
+            Text(label, fontSize = 11.sp, maxLines = 1, color = MaterialTheme.colorScheme.onSurface)
         }
     }
 }
