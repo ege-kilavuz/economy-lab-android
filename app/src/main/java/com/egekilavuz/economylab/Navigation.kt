@@ -1,10 +1,5 @@
 package com.egekilavuz.economylab
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Computer
@@ -12,14 +7,12 @@ import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.SportsEsports
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
@@ -29,11 +22,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.egekilavuz.economylab.data.ContentLoader
+import com.egekilavuz.economylab.data.GameViewModel
 import com.egekilavuz.economylab.data.ProgressManager
-import com.egekilavuz.economylab.ui.screens.CategoryScreen
-import com.egekilavuz.economylab.ui.screens.HomeScreen
-import com.egekilavuz.economylab.ui.screens.QuizScreen
-import com.egekilavuz.economylab.ui.screens.SimulationsScreen
+import com.egekilavuz.economylab.ui.screens.*
 
 sealed class BottomTab(val route: String, val title: String, val icon: ImageVector) {
     data object Learn : BottomTab("learn", "Öğren", Icons.Default.School)
@@ -107,9 +98,7 @@ fun AppNavigation() {
             composable(BottomTab.Learn.route) {
                 HomeScreen(
                     content = content,
-                    onCategoryClick = { id ->
-                        navController.navigate("category/$id")
-                    }
+                    onCategoryClick = { navController.navigate("category/$it") }
                 )
             }
             composable(BottomTab.Simulations.route) {
@@ -119,7 +108,8 @@ fun AppNavigation() {
                 )
             }
             composable(BottomTab.Game.route) {
-                GamePlaceholder()
+                val gameVm: GameViewModel = viewModel()
+                GameScreen(gameVm)
             }
             composable(
                 route = ROUTE_CATEGORY,
@@ -132,9 +122,7 @@ fun AppNavigation() {
                         category = category,
                         progressManager = progressManager,
                         onBack = { navController.popBackStack() },
-                        onStartQuiz = {
-                            navController.navigate("quiz/$catId")
-                        }
+                        onStartQuiz = { navController.navigate("quiz/$catId") }
                     )
                 }
             }
@@ -153,30 +141,6 @@ fun AppNavigation() {
                     )
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun GamePlaceholder() {
-    Box(
-        modifier = Modifier.fillMaxSize().padding(32.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                text = "🎮 30 Gün Ekonomi",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onBackground,
-                textAlign = TextAlign.Center
-            )
-            Spacer(Modifier.height(8.dp))
-            Text(
-                text = "Yakında...",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
         }
     }
 }

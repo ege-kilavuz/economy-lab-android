@@ -1,0 +1,249 @@
+package com.egekilavuz.economylab.ui.screens
+
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.egekilavuz.economylab.data.*
+
+@Composable
+fun GameHomeScreen(
+    vm: GameViewModel,
+    onNavigate: (String) -> Unit
+) {
+    val g = vm.gameState
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 12.dp)
+    ) {
+        Spacer(Modifier.height(8.dp))
+
+        // Header info
+        Text(
+            text = "Mod: ${difficultyLabel(g.difficulty)} · Faiz: ${g.policyRate / 100f}% · Puan: ${g.points}",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Spacer(Modifier.height(8.dp))
+
+        // Stat chips
+        StatChips(g)
+
+        Spacer(Modifier.height(12.dp))
+
+        // Daily quest card
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.6f)
+            )
+        ) {
+            Column(modifier = Modifier.padding(14.dp)) {
+                Text("Günlük Görev", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                Spacer(Modifier.height(4.dp))
+                Text(g.quest.title, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+                Text("İpucu: ${g.quest.hint}", style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                if (g.quest.done) {
+                    Text("✅ +10", style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.secondary)
+                }
+                if (g.mood < 45) {
+                    Spacer(Modifier.height(4.dp))
+                    Text("Moral düşük: olumsuz olay ihtimali artar",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.error)
+                }
+
+                Spacer(Modifier.height(8.dp))
+                Divider()
+
+                // Nakit/Kart switch
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text("Ödeme: ", style = MaterialTheme.typography.bodySmall)
+                    SuggestionChip(
+                        onClick = { vm.toggleUseCard(false) },
+                        label = { Text("Nakit", fontSize = 11.sp, fontWeight = if (!vm.useCard) FontWeight.Bold else FontWeight.Normal) }
+                    )
+                    Spacer(Modifier.width(4.dp))
+                    SuggestionChip(
+                        onClick = { vm.toggleUseCard(true) },
+                        label = { Text("Kart", fontSize = 11.sp, fontWeight = if (vm.useCard) FontWeight.Bold else FontWeight.Normal) }
+                    )
+                }
+
+                // Debt/Fridge status
+                Spacer(Modifier.height(6.dp))
+                StatusTips(g)
+            }
+        }
+
+        Spacer(Modifier.height(12.dp))
+
+        // App icons grid
+        Text("Uygulamalar", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+        Spacer(Modifier.height(8.dp))
+
+        AppIconGrid(g, vm, onNavigate)
+
+        Spacer(Modifier.height(12.dp))
+
+        // Difficulty selector
+        DifficultySelector(g, vm)
+
+        Spacer(Modifier.height(24.dp))
+    }
+}
+
+@Composable
+fun StatChips(g: GameState) {
+    Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
+        StatChip("Gün ${minOf(g.day, 30)}/30", MaterialTheme.colorScheme.primary)
+        StatChip("Nakit: ${g.cash}", MaterialTheme.colorScheme.secondary)
+        StatChip("Kart: ${g.cardDebt}", if (g.cardDebt > 0) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant)
+        StatChip("Dolap: ${g.fridge}%", when { g.fridge < 30 -> MaterialTheme.colorScheme.error; g.fridge < 50 -> MaterialTheme.colorScheme.tertiary; else -> MaterialTheme.colorScheme.secondary })
+        StatChip("Moral: ${g.mood}%", when { g.mood < 45 -> MaterialTheme.colorScheme.error; else -> MaterialTheme.colorScheme.secondary })
+    }
+}
+
+@Composable
+fun StatChip(text: String, color: androidx.compose.ui.graphics.Color) {
+    SuggestionChip(
+        onClick = {},
+        label = { Text(text, fontSize = 10.sp, fontWeight = FontWeight.Bold) },
+        colors = SuggestionChipDefaults.suggestionChipColors(
+            containerColor = color.copy(alpha = 0.15f),
+            labelColor = color
+        )
+    )
+}
+
+@Composable
+fun StatusTips(g: GameState) {
+    Column {
+        val cardTip = when {
+            g.cardDebt >= 10000 -> "Kart borcu ciddi baskı oluşturuyor"
+            g.cardDebt > 0 -> "Kart borcun var; ay sonu faiz baskısını azaltmak için ödeme yap"
+            else -> "Kart borcun kontrol altında"
+        }
+        val fridgeTip = when {
+            g.fridge <= 30 -> "Dolap seviyesi düşük. Market yapmalısın!"
+            g.fridge <= 55 -> "Dolap orta seviyede; plansız birkaç gün daha geçerse zorlayabilir"
+            else -> "Dolap tarafı rahat"
+        }
+        Text(cardTip, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(fridgeTip, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+}
+
+@Composable
+fun AppIconGrid(g: GameState, vm: GameViewModel, onNavigate: (String) -> Unit) {
+    val apps = listOf(
+        "Banka" to "🏦",
+        "Market" to "🛒",
+        "Yatırım" to "📈",
+        "Haber" to "📰",
+        "Kart" to "💳",
+        "Bütçe" to "🧩",
+        "Gürültü" to "📢",
+        "Radar" to "🛡️",
+        "Borsa" to "📊",
+        "Uyku" to "🌙",
+    )
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        apps.chunked(5).forEach { row ->
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                row.forEach { (label, emoji) ->
+                    val screen = when (label) {
+                        "Banka" -> "bank"
+                        "Market" -> "market"
+                        "Yatırım" -> "invest"
+                        "Haber" -> "news"
+                        "Kart" -> "card-escape"
+                        "Bütçe" -> "budget-tetris"
+                        "Gürültü" -> "news-noise"
+                        "Radar" -> "scam-radar"
+                        "Borsa" -> "candle"
+                        "Uyku" -> "sleep"
+                        else -> "home"
+                    }
+                    AppIconButton(
+                        emoji = emoji,
+                        label = label,
+                        onClick = {
+                            if (screen == "sleep") vm.advanceDay()
+                            else onNavigate(screen)
+                        }
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun AppIconButton(emoji: String, label: String, onClick: () -> Unit) {
+    OutlinedCard(
+        onClick = onClick,
+        modifier = Modifier.padding(2.dp),
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.outlinedCardColors(
+            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.3f)
+        )
+    ) {
+        Column(
+            modifier = Modifier.padding(6.dp).widthIn(min = 60.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(emoji, fontSize = 22.sp)
+            Text(label, fontSize = 9.sp, maxLines = 1, color = MaterialTheme.colorScheme.onSurface)
+        }
+    }
+}
+
+@Composable
+fun DifficultySelector(g: GameState, vm: GameViewModel) {
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f)
+        )
+    ) {
+        Column(modifier = Modifier.padding(12.dp)) {
+            Text("Zorluk", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+            Spacer(Modifier.height(8.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Difficulty.entries.forEach { d ->
+                    FilterChip(
+                        selected = g.difficulty == d,
+                        onClick = { vm.setDifficulty(d) },
+                        label = { Text(difficultyLabel(d)) }
+                    )
+                }
+            }
+            Spacer(Modifier.height(8.dp))
+            OutlinedButton(onClick = { vm.startNewGame(g.difficulty) }, modifier = Modifier.fillMaxWidth()) {
+                Text("Sıfırla")
+            }
+        }
+    }
+}
