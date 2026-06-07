@@ -176,7 +176,7 @@ fun GameEndScreen(vm: GameViewModel, onBack: () -> Unit) {
                             }
                         }
                         if (unlocked.size > 8) {
-                            Text("+${unlocked.size - 8} daha...", style = MaterialTheme.typography.bodySmall,
+                            Text("+${unlocked.size - 8} daha...", style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
@@ -201,7 +201,7 @@ fun GameEndScreen(vm: GameViewModel, onBack: () -> Unit) {
                     val displayScores = if (showGlobal && globalScores != null) globalScores!! else localScores
 
                     if (displayScores.isEmpty()) {
-                        Text("Henüz skor yok. İlk sen ol!", style = MaterialTheme.typography.bodySmall,
+                        Text("Henüz skor yok. İlk sen ol!", style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant)
                     } else {
                         displayScores.take(10).forEachIndexed { idx, entry ->
@@ -213,8 +213,8 @@ fun GameEndScreen(vm: GameViewModel, onBack: () -> Unit) {
                                 Text(medal, fontSize = MaterialTheme.typography.bodySmall.fontSize)
                                 Spacer(Modifier.width(4.dp))
                                 Text("${entry.badge} ${entry.name}", modifier = Modifier.weight(1f),
-                                    style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.SemiBold)
-                                Text("${entry.score}", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Bold,
+                                    style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+                                Text("${entry.score}", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold,
                                     color = MaterialTheme.colorScheme.primary)
                             }
                             if (idx < displayScores.take(10).lastIndex) {

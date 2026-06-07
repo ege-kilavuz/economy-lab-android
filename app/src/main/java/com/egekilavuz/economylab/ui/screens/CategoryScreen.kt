@@ -72,7 +72,7 @@ fun CategoryScreen(
             // Subtitle
             Text(
                 text = category.subtitle,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
@@ -108,7 +108,7 @@ fun CategoryScreen(
                     Spacer(Modifier.height(4.dp))
                     Text(
                         text = "${progress.totalPct}%",
-                        style = MaterialTheme.typography.labelSmall,
+                        style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Bold,
                         color = barColor
                     )
@@ -116,17 +116,17 @@ fun CategoryScreen(
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         SuggestionChip(
                             onClick = {},
-                            label = { Text("📖 ${progress.readCount}/${category.items.size}", fontSize = 11.sp) }
+                            label = { Text("📖 ${progress.readCount}/${category.items.size}", fontSize = 13.sp) }
                         )
                         if (progress.quizDone) {
                             SuggestionChip(
                                 onClick = {},
-                                label = { Text("✅ Test tamam", fontSize = 11.sp) }
+                                label = { Text("✅ Test tamam", fontSize = 13.sp) }
                             )
                         } else {
                             SuggestionChip(
                                 onClick = {},
-                                label = { Text("🧪 ${category.quiz.size} soru", fontSize = 11.sp) }
+                                label = { Text("🧪 ${category.quiz.size} soru", fontSize = 13.sp) }
                             )
                         }
                     }
@@ -172,7 +172,7 @@ fun CategoryScreen(
                         )
                         Text(
                             text = "${category.quiz.size} soru · Öğrendiklerini pekiştir",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -231,7 +231,7 @@ fun ItemCard(
                 item.body.forEach { paragraph ->
                     Text(
                         text = paragraph,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(vertical = 4.dp)
                     )
@@ -249,13 +249,13 @@ fun ItemCard(
                         Column(modifier = Modifier.padding(10.dp)) {
                             Text(
                                 text = "🎯 Mini Senaryo",
-                                style = MaterialTheme.typography.labelSmall,
+                                style = MaterialTheme.typography.bodySmall,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.primary
                             )
                             Text(
                                 text = scenario,
-                                style = MaterialTheme.typography.bodySmall,
+                                style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
@@ -273,7 +273,7 @@ fun ItemCard(
                     ) {
                         Text(
                             text = "• ${qa.q} — ${qa.a}",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(10.dp)
                         )
@@ -291,7 +291,7 @@ fun ItemCard(
                     ) {
                         Text(
                             text = "💡 $tip",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.padding(10.dp)
                         )
@@ -309,7 +309,7 @@ fun ItemCard(
                     ) {
                         Text(
                             text = "⚠️ $warning",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.error,
                             modifier = Modifier.padding(10.dp)
                         )
@@ -328,7 +328,7 @@ fun ItemCard(
                     ) {
                         Icon(Icons.Default.OpenInNew, contentDescription = "Video ac", modifier = Modifier.size(16.dp))
                         Spacer(Modifier.width(4.dp))
-                        Text("🎥 ${video.title}", fontSize = 12.sp)
+                        Text("🎥 ${video.title}", fontSize = 14.sp)
                     }
                 }
             }

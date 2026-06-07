@@ -75,7 +75,7 @@ fun AppNavigation() {
                                 Text(
                                     text = tab.title,
                                     fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
-                                    fontSize = 11.sp
+                                    fontSize = 13.sp
                                 )
                             },
                             colors = NavigationBarItemDefaults.colors(

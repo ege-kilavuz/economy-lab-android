@@ -89,7 +89,7 @@ fun InflationSimulation(onBack: () -> Unit) {
                 Column(modifier = Modifier.padding(14.dp)) {
                     Text("Enflasyon Laboratuvarı", fontWeight = FontWeight.Bold)
                     Text("Sepet fiyatı artarken maaş aynı kalırsa, alım gücü nasıl değişir?",
-                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
 
@@ -112,7 +112,7 @@ fun InflationSimulation(onBack: () -> Unit) {
                         style = MaterialTheme.typography.bodySmall)
                     Text("Reel maaş endeksi ~ %${realEnd.roundToInt()} seviyesinde.",
                         style = MaterialTheme.typography.bodySmall)
-                    Text(feeling, style = MaterialTheme.typography.bodySmall,
+                    Text(feeling, style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
@@ -201,7 +201,7 @@ fun SliderCard(label: String, value: Int, rangeStart: Int, rangeEnd: Int, step: 
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f))
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
-            Text("$label: $value", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.SemiBold)
+            Text("$label: $value", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
             Slider(
                 value = value.toFloat(),
                 onValueChange = { onChange((it / step).roundToInt() * step) },

@@ -221,7 +221,7 @@ fun QuizScreen(
                         Spacer(Modifier.height(4.dp))
                         Text(
                             text = question.explain,
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }

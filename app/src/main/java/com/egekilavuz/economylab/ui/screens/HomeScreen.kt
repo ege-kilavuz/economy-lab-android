@@ -36,14 +36,14 @@ fun HomeScreen(
 
         Text(
             text = "📚 Öğren",
-            style = MaterialTheme.typography.titleSmall,
+            style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onBackground
         )
         Spacer(Modifier.height(4.dp))
         Text(
             text = "Finansal okuryazarlık için 12 konu başlığı",
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
@@ -98,18 +98,18 @@ fun CategoryCard(
             Text(text = icon, fontSize = 22.sp, modifier = Modifier.padding(bottom = 4.dp))
             Text(
                 text = title,
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.bodySmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.Center,
-                lineHeight = 14.sp
+                lineHeight = 16.sp
             )
             if (subtitle.isNotEmpty()) {
                 Text(
                     text = subtitle,
-                    style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp),
+                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,

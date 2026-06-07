@@ -59,7 +59,7 @@ fun CentralBankSimulation(onBack: () -> Unit) {
         Column(Modifier.fillMaxSize().padding(innerPadding).padding(horizontal = 12.dp).verticalScroll(rememberScrollState())) {
             Spacer(Modifier.height(8.dp))
             Text("Faiz, enflasyon, işsizlik ve büyüme arasındaki dengeyi gözlemle.",
-                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             SliderCard("Politika faizi (%)", policyRate, 5, 80, 1) { policyRate = it }
             SliderCard("Arz şoku", supplyShock, -10, 20, 1) { supplyShock = it }
             SliderCard("Talep ısısı", demand, -10, 10, 1) { demand = it }

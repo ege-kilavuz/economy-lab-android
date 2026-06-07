@@ -86,9 +86,9 @@ private fun SimCardGrid(icon: String, title: String, subtitle: String, color: Co
         shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = color)) {
         Column(Modifier.fillMaxSize().padding(8.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
             Text(icon, fontSize = 24.sp)
-            Text(title, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface,
+            Text(title, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 2, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center)
-            Text(subtitle, style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp), color = MaterialTheme.colorScheme.onSurfaceVariant,
+            Text(subtitle, style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp), color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center)
         }
     }
