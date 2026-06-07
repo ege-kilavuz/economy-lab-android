@@ -331,6 +331,32 @@
           "correctIndex": 3,
           "explain": "İstekler, ertelenebilir/keyfi harcamalardır.",
           "relatedItemIds": null
+        },
+        {
+          "id": "bu6",
+          "q": "Acil durum fonu ne kadar olmalı?",
+          "choices": [
+            "3-6 aylık gider",
+            "1 aylık gider",
+            "1 yıllık gider",
+            "Hiç gerekmez"
+          ],
+          "correctIndex": 0,
+          "explain": "Uzmanlar 3-6 aylık gider kadar acil fon önerir.",
+          "relatedItemIds": []
+        },
+        {
+          "id": "bu7",
+          "q": "Bütçe yaparken ilk adım nedir?",
+          "choices": [
+            "Gelir ve giderleri kaydetmek",
+            "Hemen yatırım yapmak",
+            "Kredi çekmek",
+            "Sigorta yaptırmak"
+          ],
+          "correctIndex": 0,
+          "explain": "Bütçe yapmanın ilk adımı ne kazandığını ve ne harcadığını bilmektir.",
+          "relatedItemIds": []
         }
       ]
     },
@@ -865,6 +891,58 @@
           "correctIndex": 0,
           "explain": "Ekonomi küçülür, üretim düşer.",
           "relatedItemIds": null
+        },
+        {
+          "id": "m3",
+          "q": "Merkez Bankası faiz indirirse ne olabilir?",
+          "choices": [
+            "Krediler ucuzlar, tüketim artabilir",
+            "Herkes zengin olur",
+            "Enflasyon düşer",
+            "Borsa kapanır"
+          ],
+          "correctIndex": 0,
+          "explain": "Faiz indirimi kredi maliyetini düşürür, talebi canlandırır.",
+          "relatedItemIds": []
+        },
+        {
+          "id": "m4",
+          "q": "GSYİH nedir?",
+          "choices": [
+            "Gayri Safi Yurt İçi Hasıla",
+            "Günlük Satış Yüzdesi İstatistiği",
+            "Gelir ve Sermaye Yönetimi",
+            "Genel Sektör Yatırımı"
+          ],
+          "correctIndex": 0,
+          "explain": "GSYİH bir ülkedeki toplam üretim değerini ölçer.",
+          "relatedItemIds": []
+        },
+        {
+          "id": "m5",
+          "q": "Deflasyon neden zararlı olabilir?",
+          "choices": [
+            "İnsanlar harcamayı erteler, talep düşer",
+            "Her şey ucuzlar iyi olur",
+            "Maaşlar artar",
+            "İhracat patlar"
+          ],
+          "correctIndex": 0,
+          "explain": "Deflasyon bekleyen tüketici harcamayı erteler, talep düşer, üretim azalır.",
+          "relatedItemIds": []
+        },
+        {
+          "id": "m6",
+          "q": "Para politikasını kim belirler?",
+          "choices": [
+            "Merkez Bankası",
+            "Hazine",
+            "Cumhurbaşkanı",
+            "Bankalar"
+          ],
+          "correctIndex": 0,
+          "explain": "Para politikası merkez bankası tarafından yürütülür.",
+          "relatedItemIds": []
         }
       ]
     },
@@ -967,6 +1045,45 @@
           "correctIndex": 1,
           "explain": "Başkalarını kör taklit etmek sürü psikolojisidir.",
           "relatedItemIds": null
+        },
+        {
+          "id": "ps5",
+          "q": "Anchoring (çıpalama) ne demektir?",
+          "choices": [
+            "İlk duyulan fiyata takılıp kalmak",
+            "Limana demirlemek",
+            "Çok al-sat yapmak",
+            "Stop-loss koymak"
+          ],
+          "correctIndex": 0,
+          "explain": "Çıpalama, yatırımcının ilk gördüğü fiyatı referans almasıdır.",
+          "relatedItemIds": []
+        },
+        {
+          "id": "ps6",
+          "q": "Konfirmasyon biası nedir?",
+          "choices": [
+            "Sadece kendi fikrini destekleyen bilgileri aramak",
+            "Her bilgiye şüpheyle yaklaşmak",
+            "Sürekli al-sat yapmak",
+            "Risk almamak"
+          ],
+          "correctIndex": 0,
+          "explain": "İnsanlar kendi inançlarını doğrulayan bilgileri arar, zıt bilgileri görmezden gelir.",
+          "relatedItemIds": []
+        },
+        {
+          "id": "ps7",
+          "q": "Overconfidence (aşırı güven) hangi riski doğurur?",
+          "choices": [
+            "Gereğinden fazla risk alma",
+            "Hiç yatırım yapmama",
+            "Sadece tahvil alma",
+            "Fazla çeşitlendirme"
+          ],
+          "correctIndex": 0,
+          "explain": "Aşırı güvenli yatırımcılar gereğinden fazla risk alır ve sık işlem yapar.",
+          "relatedItemIds": []
         }
       ]
     },
@@ -1705,6 +1822,32 @@
           "correctIndex": 2,
           "explain": "Kart kullanımı ödeme planı ve harcama takibiyle sağlıklı yönetilir.",
           "relatedItemIds": null
+        },
+        {
+          "id": "sf6",
+          "q": "İki faktörlü doğrulama (2FA) ne işe yarar?",
+          "choices": [
+            "Hesabı ekstra güvenlik katmanıyla korur",
+            "İnterneti hızlandırır",
+            "Reklamları engeller",
+            "Kredi notunu artırır"
+          ],
+          "correctIndex": 0,
+          "explain": "2FA, şifrenin yanında ikinci bir doğrulama yöntemi ekler.",
+          "relatedItemIds": []
+        },
+        {
+          "id": "sf7",
+          "q": "Phishing saldırısı nedir?",
+          "choices": [
+            "Sahte e-posta/SMS ile kişisel bilgileri çalma",
+            "Balık tutma sporu",
+            "Virüs bulaştırma",
+            " Şifre kırma"
+          ],
+          "correctIndex": 0,
+          "explain": "Phishing, kendini güvenilir kaynak gibi göstererek bilgi çalmaya çalışır.",
+          "relatedItemIds": []
         }
       ]
     }
