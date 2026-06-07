@@ -25,6 +25,7 @@ import com.egekilavuz.economylab.data.ContentLoader
 import com.egekilavuz.economylab.data.GameViewModel
 import com.egekilavuz.economylab.data.ProgressManager
 import com.egekilavuz.economylab.ui.screens.*
+import com.egekilavuz.economylab.ui.simulations.*
 
 sealed class BottomTab(val route: String, val title: String, val icon: ImageVector) {
     data object Learn : BottomTab("learn", "Öğren", Icons.Default.School)
@@ -104,12 +105,22 @@ fun AppNavigation() {
             composable(BottomTab.Simulations.route) {
                 SimulationsScreen(
                     content = content,
-                    onSimulationClick = { /* TODO */ }
+                    onSimulationClick = { id -> navController.navigate("simulation/$id") }
                 )
             }
             composable(BottomTab.Game.route) {
                 val gameVm: GameViewModel = viewModel()
                 GameScreen(gameVm)
+            }
+            composable(route = "simulation/{simId}") { entry ->
+                val simId = entry.arguments?.getString("simId") ?: ""
+                when (simId) {
+                    "sim-0" -> InflationSimulation { navController.popBackStack() }
+                    "sim-1" -> InterestSimulation { navController.popBackStack() }
+                    "sim-2" -> CentralBankSimulation { navController.popBackStack() }
+                    "sim-3" -> BESSimulation { navController.popBackStack() }
+                    else -> InflationSimulation { navController.popBackStack() }
+                }
             }
             composable(
                 route = ROUTE_CATEGORY,
