@@ -18,10 +18,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.egekilavuz.economylab.data.LEARN_CATEGORIES
+import com.egekilavuz.economylab.data.JsonCategory
+import com.egekilavuz.economylab.data.JsonContent
 
 @Composable
-fun HomeScreen(onCategoryClick: (String) -> Unit) {
+fun HomeScreen(
+    content: JsonContent,
+    onCategoryClick: (String) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -38,14 +42,13 @@ fun HomeScreen(onCategoryClick: (String) -> Unit) {
         )
         Spacer(Modifier.height(4.dp))
         Text(
-            text = "Finansal okuryazarlık için konu başlıkları",
+            text = "Finansal okuryazarlık için 12 konu başlığı",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Spacer(Modifier.height(12.dp))
 
-        // ─── 3-Column Grid ───
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),
             modifier = Modifier
@@ -55,8 +58,8 @@ fun HomeScreen(onCategoryClick: (String) -> Unit) {
             verticalArrangement = Arrangement.spacedBy(8.dp),
             userScrollEnabled = false
         ) {
-            items(LEARN_CATEGORIES) { cat ->
-                LearnCategoryCard(
+            items(content.categories) { cat ->
+                CategoryCard(
                     icon = cat.icon,
                     title = cat.title,
                     subtitle = cat.subtitle,
@@ -70,7 +73,7 @@ fun HomeScreen(onCategoryClick: (String) -> Unit) {
 }
 
 @Composable
-fun LearnCategoryCard(
+fun CategoryCard(
     icon: String,
     title: String,
     subtitle: String,

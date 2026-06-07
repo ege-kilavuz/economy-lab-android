@@ -13,23 +13,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.egekilavuz.economylab.data.SIMULATIONS
+import com.egekilavuz.economylab.data.JsonContent
 
-private val simColors = listOf(
-    Color(0x2660A5FA), // mavi
-    Color(0x2622C55E), // yeşil
-    Color(0x26FACC15), // sarı
-    Color(0x26A855F7), // mor
+private val simDefs = listOf(
+    Triple("🏛️", "Enflasyon Lab", "6dk · Başlangıç"),
+    Triple("💹", "Faiz & Kredi", "5dk · Başlangıç"),
+    Triple("📊", "MB Karar Odası", "6dk · Orta"),
+    Triple("💰", "BES", "5dk · Başlangıç"),
 )
 
 @Composable
-fun SimulationsScreen(onSimulationClick: (String) -> Unit) {
+fun SimulationsScreen(
+    content: JsonContent,
+    onSimulationClick: (String) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -62,14 +64,20 @@ fun SimulationsScreen(onSimulationClick: (String) -> Unit) {
             verticalArrangement = Arrangement.spacedBy(8.dp),
             userScrollEnabled = false
         ) {
-            items(SIMULATIONS) { sim ->
-                val colorIndex = SIMULATIONS.indexOf(sim) % simColors.size
-                SimulationCard(
-                    icon = sim.icon,
-                    title = sim.title,
-                    subtitle = "${sim.minutes}dk · ${sim.level}",
-                    containerColor = simColors[colorIndex],
-                    onClick = { onSimulationClick(sim.id) }
+            items(simDefs) { sim ->
+                val index = simDefs.indexOf(sim)
+                val colors = listOf(
+                    androidx.compose.ui.graphics.Color(0x2660A5FA),
+                    androidx.compose.ui.graphics.Color(0x2622C55E),
+                    androidx.compose.ui.graphics.Color(0x26FACC15),
+                    androidx.compose.ui.graphics.Color(0x26A855F7),
+                )
+                SimCard(
+                    icon = sim.first,
+                    title = sim.second,
+                    subtitle = sim.third,
+                    containerColor = colors[index],
+                    onClick = { onSimulationClick("sim-$index") }
                 )
             }
         }
@@ -79,11 +87,11 @@ fun SimulationsScreen(onSimulationClick: (String) -> Unit) {
 }
 
 @Composable
-fun SimulationCard(
+fun SimCard(
     icon: String,
     title: String,
     subtitle: String,
-    containerColor: Color,
+    containerColor: androidx.compose.ui.graphics.Color,
     onClick: () -> Unit
 ) {
     Card(

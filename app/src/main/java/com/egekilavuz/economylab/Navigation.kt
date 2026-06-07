@@ -14,18 +14,25 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.egekilavuz.economylab.data.ContentLoader
+import com.egekilavuz.economylab.data.ProgressManager
+import com.egekilavuz.economylab.ui.screens.CategoryScreen
 import com.egekilavuz.economylab.ui.screens.HomeScreen
+import com.egekilavuz.economylab.ui.screens.QuizScreen
 import com.egekilavuz.economylab.ui.screens.SimulationsScreen
 
 sealed class BottomTab(val route: String, val title: String, val icon: ImageVector) {
@@ -36,47 +43,58 @@ sealed class BottomTab(val route: String, val title: String, val icon: ImageVect
 
 private val tabs = listOf(BottomTab.Learn, BottomTab.Simulations, BottomTab.Game)
 
+const val ROUTE_CATEGORY = "category/{catId}"
+const val ROUTE_QUIZ = "quiz/{catId}"
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
+    val context = LocalContext.current
+    val progressManager = remember { ProgressManager(context) }
+    val content = remember { ContentLoader.load(context) }
+
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+    val isSubScreen = currentDestination?.route?.startsWith("category") == true ||
+                      currentDestination?.route?.startsWith("quiz") == true
 
     Scaffold(
         bottomBar = {
-            NavigationBar(
-                containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f)
-            ) {
-                tabs.forEach { tab ->
-                    val selected = currentDestination?.hierarchy?.any { it.route == tab.route } == true
-                    NavigationBarItem(
-                        selected = selected,
-                        onClick = {
-                            navController.navigate(tab.route) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
+            if (!isSubScreen) {
+                NavigationBar(
+                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f)
+                ) {
+                    tabs.forEach { tab ->
+                        val selected = currentDestination?.hierarchy?.any { it.route == tab.route } == true
+                        NavigationBarItem(
+                            selected = selected,
+                            onClick = {
+                                navController.navigate(tab.route) {
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
                                 }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        },
-                        icon = { Icon(imageVector = tab.icon, contentDescription = tab.title) },
-                        label = {
-                            Text(
-                                text = tab.title,
-                                fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
-                                fontSize = 11.sp
+                            },
+                            icon = { Icon(imageVector = tab.icon, contentDescription = tab.title) },
+                            label = {
+                                Text(
+                                    text = tab.title,
+                                    fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                                    fontSize = 11.sp
+                                )
+                            },
+                            colors = NavigationBarItemDefaults.colors(
+                                selectedIconColor = MaterialTheme.colorScheme.primary,
+                                selectedTextColor = MaterialTheme.colorScheme.primary,
+                                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
                             )
-                        },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = MaterialTheme.colorScheme.primary,
-                            selectedTextColor = MaterialTheme.colorScheme.primary,
-                            unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
                         )
-                    )
+                    }
                 }
             }
         }
@@ -88,16 +106,52 @@ fun AppNavigation() {
         ) {
             composable(BottomTab.Learn.route) {
                 HomeScreen(
-                    onCategoryClick = { /* TODO */ }
+                    content = content,
+                    onCategoryClick = { id ->
+                        navController.navigate("category/$id")
+                    }
                 )
             }
             composable(BottomTab.Simulations.route) {
                 SimulationsScreen(
+                    content = content,
                     onSimulationClick = { /* TODO */ }
                 )
             }
             composable(BottomTab.Game.route) {
                 GamePlaceholder()
+            }
+            composable(
+                route = ROUTE_CATEGORY,
+                arguments = listOf(navArgument("catId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val catId = backStackEntry.arguments?.getString("catId") ?: return@composable
+                val category = content.categories.find { it.id == catId }
+                if (category != null) {
+                    CategoryScreen(
+                        category = category,
+                        progressManager = progressManager,
+                        onBack = { navController.popBackStack() },
+                        onStartQuiz = {
+                            navController.navigate("quiz/$catId")
+                        }
+                    )
+                }
+            }
+            composable(
+                route = ROUTE_QUIZ,
+                arguments = listOf(navArgument("catId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val catId = backStackEntry.arguments?.getString("catId") ?: return@composable
+                val category = content.categories.find { it.id == catId }
+                if (category != null) {
+                    QuizScreen(
+                        category = category,
+                        progressManager = progressManager,
+                        onBack = { navController.popBackStack() },
+                        onComplete = { navController.popBackStack() }
+                    )
+                }
             }
         }
     }

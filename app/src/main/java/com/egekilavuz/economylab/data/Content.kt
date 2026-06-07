@@ -1,39 +1,62 @@
 package com.egekilavuz.economylab.data
 
-data class LearnCategory(
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+
+@Serializable
+data class JsonCategory(
     val id: String,
     val title: String,
     val subtitle: String,
-    val icon: String
+    val icon: String,
+    val items: List<JsonItem>,
+    val quiz: List<JsonQuestion>
 )
 
-val LEARN_CATEGORIES = listOf(
-    LearnCategory("basics", "Temeller", "Finansal okuryazarlık 101", "📖"),
-    LearnCategory("budget", "Bütçe", "Bütçe yönetimi ve 50/30/20", "📊"),
-    LearnCategory("credit", "Kredi", "Kredi kartı ve borç yönetimi", "💳"),
-    LearnCategory("investing", "Yatırım", "Yatırım araçları ve risk", "📈"),
-    LearnCategory("stock-patterns", "Borsa", "Hisse senedi ve piyasalar", "🏛️"),
-    LearnCategory("macro", "Makro", "Enflasyon, faiz, MB politikaları", "🌍"),
-    LearnCategory("tax", "Vergi", "KDV, gelir vergisi, stopaj", "🧾"),
-    LearnCategory("credit-score", "Kredi Notu", "Kredi notu ve önemi", "⭐"),
-    LearnCategory("crypto", "Kripto", "Blokzincir ve dijital varlıklar", "₿"),
-    LearnCategory("global-economy", "Küresel", "Dünya ekonomisi ve ticaret", "🌐"),
-    LearnCategory("psychology", "Psikoloji", "Yatırım psikolojisi ve davranış", "🧠"),
-    LearnCategory("safety", "Güvenlik", "Dolandırıcılık ve güvenlik", "🛡️"),
-)
-
-data class SimulationMeta(
+@Serializable
+data class JsonItem(
     val id: String,
     val title: String,
     val short: String,
-    val minutes: Int,
-    val level: String,
-    val icon: String
+    val body: List<String>,
+    val scenario: String? = null,
+    val qa: List<JsonQA>? = null,
+    val tips: List<String>? = null,
+    val warning: String? = null,
+    val video: JsonVideo? = null
 )
 
-val SIMULATIONS = listOf(
-    SimulationMeta("inflation", "Enflasyon Lab", "Alım gücü ve enflasyon", 6, "Başlangıç", "📈"),
-    SimulationMeta("interest", "Faiz & Kredi", "Borç ve birikim karşılaştırması", 5, "Başlangıç", "💹"),
-    SimulationMeta("central", "MB Karar Odası", "Faiz-enflasyon dengesi", 6, "Orta", "🏛️"),
-    SimulationMeta("bes", "BES", "Devlet katkılı emeklilik", 5, "Başlangıç", "💰"),
+@Serializable
+data class JsonQA(val q: String, val a: String)
+
+@Serializable
+data class JsonVideo(val title: String, val url: String, val source: String? = null)
+
+@Serializable
+data class JsonQuestion(
+    val id: String,
+    val q: String,
+    val choices: List<String>,
+    val correctIndex: Int,
+    val explain: String,
+    val relatedItemIds: List<String>? = null
+)
+
+@Serializable
+data class JsonScenario(
+    val id: String,
+    val title: String,
+    val categoryId: String,
+    val summary: String,
+    val prompt: String,
+    val check: List<String>,
+    val recommendedModule: String
+)
+
+@Serializable
+data class JsonContent(
+    val categories: List<JsonCategory>,
+    val scenarios: List<JsonScenario> = emptyList(),
+    val learningPath: List<String> = emptyList()
 )
