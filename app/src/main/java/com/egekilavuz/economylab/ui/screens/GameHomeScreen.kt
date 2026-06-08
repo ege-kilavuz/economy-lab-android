@@ -168,12 +168,12 @@ fun AppIconGrid(g: GameState, vm: GameViewModel, onNavigate: (String) -> Unit) {
         Triple("Uyku", "sleep", "🌙"),
     )
 
-    // 5 columns, 2 rows
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        apps.chunked(5).forEach { row ->
+    // 4 columns, 3 rows (touch hedefleri daha geniş)
+    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        apps.chunked(4).forEach { row ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 row.forEach { (label, screenId, emoji) ->
                     AppIconButton(
@@ -195,7 +195,7 @@ fun AppIconGrid(g: GameState, vm: GameViewModel, onNavigate: (String) -> Unit) {
 fun AppIconButton(emoji: String, label: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
     OutlinedCard(
         onClick = onClick,
-        modifier = modifier.padding(2.dp),
+        modifier = modifier.padding(2.dp).aspectRatio(1f),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.outlinedCardColors(
             containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.3f)
