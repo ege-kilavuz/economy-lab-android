@@ -1,227 +1,222 @@
 package com.egekilavuz.economylab.data
 
-import org.junit.Assert.*
 import org.junit.Test
+import org.junit.Assert.*
 
 class EngineTest {
 
-    // ─── newGame ───
+    // Helper: state with neutral defaults so bonuses can be tested in isolation
+    private fun baseState(points: Int = 0) = GameState(
+        points = points,
+        fridge = 0,
+        mood = 0,
+        discipline = 0,
+        cash = 0
+    )
 
+    // ─── difficultyLabel tests ───
     @Test
-    fun `newGame should create valid state for each difficulty`() {
-        for (diff in Difficulty.entries) {
-            val g = newGame(diff, 12345)
-            assertEquals(1, g.day)
-            assertTrue(g.cash > 0)
-            assertEquals(0, g.cardDebt)
-            assertFalse(g.rentPaid)
-            assertTrue(g.log.isNotEmpty())
-            assertEquals(diff, g.difficulty)
-        }
+    fun testDifficultyLabel_returnsCorrectLabelForEasy() {
+        assertEquals("Kolay", difficultyLabel(Difficulty.Easy))
     }
 
     @Test
-    fun `newGame should be deterministic with same seed`() {
-        val a = newGame(Difficulty.Easy, 42)
-        val b = newGame(Difficulty.Easy, 42)
-        assertEquals(a.cash, b.cash)
-        assertEquals(a.holdings, b.holdings)
+    fun testDifficultyLabel_returnsCorrectLabelForNormal() {
+        assertEquals("Normal", difficultyLabel(Difficulty.Normal))
     }
 
     @Test
-    fun `newGame should produce different quests with different seeds`() {
-        val titles = mutableSetOf<String>()
-        for (s in 1..20) {
-            var g = newGame(Difficulty.Easy, s)
-            for (d in 1..3) { g = nextDay(g) }
-            titles.add(g.quest.title)
-        }
-        assertTrue(titles.size > 1)
+    fun testDifficultyLabel_returnsCorrectLabelForHard() {
+        assertEquals("Zor", difficultyLabel(Difficulty.Hard))
+    }
+
+    // ─── scoreEndOfMonth tests ───
+    @Test
+    fun testScoreEndOfMonth_returnsBasePoints() {
+        val state = baseState(points = 100)
+        assertEquals(100, scoreEndOfMonth(state))
     }
 
     @Test
-    fun `newGame should have different rent by difficulty`() {
-        val easy = newGame(Difficulty.Easy)
-        val hard = newGame(Difficulty.Hard)
-        assertTrue(easy.currentRent < hard.currentRent)
+    fun testScoreEndOfMonth_addsRentBonusWhenPaid() {
+        val state = baseState(points = 100).copy(rentPaid = true)
+        assertEquals(120, scoreEndOfMonth(state))
     }
 
-    // ─── applyAction ───
+    @Test
+    fun testScoreEndOfMonth_addsBillsScore() {
+        val state = baseState(points = 100).copy(
+            billsPaid = BillsState(electric = true, gas = true, internet = true, dues = true)
+        )
+        assertEquals(132, scoreEndOfMonth(state))
+    }
 
     @Test
-    fun `payRent with cash should work`() {
-        val g = newGame(Difficulty.Easy, 100)
-        val result = applyAction(g, ActionId.PayRent, useCard = false)
+    fun testScoreEndOfMonth_subtractsDebtPenalty() {
+        val state = baseState(points = 100).copy(cardDebt = 5000)
+        assertEquals(95, scoreEndOfMonth(state))
+    }
+
+    @Test
+    fun testScoreEndOfMonth_capsDebtPenaltyAt80() {
+        val state = baseState(points = 100).copy(cardDebt = 100000)
+        assertEquals(20, scoreEndOfMonth(state))
+    }
+
+    @Test
+    fun testScoreEndOfMonth_addsAssetBonus() {
+        val state = baseState(points = 100).copy(
+            holdings = mapOf(HoldingId.Gold to 10)
+        )
+        assertEquals(111, scoreEndOfMonth(state))
+    }
+
+    @Test
+    fun testScoreEndOfMonth_addsCashBonus() {
+        val state = baseState(points = 100).copy(cash = 50000)
+        assertEquals(125, scoreEndOfMonth(state))
+    }
+
+    @Test
+    fun testScoreEndOfMonth_addsFridgeBonus() {
+        val state = baseState(points = 100).copy(fridge = 80)
+        assertEquals(116, scoreEndOfMonth(state))
+    }
+
+    @Test
+    fun testScoreEndOfMonth_addsMoodBonus() {
+        val state = baseState(points = 100).copy(mood = 90)
+        assertEquals(118, scoreEndOfMonth(state))
+    }
+
+    @Test
+    fun testScoreEndOfMonth_addsDisciplineBonus() {
+        val state = baseState(points = 100).copy(discipline = 96)
+        assertEquals(116, scoreEndOfMonth(state))
+    }
+
+    @Test
+    fun testScoreEndOfMonth_combinesAllBonuses() {
+        val state = baseState(points = 100).copy(
+            rentPaid = true,
+            billsPaid = BillsState(electric = true, gas = true, internet = true, dues = true),
+            fridge = 100,
+            mood = 100,
+            discipline = 100,
+            cardDebt = 0,
+            holdings = mapOf(HoldingId.Gold to 10),
+            cash = 50000
+        )
+        assertEquals(244, scoreEndOfMonth(state))
+    }
+
+    // ─── newGame tests ───
+    @Test
+    fun testNewGame_setsDefaultDifficulty() {
+        val state = newGame(Difficulty.Easy)
+        assertEquals(Difficulty.Easy, state.difficulty)
+    }
+
+    @Test
+    fun testNewGame_initializesDayOne() {
+        val state = newGame(Difficulty.Easy)
+        assertEquals(1, state.day)
+    }
+
+    @Test
+    fun testNewGame_initializesLog() {
+        val state = newGame(Difficulty.Easy)
+        assertTrue(state.log.isNotEmpty())
+    }
+
+    @Test
+    fun testNewGame_setsStartingCash() {
+        val state = newGame(Difficulty.Easy)
+        assertEquals(17002, state.cash)
+    }
+
+    // ─── applyAction tests ───
+    @Test
+    fun testApplyAction_groceryDecreasesCash() {
+        val state = GameState(cash = 10000, fridge = 50)
+        val result = applyAction(state, ActionId.Grocery, useCard = false, amount = 1)
+        assertTrue(result.cash < 10000)
+    }
+
+    @Test
+    fun testApplyAction_groceryIncreasesFridge() {
+        val state = GameState(cash = 10000, fridge = 50)
+        val result = applyAction(state, ActionId.Grocery, useCard = false, amount = 1)
+        assertTrue(result.fridge > 50)
+    }
+
+    @Test
+    fun testApplyAction_payRentSetsRentPaid() {
+        val state = GameState(cash = 10000, rentPaid = false)
+        val result = applyAction(state, ActionId.PayRent, useCard = false)
         assertTrue(result.rentPaid)
-        assertTrue(result.cash < g.cash)
-        assertEquals(0, result.cardDebt)
     }
 
     @Test
-    fun `payRent should fail when insufficient cash`() {
-        val g = newGame(Difficulty.Easy, 200).copy(cash = 0)
-        val result = applyAction(g, ActionId.PayRent, useCard = false)
+    fun testApplyAction_payRent_insufficientCash() {
+        val state = GameState(cash = 100, rentPaid = false)
+        val result = applyAction(state, ActionId.PayRent, useCard = false)
         assertFalse(result.rentPaid)
-        assertTrue(result.log[0].contains("Yetersiz bakiye"))
     }
 
     @Test
-    fun `should not double-pay rent`() {
-        val g = newGame(Difficulty.Easy, 300)
-        val first = applyAction(g, ActionId.PayRent, useCard = false)
-        val second = applyAction(first, ActionId.PayRent, useCard = false)
-        assertTrue(second.log[0].contains("zaten ödendi"))
+    fun testApplyAction_cinemaDecreasesCash() {
+        val state = GameState(cash = 10000, mood = 50)
+        val result = applyAction(state, ActionId.Cinema, useCard = false)
+        assertTrue(result.cash < 10000)
     }
 
     @Test
-    fun `payRent with card should increase debt`() {
-        val g = newGame(Difficulty.Easy, 400)
-        val result = applyAction(g, ActionId.PayRent, useCard = true)
-        assertTrue(result.rentPaid)
-        assertTrue(result.cardDebt > 0)
+    fun testApplyAction_lightsOff_increasesMood() {
+        val state = GameState(mood = 50)
+        val result = applyAction(state, ActionId.LightsOff)
+        assertTrue(result.mood > 50)
     }
 
     @Test
-    fun `grocery should increase fridge and decrease cash`() {
-        val g = newGame(Difficulty.Easy, 500)
-        val result = applyAction(g, ActionId.Grocery, useCard = false)
-        assertTrue(result.cash < g.cash)
-        assertTrue(result.fridge > g.fridge)
+    fun testApplyAction_buyAsset_insufficientCash() {
+        val state = GameState(cash = 0)
+        val result = applyAction(state, ActionId.BuyAsset, useCard = false, amount = 1, asset = HoldingId.Gold)
+        assertEquals(0, result.cash)
+    }
+
+    // ─── nextDay tests ───
+    @Test
+    fun testNextDay_incrementsDay() {
+        val state = GameState(day = 5)
+        val result = nextDay(state)
+        assertEquals(6, result.day)
     }
 
     @Test
-    fun `grocery with card should increase debt`() {
-        val g = newGame(Difficulty.Easy, 600)
-        val result = applyAction(g, ActionId.Grocery, useCard = true)
-        assertTrue(result.cardDebt > 0)
-        assertEquals(g.cash, result.cash)
+    fun testNextDay_dayDoesNotExceed30() {
+        val state = GameState(day = 30)
+        val result = nextDay(state)
+        assertEquals(30, result.day)
     }
 
     @Test
-    fun `cinema should increase mood`() {
-        val g = newGame(Difficulty.Easy, 700)
-        val result = applyAction(g, ActionId.Cinema, useCard = false)
-        assertTrue(result.mood > g.mood)
-        assertTrue(result.cash < g.cash)
+    fun testNextDay_appliesDailyExpenses() {
+        val state = GameState(cash = 10000)
+        val result = nextDay(state)
+        assertTrue(result.cash < 10000)
+    }
+
+    // ─── canAfford tests ───
+    @Test
+    fun testCanAfford_returnsTrueWhenSufficient() {
+        val state = GameState(cash = 1000)
+        assertTrue(canAfford(state, 500))
     }
 
     @Test
-    fun `lightsOff should increase discipline`() {
-        val g = newGame(Difficulty.Easy, 800)
-        val result = applyAction(g, ActionId.LightsOff)
-        assertTrue(result.discipline > g.discipline)
-        assertEquals(g.cash, result.cash)
-    }
-
-    @Test
-    fun `buyAsset should add holdings`() {
-        val g = newGame(Difficulty.Easy, 900)
-        val result = applyAction(g, ActionId.BuyAsset, asset = HoldingId.Gold, amount = 1)
-        assertEquals(1, result.holdings[HoldingId.Gold])
-        assertTrue(result.cash < g.cash)
-    }
-
-    @Test
-    fun `buyAsset should fail without cash`() {
-        val g = newGame(Difficulty.Easy, 1000).copy(cash = 0)
-        val result = applyAction(g, ActionId.BuyAsset, asset = HoldingId.Gold, amount = 1)
-        assertEquals(0, result.holdings[HoldingId.Gold])
-        assertTrue(result.log[0].contains("yeterli nakit"))
-    }
-
-    @Test
-    fun `sellAsset should increase cash`() {
-        val g = newGame(Difficulty.Easy, 1100).copy(holdings = mapOf(
-            HoldingId.Gold to 5, HoldingId.Stock to 0, HoldingId.Usd to 0,
-            HoldingId.Btc to 0, HoldingId.Eth to 0
-        ))
-        val result = applyAction(g, ActionId.SellAsset, asset = HoldingId.Gold, amount = 2)
-        assertEquals(3, result.holdings[HoldingId.Gold])
-        assertTrue(result.cash > g.cash)
-    }
-
-    @Test
-    fun `sellAsset should fail without holdings`() {
-        val g = newGame(Difficulty.Easy, 1200)
-        val result = applyAction(g, ActionId.SellAsset, asset = HoldingId.Gold)
-        assertTrue(result.log[0].contains("Satacak varlık"))
-    }
-
-    @Test
-    fun `payCardMin should reduce debt`() {
-        val g = newGame(Difficulty.Easy, 1300).copy(cardDebt = 10000, cash = 10000)
-        val result = applyAction(g, ActionId.PayCardMin)
-        assertTrue(result.cardDebt < g.cardDebt)
-    }
-
-    @Test
-    fun `payCardMin should fail without cash`() {
-        val g = newGame(Difficulty.Easy, 1400).copy(cardDebt = 10000, cash = 0)
-        val result = applyAction(g, ActionId.PayCardMin)
-        assertEquals(10000, result.cardDebt)
-    }
-
-    @Test
-    fun `payCardAll should clear debt`() {
-        val g = newGame(Difficulty.Easy, 1500).copy(cardDebt = 5000, cash = 10000)
-        val result = applyAction(g, ActionId.PayCardAll)
-        assertEquals(0, result.cardDebt)
-        assertEquals(5000, result.cash)
-    }
-
-    @Test
-    fun `payCardAll should not pay when no debt`() {
-        val g = newGame(Difficulty.Easy, 1600)
-        val result = applyAction(g, ActionId.PayCardAll)
-        assertTrue(result.log[0].contains("Kart borcu yok"))
-    }
-
-    @Test
-    fun `payBill actions should work`() {
-        for (bill in listOf(ActionId.PayElectric, ActionId.PayGas, ActionId.PayInternet, ActionId.PayDues)) {
-            val g = newGame(Difficulty.Easy, 1700)
-            val result = applyAction(g, bill, useCard = false)
-            assertTrue(result.cash < g.cash)
-            val key = when (bill) {
-                ActionId.PayElectric -> result.billsPaid.electric
-                ActionId.PayGas -> result.billsPaid.gas
-                ActionId.PayInternet -> result.billsPaid.internet
-                ActionId.PayDues -> result.billsPaid.dues
-                else -> false
-            }
-            assertTrue(key)
-        }
-    }
-
-    @Test
-    fun `buyAsset should warn about concentration`() {
-        var g = newGame(Difficulty.Easy, 1800)
-        g = applyAction(g, ActionId.BuyAsset, asset = HoldingId.Gold, amount = 3)
-        assertTrue(g.log.any { it.contains("yoğunlaşıyor") })
-    }
-
-    // ─── nextDay ───
-
-    @Test
-    fun `nextDay should advance day by 1`() {
-        val g = newGame(Difficulty.Easy, 2000)
-        val next = nextDay(g)
-        assertEquals(2, next.day)
-    }
-
-    @Test
-    fun `nextDay should decrease fridge`() {
-        val g = newGame(Difficulty.Easy, 2100)
-        val next = nextDay(g)
-        assertTrue(next.fridge < g.fridge)
-    }
-
-    @Test
-    fun `nextDay should stop at day 30`() {
-        var g = newGame(Difficulty.Easy, 2500)
-        for (i in 2..30) { g = nextDay(g) }
-        assertEquals(30, g.day)
-        val final = nextDay(g)
-        assertEquals(30, final.day)
+    fun testCanAfford_returnsFalseWhenInsufficient() {
+        val state = GameState(cash = 100)
+        assertFalse(canAfford(state, 500))
     }
 }

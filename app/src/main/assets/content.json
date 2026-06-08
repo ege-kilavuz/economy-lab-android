@@ -418,6 +418,45 @@
           "relatedItemIds": [
             "50-30-20"
           ]
+        },
+        {
+          "id": "bg11",
+          "q": "Gelir-gider takibi için en etkili araç hangisidir?",
+          "choices": [
+            "Tahmin etmek",
+            "Bütçe uygulaması veya defter",
+            "Bankadan bakmak",
+            "Sadece kredi kartı ekstresi"
+          ],
+          "correctIndex": 1,
+          "explain": "Düzenli kayıt, harcama alışkanlıklarını görmenin en iyi yoludur.",
+          "relatedItemIds": null
+        },
+        {
+          "id": "bg12",
+          "q": "Bütçelemede 50/30/20 kuralındaki %30 hangi harcamaları kapsar?",
+          "choices": [
+            "Zorunlu harcamalar",
+            "İsteğe bağlı harcamalar",
+            "Yatırım ve birikim",
+            "Faturalar"
+          ],
+          "correctIndex": 1,
+          "explain": "%30 isteğe bağlı harcamalar (eğlence, tatil vb.) içindir.",
+          "relatedItemIds": null
+        },
+        {
+          "id": "bg13",
+          "q": "Acil durum fonu nerede tutulmalıdır?",
+          "choices": [
+            "Kripto parada",
+            "Kolay erişilebilir bir hesapta",
+            "Evde nakitte",
+            "Uzun vadeli yatırımda"
+          ],
+          "correctIndex": 1,
+          "explain": "Acil durum fonu hızlıca nakde çevrilebilir olmalıdır.",
+          "relatedItemIds": null
         }
       ]
     },
@@ -647,6 +686,45 @@
           "correctIndex": 0,
           "explain": "Kefil borcun yasal sorumlusudur, notun da düşer.",
           "relatedItemIds": null
+        },
+        {
+          "id": "cr11",
+          "q": "Kredi faiz oranı yüksekse kredi çekmek ne zaman mantıklıdır?",
+          "choices": [
+            "Hiçbir zaman",
+            "Acil sağlık durumunda",
+            "Sadece tatil için",
+            "Her zaman"
+          ],
+          "correctIndex": 1,
+          "explain": "Acil sağlık gibi zorunlu durumlar dışında yüksek faizli kredi risklidir.",
+          "relatedItemIds": null
+        },
+        {
+          "id": "cr12",
+          "q": "Kredi kartı ekstresindeki asgari tutar ne anlama gelir?",
+          "choices": [
+            "Ödenmesi gereken minimum miktar",
+            "Her ay ödenen miktar",
+            "Kart limiti",
+            "Birikmiş faiz"
+          ],
+          "correctIndex": 0,
+          "explain": "Asgari tutar, gecikmeye düşmemek için ödenmesi gereken en düşük miktardır.",
+          "relatedItemIds": null
+        },
+        {
+          "id": "cr13",
+          "q": "Kredi yapılandırması ne zaman düşünülmelidir?",
+          "choices": [
+            "Ödemeler düzenliyken",
+            "Ödeme güçlüğü çekildiğinde",
+            "Hiçbir zaman",
+            "Sadece faizler düşükken"
+          ],
+          "correctIndex": 1,
+          "explain": "Ödeme güçlüğünde yapılandırma, borcu daha yönetilebilir hale getirebilir.",
+          "relatedItemIds": null
         }
       ]
     },
@@ -874,6 +952,45 @@
           ],
           "correctIndex": 2,
           "explain": "Hisse başı temettü / hisse fiyatı x 100.",
+          "relatedItemIds": null
+        },
+        {
+          "id": "in9",
+          "q": "Passive yatırım ile aktif yatırım arasındaki temel fark nedir?",
+          "choices": [
+            "Passifte daha az işlem yapılır",
+            "Aktifte daha az kazanılır",
+            "Passifte risk yoktur",
+            "Aktifte vergi alınmaz"
+          ],
+          "correctIndex": 0,
+          "explain": "Pasif yatırım, endeks takibi gibi az işlem gerektirir; aktif yatırım sık al-sat içerir.",
+          "relatedItemIds": null
+        },
+        {
+          "id": "in10",
+          "q": "Ortalama TL maliyet (DCA) stratejisi nasıl çalışır?",
+          "choices": [
+            "Her ay aynı miktarda alım yapmak",
+            "Fiyat düşünce tüm parayı yatırmak",
+            "Sadece yükselişte almak",
+            "Fiyat takibi yapmamak"
+          ],
+          "correctIndex": 0,
+          "explain": "Belirli aralıklarla sabit miktar alarak piyasa zamanlaması riskini azaltırsınız.",
+          "relatedItemIds": null
+        },
+        {
+          "id": "in11",
+          "q": "Likidite ne anlama gelir?",
+          "choices": [
+            "Bir varlığın hızlıca nakde çevrilebilmesi",
+            "Yatırımın vergisi",
+            "Piyasanın büyüklüğü",
+            "Şirketin borcu"
+          ],
+          "correctIndex": 0,
+          "explain": "Likidite, bir varlığın değer kaybetmeden nakde çevrilme kolaylığıdır.",
           "relatedItemIds": null
         }
       ]
@@ -1351,6 +1468,45 @@
           "correctIndex": 3,
           "explain": "Ülkedeki toplam nihai mal ve hizmet değeridir.",
           "relatedItemIds": null
+        },
+        {
+          "id": "m11",
+          "q": "Merkez Bankası faiz artırınca ne olur?",
+          "choices": [
+            "Krediler ucuzlar",
+            "Tasarruf teşvik edilir",
+            "Enflasyon hızlanır",
+            "Dolar düşer"
+          ],
+          "correctIndex": 1,
+          "explain": "Faiz artışı tasarrufu cazip hale getirerek talebi yavaşlatır.",
+          "relatedItemIds": null
+        },
+        {
+          "id": "m12",
+          "q": "Birim işgücü maliyeti hangi durumda artar?",
+          "choices": [
+            "Üretim artarsa",
+            "Maaşlar enflasyonun altında kalırsa",
+            "Maaşlar üretimden hızlı artarsa",
+            "Vergiler düşerse"
+          ],
+          "correctIndex": 2,
+          "explain": "Maaşlar verimlilikten hızlı artarsa, birim işgücü maliyeti yükselir.",
+          "relatedItemIds": null
+        },
+        {
+          "id": "m13",
+          "q": "GSYH'nin hesaplanmasında hangi yöntem kullanılmaz?",
+          "choices": [
+            "Harcama yöntemi",
+            "Gelir yöntemi",
+            "Üretim yöntemi",
+            "Tasarruf yöntemi"
+          ],
+          "correctIndex": 3,
+          "explain": "GSYH harcama, gelir ve üretim yöntemleriyle hesaplanır.",
+          "relatedItemIds": null
         }
       ]
     },
@@ -1809,6 +1965,45 @@
           "relatedItemIds": [
             "kdv"
           ]
+        },
+        {
+          "id": "t11",
+          "q": "Kira geliri için hangi durumda beyanname verilir?",
+          "choices": [
+            "Gelir ne olursa olsun",
+            "İstisna tutarını aşan gelirde",
+            "Sadece ticari mülkte",
+            "Beyanname gerekmez"
+          ],
+          "correctIndex": 1,
+          "explain": "Belirli bir istisna tutarını aşan kira gelirleri için beyanname verilmelidir.",
+          "relatedItemIds": null
+        },
+        {
+          "id": "t12",
+          "q": "KDV iadesi kimlere yapılır?",
+          "choices": [
+            "Tüm tüketicilere",
+            "İhracatçılara ve bazı işletmelere",
+            "Sadece şirketlere",
+            "Hiçbir zaman"
+          ],
+          "correctIndex": 1,
+          "explain": "İhracatçılar ve bazı sektörler KDV iadesi alabilir.",
+          "relatedItemIds": null
+        },
+        {
+          "id": "t13",
+          "q": "Vergi dilimlerinin amacı nedir?",
+          "choices": [
+            "Herkesi aynı oranda vergilendirmek",
+            "Gelir arttıkça daha yüksek oran uygulamak",
+            "Vergi toplamamak",
+            "Sadece düşük gelirlileri vergilendirmek"
+          ],
+          "correctIndex": 1,
+          "explain": "Artan oranlı vergi sistemi, gelir seviyesine göre adalet sağlar.",
+          "relatedItemIds": null
         }
       ]
     },

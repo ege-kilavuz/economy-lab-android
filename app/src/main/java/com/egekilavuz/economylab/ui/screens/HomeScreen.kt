@@ -27,7 +27,8 @@ import com.egekilavuz.economylab.data.JsonContent
 fun HomeScreen(
     content: JsonContent,
     onCategoryClick: (String) -> Unit,
-    onDailyQuizClick: (() -> Unit)? = null
+    onDailyQuizClick: (() -> Unit)? = null,
+    onStatsClick: (() -> Unit)? = null
 ) {
     Column(
         modifier = Modifier
@@ -43,6 +44,18 @@ fun HomeScreen(
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onBackground
         )
+        Spacer(Modifier.width(8.dp))
+        if (onStatsClick != null) {
+            FilledTonalButton(
+                onClick = onStatsClick,
+                modifier = Modifier.height(32.dp),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text("📊", fontSize = 14.sp)
+                Spacer(Modifier.width(4.dp))
+                Text("İstatistik", fontSize = 12.sp)
+            }
+        }
         Spacer(Modifier.height(4.dp))
         Text(
             text = "Finansal okuryazarlık için 12 konu başlığı",

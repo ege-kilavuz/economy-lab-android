@@ -9,3 +9,4 @@
 .cxx
 local.properties
 /android/app/build
+add_quiz_questions.py

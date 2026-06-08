@@ -1,5 +1,10 @@
 package com.egekilavuz.economylab.ui.screens
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,6 +17,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -59,6 +65,13 @@ fun GameEndScreen(vm: GameViewModel, onBack: () -> Unit) {
         if (gameXp > 0) {
             xpManager.addXp(gameXp)
         }
+        // Sound effects for achievements
+        if (unlocked.isNotEmpty()) {
+            SoundManager.getInstance(context).play(Sfx.BADGE)
+            SoundManager.getInstance(context).play(Sfx.LEVEL_UP)
+        } else {
+            SoundManager.getInstance(context).play(if (score > 0) Sfx.CORRECT else Sfx.WRONG)
+        }
     }
 
     Scaffold(
@@ -81,35 +94,37 @@ fun GameEndScreen(vm: GameViewModel, onBack: () -> Unit) {
         ) {
             Spacer(Modifier.height(8.dp))
 
-            // Score card
-            Card(
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.6f))
-            ) {
-                Column(
-                    modifier = Modifier.padding(20.dp).fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
+            // Score card with entrance animation
+            AnimatedVisibility(visible = true, enter = fadeIn(tween(400)) + slideInVertically(tween(400))) {
+                Card(
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.6f))
                 ) {
-                    Text("Skor", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    Spacer(Modifier.height(4.dp))
-                    Text("$score", style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.Black,
-                        color = when { score >= 70 -> MaterialTheme.colorScheme.secondary; score >= 40 -> MaterialTheme.colorScheme.primary; else -> MaterialTheme.colorScheme.error })
-                    Text("/ 200", style = MaterialTheme.typography.bodySmall)
-                    Spacer(Modifier.height(8.dp))
+                    Column(
+                        modifier = Modifier.padding(20.dp).fillMaxWidth().animateContentSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text("Skor", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Spacer(Modifier.height(4.dp))
+                        Text("$score", style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.Black,
+                            color = when { score >= 70 -> MaterialTheme.colorScheme.secondary; score >= 40 -> MaterialTheme.colorScheme.primary; else -> MaterialTheme.colorScheme.error })
+                        Text("/ 200", style = MaterialTheme.typography.bodySmall)
+                        Spacer(Modifier.height(8.dp))
 
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        StatChip2("Nakit: ${g.cash} TL", MaterialTheme.colorScheme.secondary)
-                        StatChip2("Kart: ${g.cardDebt} TL", if (g.cardDebt > 0) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.secondary)
-                        StatChip2("Dolap: ${g.fridge}%", MaterialTheme.colorScheme.primary)
-                    }
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            StatChip2("Nakit: ${g.cash} TL", MaterialTheme.colorScheme.secondary)
+                            StatChip2("Kart: ${g.cardDebt} TL", if (g.cardDebt > 0) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.secondary)
+                            StatChip2("Dolap: ${g.fridge}%", MaterialTheme.colorScheme.primary)
+                        }
 
-                    val eval = when {
-                        score >= 70 -> "Dengeyi kurdun! 💪"
-                        score >= 40 -> "Kıl payı, biraz daha dikkat 📈"
-                        else -> "Zorlu ay, tekrar dene 🔄"
+                        val eval = when {
+                            score >= 70 -> "Dengeyi kurdun! 💪"
+                            score >= 40 -> "Kıl payı, biraz daha dikkat 📈"
+                            else -> "Zorlu ay, tekrar dene 🔄"
+                        }
+                        Spacer(Modifier.height(8.dp))
+                        Text(eval, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
                     }
-                    Spacer(Modifier.height(8.dp))
-                    Text(eval, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
                 }
             }
 

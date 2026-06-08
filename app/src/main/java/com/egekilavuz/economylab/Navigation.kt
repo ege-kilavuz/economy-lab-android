@@ -25,6 +25,7 @@ import androidx.navigation.navArgument
 import com.egekilavuz.economylab.data.ContentLoader
 import com.egekilavuz.economylab.data.GameViewModel
 import com.egekilavuz.economylab.data.ProgressManager
+import com.egekilavuz.economylab.data.SoundManager
 import com.egekilavuz.economylab.data.XpManager
 import com.egekilavuz.economylab.ui.screens.*
 import com.egekilavuz.economylab.ui.simulations.*
@@ -48,6 +49,7 @@ fun AppNavigation() {
     val context = LocalContext.current
     val progressManager = remember { ProgressManager(context) }
     val xpManager = remember { XpManager(context) }
+    val soundManager = remember { SoundManager(context) }
     val content = remember { ContentLoader.load(context) }
 
     // Content update check
@@ -74,7 +76,8 @@ fun AppNavigation() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val isSubScreen = currentDestination?.route?.startsWith("category") == true ||
-                      currentDestination?.route?.startsWith("quiz") == true
+                      currentDestination?.route?.startsWith("quiz") == true ||
+                      currentDestination?.route == "stats"
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -128,7 +131,8 @@ fun AppNavigation() {
                     HomeScreen(
                         content = content,
                         onCategoryClick = { navController.navigate("category/$it") },
-                        onDailyQuizClick = { navController.navigate("daily-quiz") }
+                        onDailyQuizClick = { navController.navigate("daily-quiz") },
+                        onStatsClick = { navController.navigate("stats") }
                     )
                 }
             }
@@ -218,6 +222,15 @@ fun AppNavigation() {
                         onComplete = { navController.popBackStack() }
                     )
                 }
+            }
+            // Stats route
+            composable(route = "stats") {
+                StatsScreen(
+                    content = content,
+                    progressManager = progressManager,
+                    xpManager = xpManager,
+                    onBack = { navController.popBackStack() }
+                )
             }
         }
     }

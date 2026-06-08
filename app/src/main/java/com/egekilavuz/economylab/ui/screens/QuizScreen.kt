@@ -13,12 +13,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.egekilavuz.economylab.data.JsonCategory
 import com.egekilavuz.economylab.data.JsonQuestion
 import com.egekilavuz.economylab.data.ProgressManager
+import com.egekilavuz.economylab.data.Sfx
+import com.egekilavuz.economylab.data.SoundManager
 import com.egekilavuz.economylab.data.XpManager
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,6 +46,8 @@ fun QuizScreen(
     var isAnswered by remember { mutableStateOf(false) }
     var isFinished by remember { mutableStateOf(false) }
 
+    val context = LocalContext.current
+
     val currentQ: JsonQuestion? = if (currentIndex < questionOrder.size) {
         category.quiz[questionOrder[currentIndex]]
     } else null
@@ -53,6 +58,9 @@ fun QuizScreen(
         isAnswered = true
         if (choiceIndex == currentQ?.correctIndex) {
             correctCount++
+            SoundManager.getInstance(context).play(Sfx.CORRECT)
+        } else {
+            SoundManager.getInstance(context).play(Sfx.WRONG)
         }
     }
 
