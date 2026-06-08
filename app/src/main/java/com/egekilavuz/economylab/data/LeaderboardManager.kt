@@ -2,6 +2,10 @@ package com.egekilavuz.economylab.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -50,7 +54,7 @@ class LeaderboardManager(context: Context) {
     }
 
     fun fetchGlobalScores(onResult: (List<LeaderboardEntry>) -> Unit) {
-        Thread {
+        GlobalScope.launch(Dispatchers.IO) {
             try {
                 val url = URL("https://api.github.com/repos/ege-kilavuz/economy-lab-android/issues?state=all&per_page=50")
                 val conn = url.openConnection() as HttpURLConnection
@@ -59,8 +63,8 @@ class LeaderboardManager(context: Context) {
                 conn.connectTimeout = 8000
 
                 if (conn.responseCode != 200) {
-                    onResult(emptyList())
-                    return@Thread
+                    withContext(Dispatchers.Main) { onResult(emptyList()) }
+                    return@launch
                 }
 
                 val body = conn.inputStream.bufferedReader().readText()
@@ -83,15 +87,17 @@ class LeaderboardManager(context: Context) {
                     entries.add(LeaderboardEntry(name, score, difficulty, date, 0, badge))
                 }
 
-                onResult(entries.sortedByDescending { it.score }.take(50))
+                withContext(Dispatchers.Main) {
+                    onResult(entries.sortedByDescending { it.score }.take(50))
+                }
             } catch (_: Exception) {
-                onResult(emptyList())
+                withContext(Dispatchers.Main) { onResult(emptyList()) }
             }
-        }.start()
+        }
     }
 
     fun submitScoreToGitHub(entry: LeaderboardEntry, onResult: (Boolean) -> Unit) {
-        Thread {
+        GlobalScope.launch(Dispatchers.IO) {
             try {
                 val dateStr = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date())
                 val issueBody = "## Yeni Skor\n" +
@@ -114,11 +120,11 @@ class LeaderboardManager(context: Context) {
                 val payload = """{"title":"$title","body":${Json.encodeToString(issueBody)}}"""
                 conn.outputStream.write(payload.toByteArray())
 
-                onResult(conn.responseCode == 201)
+                withContext(Dispatchers.Main) { onResult(conn.responseCode == 201) }
             } catch (_: Exception) {
-                onResult(false)
+                withContext(Dispatchers.Main) { onResult(false) }
             }
-        }.start()
+        }
     }
 }
 

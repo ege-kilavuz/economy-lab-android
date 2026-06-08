@@ -1,6 +1,10 @@
 package com.egekilavuz.economylab.data
 
 import android.content.Context
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import java.io.File
 import java.net.HttpURLConnection
@@ -47,11 +51,11 @@ object ContentLoader {
      * Call this from the main composable on start.
      */
     fun checkForUpdate(context: Context, onResult: ((Boolean, String) -> Unit)? = null) {
-        Thread {
+        GlobalScope.launch(Dispatchers.IO) {
             try {
-                val bundled = try {
+                val bundled = withContext(Dispatchers.IO) {
                     context.assets.open("content.json").bufferedReader().use { it.readText() }
-                } catch (_: Exception) { return@Thread }
+                }
 
                 val bundledJson = json.decodeFromString<JsonContent>(bundled)
                 val currentVersion = bundledJson._version
@@ -65,27 +69,26 @@ object ContentLoader {
                 conn.readTimeout = 5000
 
                 if (conn.responseCode != 200) {
-                    onResult?.invoke(false, "Sunucu yanıt vermedi (${conn.responseCode})")
-                    return@Thread
+                    withContext(Dispatchers.Main) { onResult?.invoke(false, "Sunucu yanıt vermedi (${conn.responseCode})") }
+                    return@launch
                 }
 
                 val remoteText = conn.inputStream.bufferedReader().use { it.readText() }
                 val remoteJson = json.decodeFromString<JsonContent>(remoteText)
 
                 if (remoteJson._version > currentVersion) {
-                    // Save to internal storage
                     val cacheFile = File(context.filesDir, "content.json")
                     cacheFile.writeText(remoteText)
                     cached = remoteJson
                     remoteVersion = remoteJson._version
-                    onResult?.invoke(true, "İçerik güncellendi (v${currentVersion} → v${remoteJson._version})")
+                    withContext(Dispatchers.Main) { onResult?.invoke(true, "İçerik güncellendi (v${currentVersion} → v${remoteJson._version})") }
                 } else {
-                    onResult?.invoke(false, "Zaten güncel (v$currentVersion)")
+                    withContext(Dispatchers.Main) { onResult?.invoke(false, "Zaten güncel (v$currentVersion)") }
                 }
             } catch (e: Exception) {
-                onResult?.invoke(false, "Güncelleme kontrolü başarısız: ${e.localizedMessage ?: "bağlantı hatası"}")
+                withContext(Dispatchers.Main) { onResult?.invoke(false, "Güncelleme kontrolü başarısız: ${e.localizedMessage ?: "bağlantı hatası"}") }
             }
-        }.start()
+        }
     }
 
     fun getCachedVersion(): Int = cached?._version ?: 0

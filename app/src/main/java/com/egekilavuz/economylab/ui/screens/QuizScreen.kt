@@ -145,7 +145,7 @@ fun QuizScreen(
                     fadeIn(animationSpec = tween(250)) togetherWith fadeOut(animationSpec = tween(150))
                 },
                 label = "quizContent"
-            ) { _ ->
+            ) {
                 Column {
                     Card(
                 modifier = Modifier.fillMaxWidth(),
