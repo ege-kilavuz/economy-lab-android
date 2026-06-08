@@ -10,28 +10,34 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color as ComposeColor
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.egekilavuz.economylab.data.toLocaleString
 import kotlin.random.Random
 
-// ─── BUDGET TETRIS (Bütçe Yönetimi) — Parayı istediğin kovaya koy, sen karar ver ───
+// ─── BUDGET TETRIS (Sürükle-Bırak) — Yukarıdan düşen parayı kovaya sürükle ───
 
-private data class BudgetBucket(
-    val id: Int,
-    val title: String,
-    val subtitle: String,
-    val hint: String,
-    val color: Long
-)
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.zIndex
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
+import kotlinx.coroutines.delay
+import kotlin.math.roundToInt
 
-private val BUDGET_BUCKETS = listOf(
-    BudgetBucket(0, "İhtiyaçlar", "Kira, fatura, gıda", "Önce zorunlular — domino etkisini engeller.", 0xFF1D4ED8),
-    BudgetBucket(1, "Acil Durum", "Beklenmedik masraf", "Sürpriz giderlerde karta yazmamak için yastık.", 0xFF16A34A),
-    BudgetBucket(2, "Hedef", "Birikim, yatırım", "Küçük ama düzenli ilerleme daha sürdürülebilir.", 0xFFF59E0B),
-    BudgetBucket(3, "İstekler", "Eğlence, keyfi", "İstekler iyi ama önce zorunlular, yoksa borç riski artar.", 0xFFDC2626),
+private data class BtBucket(val id: Int, val title: String, val subt: String, val color: Long)
+
+private val BT_BUCKETS = listOf(
+    BtBucket(0, "İhtiyaçlar", "kira/fatura/gıda", 0xFF1D4ED8),
+    BtBucket(1, "Acil Durum", "beklenmedik", 0xFF16A34A),
+    BtBucket(2, "Hedef", "birikim/yatırım", 0xFFF59E0B),
+    BtBucket(3, "İstekler", "eğlence/keyfi", 0xFFDC2626),
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,220 +46,177 @@ fun BudgetTetrisGame(onBack: () -> Unit) {
     var score by remember { mutableIntStateOf(0) }
     var turn by remember { mutableIntStateOf(1) }
     var buckets by remember { mutableStateOf(listOf(0, 0, 0, 0)) }
-    var currentAmount by remember { mutableIntStateOf(0) }
-    var message by remember { mutableStateOf("") }
-    var tip by remember { mutableStateOf("İpucu: Önce ihtiyaçları ayır, sonra acil fon ve hedeflere geç.") }
+    var currentAmount by remember { mutableIntStateOf(500) }
     var finished by remember { mutableStateOf(false) }
     var streak by remember { mutableIntStateOf(0) }
-    var totalDropped by remember { mutableIntStateOf(0) }
-    var lastBucket by remember { mutableIntStateOf(-1) }
     var feedback by remember { mutableStateOf("") }
-    var feedbackColor by remember { mutableStateOf(androidx.compose.ui.graphics.Color.Unspecified) }
 
-    // Milestone tracking
-    var milestone6000 by remember { mutableStateOf(false) }
-    var milestone8000 by remember { mutableStateOf(false) }
-    var milestoneEmergency by remember { mutableStateOf(false) }
-    var milestoneGoal by remember { mutableStateOf(false) }
+    var bX by remember { mutableFloatStateOf(0.5f) }
+    var bY by remember { mutableFloatStateOf(0f) }
+    var dragging by remember { mutableStateOf(false) }
+    var droppable by remember { mutableStateOf(true) }
+    var areaSize by remember { mutableStateOf(IntSize.Zero) }
+
+    // Milestones
+    var m6000 by remember { mutableStateOf(false) }
+    var m8000 by remember { mutableStateOf(false) }
+    var mEm by remember { mutableStateOf(false) }
+    var mGoal by remember { mutableStateOf(false) }
 
     val total = buckets.sum()
-    val milestoneCount = listOf(milestone6000, milestone8000, milestoneEmergency, milestoneGoal).count { it }
+    val mc = listOf(m6000, m8000, mEm, mGoal).count { it }
 
-    fun newRound() {
-        val amounts = listOf(300, 500, 700, 1000, 1200, 1500)
-        currentAmount = amounts.random()
-        totalDropped++
-        message = "+${currentAmount.toLocaleString()} TL — Nereye koyuyorsun?"
-        lastBucket = -1
-        feedback = ""
-    }
+    // Drop handler - triggered when block hits bottom
+    fun handleDrop(idx: Int) {
+        if (!droppable) return
+        droppable = false
+        val nb = buckets.toMutableList()
+        nb[idx] += currentAmount
+        buckets = nb
+        val nt = nb[0]
 
-    fun dropTo(bucketIndex: Int) {
-        val newBuckets = buckets.toMutableList()
-        newBuckets[bucketIndex] = newBuckets[bucketIndex] + currentAmount
-        buckets = newBuckets
-
-        val needsTotal = newBuckets[0]
-
-        // Skor: önce ihtiyaçlar → daha yüksek puan
         var add = 0
         var fb = ""
-        when (bucketIndex) {
-            0 -> {
-                add = 8
-                fb = "✅ İhtiyaçlar — doğru öncelik"
-                streak++
-            }
-            1 -> {
-                add = if (needsTotal >= 3000) 6 else 2
-                fb = if (needsTotal >= 3000) "✅ Acil fon — ihtiyaçlar yeterli, doğru sıra" else "⚠️ Acil fon — ihtiyaçlar henüz düşük, önce onları tamamla"
-                if (needsTotal >= 3000) streak++ else streak = 0
-            }
-            2 -> {
-                add = if (needsTotal >= 4000) 5 else 1
-                fb = if (needsTotal >= 4000) "✅ Hedef — ihtiyaçlar tamam, birikim iyi fikir" else "⚠️ Hedef — ihtiyaçlar daha öncelikli olabilir"
-                if (needsTotal >= 4000) streak++ else streak = 0
-            }
-            3 -> {
-                add = if (needsTotal >= 5000) 3 else -2
-                fb = if (needsTotal >= 5000) "✅ İstekler — zorunlular tamam, keyfe sıra geldi" else "❌ İstekler — önce ihtiyaçları hallet!"
-                if (needsTotal >= 5000) streak++ else streak = 0
-            }
+        when (idx) {
+            0 -> { add = 8; fb = "✅ İhtiyaçlar — doğru öncelik"; streak++ }
+            1 -> { add = if (nt >= 3000) 6 else 2; fb = if (nt >= 3000) "✅ Acil fon" else "⚠️ Acil fon — önce ihtiyaçları tamamla"; if (nt >= 3000) streak++ else streak = 0 }
+            2 -> { add = if (nt >= 4000) 5 else 1; fb = if (nt >= 4000) "✅ Hedef" else "⚠️ Hedef — ihtiyaçlar daha öncelikli"; if (nt >= 4000) streak++ else streak = 0 }
+            3 -> { add = if (nt >= 5000) 3 else -2; fb = if (nt >= 5000) "✅ İstekler" else "❌ İstekler — önce ihtiyaçları hallet!"; if (nt >= 5000) streak++ else streak = 0 }
         }
-        score += add
-        feedback = fb
-        feedbackColor = if (add > 0) androidx.compose.ui.graphics.Color(0xFF22C55E) else androidx.compose.ui.graphics.Color(0xFFEF4444)
-
-        // Milestone bonusları
-        if (!milestone6000 && newBuckets[0] >= 6000) { milestone6000 = true; score += 8; tip = "🎯 Bonus +8: İhtiyaçlar 6.000 TL'yi geçti!" }
-        if (!milestone8000 && newBuckets[0] >= 8000) { milestone8000 = true; score += 10; tip = "🎯 Bonus +10: İhtiyaçlar 8.000 TL'ye ulaştı!" }
-        if (!milestoneEmergency && newBuckets[1] >= 2000) { milestoneEmergency = true; score += 6; tip = "🎯 Bonus +6: Acil fon hedefine ulaştı!" }
-        if (!milestoneGoal && newBuckets[2] >= 3000) { milestoneGoal = true; score += 5; tip = "🎯 Bonus +5: Hedef birikimine ulaştın!" }
-
-        // Seviye atlama
-        if (turn % 4 == 0) {
-            tip = "⬆ Seviye atladın! Bütçe dengesini koru: önce ihtiyaç, sonra acil, sonra hedef."
-        }
-
-        lastBucket = bucketIndex
+        score += add; feedback = fb
+        if (!m6000 && nb[0] >= 6000) { m6000 = true; score += 8 }
+        if (!m8000 && nb[0] >= 8000) { m8000 = true; score += 10 }
+        if (!mEm && nb[1] >= 2000) { mEm = true; score += 6 }
+        if (!mGoal && nb[2] >= 3000) { mGoal = true; score += 5 }
         turn++
-        if (turn > 12) {
-            finished = true
-        } else {
-            newRound()
-        }
+        if (turn > 12) { finished = true }
+        currentAmount = listOf(300, 500, 700, 1000, 1200, 1500).random()
     }
 
-    if (!finished && turn == 1) { LaunchedEffect(Unit) { newRound() } }
+    // Fall animation
+    LaunchedEffect(turn) {
+        if (finished) return@LaunchedEffect
+        bY = 0f; bX = 0.15f + kotlin.random.Random.nextFloat() * 0.7f; droppable = true; feedback = ""
+        while (bY < 1f && droppable) {
+            delay(32)
+            if (!dragging) bY += 0.012f
+            if (bY >= 1f && droppable) {
+                handleDrop((bX * 4).toInt().coerceIn(0, 3))
+            }
+        }
+    }
 
     Scaffold(topBar = {
         TopAppBar(title = { Text("🧩 Bütçe Tetris", fontWeight = FontWeight.Bold) },
             navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, "Geri") } },
             colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background))
     }) { innerPadding ->
-        Column(Modifier.fillMaxSize().padding(innerPadding).padding(12.dp).verticalScroll(rememberScrollState())) {
-            // Header
-            Card(shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.6f))) {
-                Column(Modifier.padding(14.dp)) {
-                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-                        Text("Bütçe Tetris", fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
-                        SuggestionChip(onClick = {}, label = { Text("Skor $score") },
-                            colors = SuggestionChipDefaults.suggestionChipColors(containerColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.15f)))
-                    }
-                    Text("12 tur. Gelen parayı bütçedeki kovalara yerleştir — sen karar ver!",
-                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    Spacer(Modifier.height(4.dp))
-                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                        SuggestionChip(onClick = {}, label = { Text(if (finished) "Bitti" else "Tur $turn/12") })
-                        SuggestionChip(onClick = {}, label = { Text("Toplam: ${total.toLocaleString()} TL") })
-                        if (streak > 1) SuggestionChip(onClick = {}, label = { Text("Seri: $streak") })
-                        SuggestionChip(onClick = {}, label = { Text("🎯 $milestoneCount/4") })
-                    }
-                }
-            }
-
-            Spacer(Modifier.height(8.dp))
-
-            // Para bloğu
-            if (!finished) {
-                Card(
-                    shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Column(Modifier.padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("🪙", fontSize = 32.sp)
-                        Text(message, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(top = 4.dp))
-                        Text("${currentAmount.toLocaleString()} TL", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Black,
-                            color = MaterialTheme.colorScheme.primary)
-                    }
-                }
-
-                Spacer(Modifier.height(8.dp))
-
-                // Buckets
-                BUDGET_BUCKETS.forEach { bucket ->
-                    val isLast = lastBucket == bucket.id
-                    val borderAlpha = if (isLast) 0.4f else 0.0f
-                    Card(
-                        shape = RoundedCornerShape(12.dp),
-                        colors = CardDefaults.cardColors(containerColor = colorFromLong(bucket.color).copy(alpha = 0.2f)),
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
-                        onClick = { dropTo(bucket.id) },
-                        border = if (isLast) CardDefaults.outlinedCardBorder().copy(
-                            brush = androidx.compose.ui.graphics.SolidColor(colorFromLong(bucket.color).copy(alpha = borderAlpha))
-                        ) else null
-                    ) {
-                        Row(Modifier.padding(12.dp).fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                            Column(Modifier.weight(1f)) {
-                                Text(bucket.title, fontWeight = FontWeight.Bold)
-                                Text(bucket.subtitle, style = MaterialTheme.typography.bodySmall)
-                            }
-                            Text("${buckets[bucket.id].toLocaleString()} TL", fontWeight = FontWeight.Bold)
+        Box(Modifier.fillMaxSize().padding(innerPadding)) {
+            Column(Modifier.fillMaxSize().padding(horizontal = 10.dp)) {
+                Card(shape = RoundedCornerShape(14.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.6f))) {
+                    Column(Modifier.padding(8.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text("Bütçe Tetris", fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+                            SuggestionChip(onClick = {}, label = { Text("Skor $score") })
+                        }
+                        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                            SuggestionChip(onClick = {}, label = { Text("${minOf(turn, 12)}/12") })
+                            SuggestionChip(onClick = {}, label = { Text("💰${total.toLocaleString()}") })
+                            if (streak > 1) SuggestionChip(onClick = {}, label = { Text("🔥$streak") })
+                            SuggestionChip(onClick = {}, label = { Text("🎯$mc/4") })
                         }
                     }
                 }
-
-                // Feedback
-                if (feedback.isNotEmpty()) {
-                    Spacer(Modifier.height(4.dp))
-                    Card(
-                        shape = RoundedCornerShape(12.dp),
-                        colors = CardDefaults.cardColors(containerColor = feedbackColor.copy(alpha = 0.1f))
-                    ) {
-                        Text(feedback, modifier = Modifier.padding(10.dp), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Bold, color = feedbackColor)
-                    }
-                }
-
                 Spacer(Modifier.height(4.dp))
-                Text(tip, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
 
-            // Result
-            if (finished) {
-                Card(shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.6f))) {
-                    Column(Modifier.padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("Oyun Bitti!", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
-                        Text("Skor: $score", style = MaterialTheme.typography.bodyLarge)
-                        Spacer(Modifier.height(8.dp))
-
-                        // Dağılım görselleştirmesi
-                        val totalBuckets = buckets.sum().coerceAtLeast(1)
-                        Column(Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
-                            BUDGET_BUCKETS.forEachIndexed { i, bucket ->
-                                val pct = (buckets[i] * 100) / totalBuckets
-                                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(vertical = 2.dp)) {
-                                    Text(bucket.title, modifier = Modifier.width(80.dp), style = MaterialTheme.typography.bodySmall)
-                                    LinearProgressIndicator(
-                                        progress = { pct / 100f },
-                                        modifier = Modifier.weight(1f).height(8.dp).padding(end = 8.dp),
-                                        color = colorFromLong(bucket.color),
-                                        trackColor = colorFromLong(bucket.color).copy(alpha = 0.15f)
+                // Game area
+                Box(Modifier.fillMaxWidth().weight(1f).onSizeChanged { areaSize = it }) {
+                    if (!finished && droppable && areaSize.width > 0) {
+                        val xPx = bX * areaSize.width
+                        val yPx = bY * areaSize.height
+                        Box(
+                            modifier = Modifier
+                                .offset { IntOffset((xPx - 60).roundToInt(), yPx.roundToInt()) }
+                                .zIndex(10f)
+                                .pointerInput(Unit) {
+                                    detectDragGestures(
+                                        onDragStart = { dragging = true },
+                                        onDragEnd = { dragging = false },
+                                        onDragCancel = { dragging = false },
+                                        onDrag = { change, amount ->
+                                            change.consume()
+                                            val newX = (bX * areaSize.width + amount.x) / areaSize.width
+                                            bX = newX.coerceIn(0.02f, 0.98f)
+                                        }
                                     )
-                                    Text("%$pct", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Bold)
+                                }
+                        ) {
+                            Card(
+                                shape = RoundedCornerShape(14.dp),
+                                colors = CardDefaults.cardColors(containerColor = ComposeColor(0xFF3B82F6)),
+                            ) {
+                                Text("₺${currentAmount.toLocaleString()}",
+                                    modifier = Modifier.padding(horizontal = 18.dp, vertical = 12.dp),
+                                    fontWeight = FontWeight.Black, color = ComposeColor.White, fontSize = 15.sp)
+                            }
+                        }
+                    }
+
+                    // Bucket lanes
+                    Column(Modifier.align(Alignment.BottomCenter).fillMaxWidth()) {
+                        HorizontalDivider(thickness = 2.dp, color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
+                        Row(Modifier.fillMaxWidth().height(100.dp)) {
+                            BT_BUCKETS.forEachIndexed { i, bucket ->
+                                val hover = !finished && droppable && (bX * 4).toInt().coerceIn(0, 3) == i
+                                Box(Modifier.weight(1f).fillMaxHeight()
+                                    .background(ComposeColor(bucket.color).copy(alpha = if (hover) 0.25f else 0.08f))
+                                    .border(1.dp, ComposeColor(bucket.color).copy(alpha = if (hover) 0.5f else 0.15f)),
+                                    contentAlignment = Alignment.TopCenter) {
+                                    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(2.dp)) {
+                                        Text(bucket.title, fontWeight = FontWeight.Bold, fontSize = 11.sp, maxLines = 1)
+                                        Text(bucket.subt, fontSize = 9.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
+                                        Text("${buckets[i].toLocaleString()}", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                                    }
                                 }
                             }
                         }
+                    }
+                }
 
-                        val needsPct = (buckets[0] * 100) / totalBuckets
-                        val eval = when {
-                            needsPct >= 45 -> "✅ Dengeli bütçe! İhtiyaçlar öncelikli, doğru yoldasın."
-                            needsPct >= 30 -> "📈 Fena değil ama ihtiyaçlara daha fazla ayırabilirsin."
-                            else -> "⚠️ İhtiyaçlar düşük kalmış. Bütçede önce zorunluları ayırmak sağlıklıdır."
+                if (feedback.isNotEmpty()) {
+                    Text(feedback, modifier = Modifier.padding(4.dp), style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Bold,
+                        color = if (feedback.contains("✅")) ComposeColor(0xFF22C55E) else ComposeColor(0xFFEF4444))
+                }
+            }
+
+            if (finished) {
+                Card(Modifier.align(Alignment.Center).fillMaxWidth().padding(20.dp), shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
+                    Column(Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text("Oyun Bitti!", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                        Text("Skor: $score")
+                        val tb = buckets.sum().coerceAtLeast(1)
+                        BT_BUCKETS.forEachIndexed { i, b ->
+                            val pct = (buckets[i] * 100) / tb
+                            Row(Modifier.fillMaxWidth().padding(vertical = 1.dp), verticalAlignment = Alignment.CenterVertically) {
+                                Text(b.title, Modifier.width(65.dp), style = MaterialTheme.typography.bodySmall)
+                                LinearProgressIndicator(progress = { pct / 100f }, Modifier.weight(1f).height(6.dp),
+                                    color = ComposeColor(b.color), trackColor = ComposeColor(b.color).copy(alpha = 0.15f))
+                                Text(" $pct%", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Bold)
+                            }
                         }
-                        Text(eval, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-
-                        Spacer(Modifier.height(12.dp))
+                        val needsPct = (buckets[0] * 100) / tb
+                        Text(when { needsPct >= 45 -> "✅ Dengeli bütçe!"; needsPct >= 30 -> "📈 Fena değil"; else -> "⚠️ İhtiyaçlar düşük" })
+                        Spacer(Modifier.height(8.dp))
                         Button(onClick = {
                             score = 0; turn = 1; buckets = listOf(0,0,0,0); finished = false; streak = 0
-                            milestone6000 = false; milestone8000 = false; milestoneEmergency = false; milestoneGoal = false
-                            tip = "İpucu: Önce ihtiyaçları ayır, sonra acil fon ve hedeflere geç."
-                            totalDropped = 0; lastBucket = -1
-                        }) { Text("Tekrar Oyna", fontWeight = FontWeight.Bold) }
+                            m6000 = false; m8000 = false; mEm = false; mGoal = false
+                            droppable = true; bY = 0f; feedback = ""
+                        }) { Text("Tekrar Oyna") }
                     }
                 }
             }
-            Spacer(Modifier.height(24.dp))
         }
     }
 }
@@ -576,4 +539,4 @@ fun ScamRadarGame(onBack: () -> Unit) {
 }
 
 // Helper to convert Long to Compose Color
-private fun colorFromLong(color: Long): Color = Color(color.toInt())
+private fun colorFromLong(color: Long): ComposeColor = ComposeColor(color.toInt())
