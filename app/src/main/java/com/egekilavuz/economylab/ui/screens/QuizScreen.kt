@@ -19,12 +19,14 @@ import androidx.compose.ui.unit.sp
 import com.egekilavuz.economylab.data.JsonCategory
 import com.egekilavuz.economylab.data.JsonQuestion
 import com.egekilavuz.economylab.data.ProgressManager
+import com.egekilavuz.economylab.data.XpManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun QuizScreen(
     category: JsonCategory,
     progressManager: ProgressManager,
+    xpManager: XpManager? = null,
     onBack: () -> Unit,
     onComplete: () -> Unit
 ) {
@@ -58,6 +60,8 @@ fun QuizScreen(
         if (currentIndex + 1 >= questionOrder.size) {
             isFinished = true
             progressManager.markQuizCompleted(category.id)
+            val perfect = correctCount == questionOrder.size
+            xpManager?.addXpForAction(if (perfect) "quiz_perfect" else "quiz_complete")
         } else {
             currentIndex++
             selectedAnswer = -1

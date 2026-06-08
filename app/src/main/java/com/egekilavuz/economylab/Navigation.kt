@@ -1,6 +1,6 @@
 package com.egekilavuz.economylab
 
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Computer
 import androidx.compose.material.icons.filled.School
@@ -24,6 +24,7 @@ import androidx.navigation.navArgument
 import com.egekilavuz.economylab.data.ContentLoader
 import com.egekilavuz.economylab.data.GameViewModel
 import com.egekilavuz.economylab.data.ProgressManager
+import com.egekilavuz.economylab.data.XpManager
 import com.egekilavuz.economylab.ui.screens.*
 import com.egekilavuz.economylab.ui.simulations.*
 
@@ -44,6 +45,7 @@ fun AppNavigation() {
     val navController = rememberNavController()
     val context = LocalContext.current
     val progressManager = remember { ProgressManager(context) }
+    val xpManager = remember { XpManager(context) }
     val content = remember { ContentLoader.load(context) }
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -97,23 +99,33 @@ fun AppNavigation() {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(BottomTab.Learn.route) {
-                HomeScreen(
-                    content = content,
-                    onCategoryClick = { navController.navigate("category/$it") }
-                )
+                Column {
+                    XpBar(xpManager = xpManager)
+                    HomeScreen(
+                        content = content,
+                        onCategoryClick = { navController.navigate("category/$it") },
+                        onDailyQuizClick = { navController.navigate("daily-quiz") }
+                    )
+                }
             }
             composable(BottomTab.Simulations.route) {
-                SimulationsScreen(
-                    content = content,
-                    onSimulationClick = { id ->
-                        if (id.startsWith("sim-")) navController.navigate("simulation/$id")
-                        else navController.navigate("minigame/$id")
-                    }
-                )
+                Column {
+                    XpBar(xpManager = xpManager)
+                    SimulationsScreen(
+                        content = content,
+                        onSimulationClick = { id ->
+                            if (id.startsWith("sim-")) navController.navigate("simulation/$id")
+                            else navController.navigate("minigame/$id")
+                        }
+                    )
+                }
             }
             composable(BottomTab.Game.route) {
-                val gameVm: GameViewModel = viewModel()
-                GameScreen(gameVm)
+                Column {
+                    XpBar(xpManager = xpManager)
+                    val gameVm: GameViewModel = viewModel()
+                    GameScreen(gameVm)
+                }
             }
             composable(route = "simulation/{simId}") { entry ->
                 val simId = entry.arguments?.getString("simId") ?: ""
@@ -136,6 +148,15 @@ fun AppNavigation() {
                     else -> CandleGame { navController.popBackStack() }
                 }
             }
+            // Daily quiz route
+            composable(route = "daily-quiz") {
+                DailyQuizScreen(
+                    contentLoader = ContentLoader,
+                    xpManager = xpManager,
+                    onBack = { navController.popBackStack() }
+                )
+            }
+
             composable(
                 route = ROUTE_CATEGORY,
                 arguments = listOf(navArgument("catId") { type = NavType.StringType })
@@ -161,6 +182,7 @@ fun AppNavigation() {
                     QuizScreen(
                         category = category,
                         progressManager = progressManager,
+                        xpManager = xpManager,
                         onBack = { navController.popBackStack() },
                         onComplete = { navController.popBackStack() }
                     )

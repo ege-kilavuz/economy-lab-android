@@ -28,6 +28,7 @@ fun GameEndScreen(vm: GameViewModel, onBack: () -> Unit) {
     val context = LocalContext.current
     val leaderboardManager = remember { LeaderboardManager(context) }
     val progressManager = remember { ProgressManager(context) }
+    val xpManager = remember { XpManager(context) }
 
     // Calculate achievements
     val stats = AchievementStats(
@@ -52,6 +53,7 @@ fun GameEndScreen(vm: GameViewModel, onBack: () -> Unit) {
         leaderboardManager.fetchGlobalScores { scores ->
             globalScores = scores
         }
+        xpManager.addXpForAction("game_finish")
     }
 
     Scaffold(

@@ -34,6 +34,12 @@ class ProgressManager(context: Context) {
         openedSimulationIds = openedSimulationIds + id
     }
 
+    fun isDailyQuizCompleted(): Boolean = prefs.getBoolean("daily_quiz_done", false)
+
+    fun markDailyQuizCompleted() {
+        prefs.edit().putBoolean("daily_quiz_done", true).apply()
+    }
+
     fun getCategoryProgress(categoryId: String, items: List<String>): CategoryProgress {
         val readCount = items.count { openedItemIds.contains(it) }
         val readPct = if (items.isNotEmpty()) (readCount * 100) / items.size else 0

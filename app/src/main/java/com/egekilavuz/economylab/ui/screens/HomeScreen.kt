@@ -26,7 +26,8 @@ import com.egekilavuz.economylab.data.JsonContent
 @Composable
 fun HomeScreen(
     content: JsonContent,
-    onCategoryClick: (String) -> Unit
+    onCategoryClick: (String) -> Unit,
+    onDailyQuizClick: (() -> Unit)? = null
 ) {
     Column(
         modifier = Modifier
@@ -50,6 +51,33 @@ fun HomeScreen(
         )
 
         Spacer(Modifier.height(12.dp))
+
+        // Daily Quiz banner
+        if (onDailyQuizClick != null) {
+            Card(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp).clickable(onClick = onDailyQuizClick),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
+            ) {
+                Row(
+                    modifier = Modifier.padding(12.dp).fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Column {
+                        Text("🌟 Günlük Quiz", fontWeight = FontWeight.Bold)
+                        Text("Her gün 5 yeni soru · XP kazan",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                    SuggestionChip(
+                        onClick = onDailyQuizClick,
+                        label = { Text("BAŞLA", fontWeight = FontWeight.Bold) }
+                    )
+                }
+            }
+            Spacer(Modifier.height(12.dp))
+        }
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
