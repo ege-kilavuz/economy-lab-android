@@ -79,15 +79,15 @@ fun BudgetTetrisGame(onBack: () -> Unit) {
         var fb = ""
         when (idx) {
             0 -> { add = 8; fb = "✅ İhtiyaçlar — doğru öncelik"; streak++ }
-            1 -> { add = if (nt >= 3000) 6 else 2; fb = if (nt >= 3000) "✅ Acil fon" else "⚠️ Acil fon — önce ihtiyaçları tamamla"; if (nt >= 3000) streak++ else streak = 0 }
-            2 -> { add = if (nt >= 4000) 5 else 1; fb = if (nt >= 4000) "✅ Hedef" else "⚠️ Hedef — ihtiyaçlar daha öncelikli"; if (nt >= 4000) streak++ else streak = 0 }
-            3 -> { add = if (nt >= 5000) 3 else -2; fb = if (nt >= 5000) "✅ İstekler" else "❌ İstekler — önce ihtiyaçları hallet!"; if (nt >= 5000) streak++ else streak = 0 }
+            1 -> { add = if (nt >= 1000) 6 else 2; fb = if (nt >= 1000) "✅ Acil fon" else "⚠️ Acil fon — önce ihtiyaçları tamamla"; if (nt >= 1000) streak++ else streak = 0 }
+            2 -> { add = if (nt >= 2000) 5 else 1; fb = if (nt >= 2000) "✅ Hedef" else "⚠️ Hedef — ihtiyaçlar daha öncelikli"; if (nt >= 2000) streak++ else streak = 0 }
+            3 -> { add = if (nt >= 3000) 3 else 0; fb = if (nt >= 3000) "✅ İstekler" else "⚠️ İstekler — önce ihtiyaçları tamamla"; if (nt >= 3000) streak++ else streak = 0 }
         }
         score += add; feedback = fb
-        if (!m6000 && nb[0] >= 6000) { m6000 = true; score += 8 }
-        if (!m8000 && nb[0] >= 8000) { m8000 = true; score += 10 }
-        if (!mEm && nb[1] >= 2000) { mEm = true; score += 6 }
-        if (!mGoal && nb[2] >= 3000) { mGoal = true; score += 5 }
+        if (!m6000 && nb[0] >= 3500) { m6000 = true; score += 8 }
+        if (!m8000 && nb[0] >= 5500) { m8000 = true; score += 10 }
+        if (!mEm && nb[1] >= 1000) { mEm = true; score += 6 }
+        if (!mGoal && nb[2] >= 1500) { mGoal = true; score += 5 }
         turn++
         if (turn > 12) { finished = true }
         currentAmount = listOf(300, 500, 700, 1000, 1200, 1500).random()

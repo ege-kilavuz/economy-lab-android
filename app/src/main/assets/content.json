@@ -54,7 +54,11 @@
           ],
           "tips": null,
           "warning": null,
-          "video": null
+          "video": {
+            "title": "Faiz ve Bileşik Etki",
+            "url": "https://finansalokuryazarlik.gov.tr/i/faiz-ve-bilesik-etki",
+            "source": "finansalokuryazarlik.gov.tr"
+          }
         },
         {
           "id": "liquidity",
@@ -73,7 +77,11 @@
           ],
           "tips": null,
           "warning": null,
-          "video": null
+          "video": {
+            "title": "Likidite Nedir?",
+            "url": "https://finansalokuryazarlik.gov.tr/i/likidite",
+            "source": "finansalokuryazarlik.gov.tr"
+          }
         }
       ],
       "quiz": [
@@ -291,7 +299,11 @@
             "Kucuk basarilari kutla."
           ],
           "warning": null,
-          "video": null
+          "video": {
+            "title": "Finansal Hedef Belirleme",
+            "url": "https://finansalokuryazarlik.gov.tr/i/finansal-hedef",
+            "source": "finansalokuryazarlik.gov.tr"
+          }
         }
       ],
       "quiz": [
@@ -486,7 +498,11 @@
             "Kredi oncesi toplam maliyeti hesapla."
           ],
           "warning": "İhtiyaç kredisini yatirim icin kullanma, riskli.",
-          "video": null
+          "video": {
+            "title": "Kredi Türleri",
+            "url": "https://finansalokuryazarlik.gov.tr/i/kredi-turleri",
+            "source": "finansalokuryazarlik.gov.tr"
+          }
         },
         {
           "id": "kefillik",
@@ -514,7 +530,11 @@
             "Ust limit koy, tamamina kefil olma."
           ],
           "warning": "Kefil oldugun borc senindir, maasina icra gelebilir.",
-          "video": null
+          "video": {
+            "title": "Kefillik ve Müteselsil Borç",
+            "url": "https://finansalokuryazarlik.gov.tr/i/kefillik",
+            "source": "finansalokuryazarlik.gov.tr"
+          }
         }
       ],
       "quiz": [
@@ -703,7 +723,11 @@
             "Portfoyu yasina gore ayarla: gencken riskli, yaslaninca guvenli."
           ],
           "warning": null,
-          "video": null
+          "video": {
+            "title": "Varlık Sınıfları",
+            "url": "https://finansalokuryazarlik.gov.tr/i/varlik-siniflari",
+            "source": "finansalokuryazarlik.gov.tr"
+          }
         },
         {
           "id": "temettu",
@@ -865,8 +889,10 @@
               "a": "Bir şirkete ortak olmak demektir."
             }
           ],
-          "tips": null,
-          "warning": null,
+          "tips": [
+            "Hisse senedi şirkete ortaklık payıdır, kâr ve riski paylaşırsın."
+          ],
+          "warning": "Tek hisseye tüm parayı yatırmak çeşitlendirme eksikliğidir.",
           "video": {
             "title": "Borsada Hisse Senedi İşlemleri",
             "url": "https://finansalokuryazarlik.gov.tr/i/borsada-hisse-senedi-islemleri",
@@ -888,7 +914,9 @@
               "a": "Riski ve fiyat dalgalanmasını artırabilir."
             }
           ],
-          "tips": null,
+          "tips": [
+            "Yüksek getiri vaadi yüksek risk taşır, risksiz kazanç yoktur."
+          ],
           "warning": null,
           "video": {
             "title": "Risk ve Getiri Dengesi",
@@ -911,7 +939,10 @@
               "a": "Tek bir varlığa bağlı riski azaltmaya yardımcı olur."
             }
           ],
-          "tips": null,
+          "tips": [
+            "Çeşitlendirme tek bir varlığın düşüşünden korunmanın en temel yoludur.",
+            "Farklı sektörlerden hisseler alarak riski dağıtabilirsin."
+          ],
           "warning": null,
           "video": {
             "title": "Yatırımda Çeşitlendirme Nedir?",
@@ -934,8 +965,11 @@
               "a": "Şirket paylarının yatırımcılara açılması demektir."
             }
           ],
-          "tips": null,
-          "warning": null,
+          "tips": [
+            "Halka arzlar ilgi çekebilir, her halka arz kazanç garantisi değildir.",
+            "Şirketin bilançosunu ve sektörünü araştırmadan yatırım yapma."
+          ],
+          "warning": "Halka arz sonrası fiyat dalgalanmaları normaldir.",
           "video": {
             "title": "Halka Arz",
             "url": "https://finansalokuryazarlik.gov.tr/i/halka-arz",
@@ -1153,7 +1187,11 @@
             "TCMB faiz kararlarini takip et, enflasyon beklentini yonet."
           ],
           "warning": null,
-          "video": null
+          "video": {
+            "title": "Enflasyon Hedeflemesi",
+            "url": "https://finansalokuryazarlik.gov.tr/i/enflasyon-hedeflemesi",
+            "source": "finansalokuryazarlik.gov.tr"
+          }
         },
         {
           "id": "unemployment-growth",
@@ -1180,7 +1218,11 @@
             "Büyüme rakami kadar dagilimi da onemli."
           ],
           "warning": null,
-          "video": null
+          "video": {
+            "title": "İşsizlik ve Büyüme",
+            "url": "https://finansalokuryazarlik.gov.tr/i/issizlik-ve-buyume",
+            "source": "finansalokuryazarlik.gov.tr"
+          }
         }
       ],
       "quiz": [
@@ -1497,6 +1539,51 @@
           "correctIndex": 3,
           "explain": "Planlı yaklaşım duygusal kararları filtreler.",
           "relatedItemIds": null
+        },
+        {
+          "id": "p8",
+          "q": "FOMO nedir?",
+          "choices": [
+            "Yatırım aracı",
+            "Kaçırma korkusuyla acele karar",
+            "Borsa terimi",
+            "Para biriktirme yöntemi"
+          ],
+          "correctIndex": 1,
+          "explain": "Fear Of Missing Out: yükselen bir şeyi kaçırma korkusu.",
+          "relatedItemIds": [
+            "fomo-deep"
+          ]
+        },
+        {
+          "id": "p9",
+          "q": "Aşırı güven yatırımda neye yol açar?",
+          "choices": [
+            "Daha iyi analiz",
+            "Az çeşitlendirme ve yüksek risk",
+            "Daha düşük risk",
+            "Garanti kazanç"
+          ],
+          "correctIndex": 1,
+          "explain": "Kendine aşırı güvenen yatırımcılar daha fazla risk alır.",
+          "relatedItemIds": [
+            "overconfidence"
+          ]
+        },
+        {
+          "id": "p10",
+          "q": "Çıpalama önyargısı nedir?",
+          "choices": [
+            "Bir fiyata takılıp kalma",
+            "Limana yanaşma",
+            "Düşük fiyattan alım",
+            "Portföy çeşitlendirme"
+          ],
+          "correctIndex": 0,
+          "explain": "İlk görülen fiyata takılıp objektif karar vermeyi engeller.",
+          "relatedItemIds": [
+            "ankraj"
+          ]
         }
       ]
     },
@@ -1527,7 +1614,11 @@
             "Fiş almak vergini ödemenin kanıtıdır, aynı zamanda bütçe takibinde işe yarar."
           ],
           "warning": null,
-          "video": null
+          "video": {
+            "title": "KDV ve Vergi Türleri",
+            "url": "https://finansalokuryazarlik.gov.tr/i/kdv-vergi-turleri",
+            "source": "finansalokuryazarlik.gov.tr"
+          }
         },
         {
           "id": "income-tax",
@@ -1658,6 +1749,36 @@
           "correctIndex": 3,
           "explain": "KDV tutarı fişte ayrıca gösterilir. Temel gıdada %1, çoğu üründe %10, lükste %20.",
           "relatedItemIds": null
+        },
+        {
+          "id": "t7",
+          "q": "BES'te devlet katkısı nasıl çalışır?",
+          "choices": [
+            "Devlet katkıyı geri alır",
+            "Yatırılan tutarın belirli yüzdesine kadar devlet katkı sağlar",
+            "Sadece ilk yıl geçerlidir",
+            "Herkes eşit katkı alır"
+          ],
+          "correctIndex": 1,
+          "explain": "BES'te devlet, yatırdığın tutarın %30'una kadar katkı sağlar.",
+          "relatedItemIds": [
+            "bes-tax"
+          ]
+        },
+        {
+          "id": "t8",
+          "q": "Kira geliri vergisi kimleri kapsar?",
+          "choices": [
+            "Sadece ev sahiplerini",
+            "Kira geliri olan herkesi (istisna altı hariç)",
+            "Sadece iş yeri sahiplerini",
+            "Öğrencileri"
+          ],
+          "correctIndex": 1,
+          "explain": "Konut kira gelirinde istisna tutarına kadar vergi alınmaz, üstü beyan edilir.",
+          "relatedItemIds": [
+            "kdv"
+          ]
         }
       ]
     },
@@ -2367,8 +2488,10 @@
           "title": "BANKACILIK TEMELLERİ",
           "short": "Kartlar, transferler ve dijital bankacılık günlük hayatın parçası.",
           "body": [
-            "Bankalar tasarrufları değerlendirmek, ödeme yapmak ve para transferi gibi işlemleri kolaylaştırır.",
-            "Banka kartı, kredi kartı, para transferi ve mobil bankacılık günlük finans yönetiminin temel parçalarıdır."
+            "Bankacılık işlemlerini yalnızca resmî mobil uygulama veya internet sitesi üzerinden yap.",
+            "Asla tanımadığın kişilerle hesap bilgilerini, şifreni veya T.C. kimlik numaranı paylaşma.",
+            "Banka çalışanları asla şifre, işlem doğrulama kodu veya kart bilgisi istemez.",
+            "ATM'de kart sıkışması veya para sayma hatası gibi durumlarda hemen bankanı ara."
           ],
           "scenario": "Fatura öderken, para transferi yaparken ve hesap hareketlerini izlerken bankacılık araçlarını kullanırsın.",
           "qa": [
@@ -2377,7 +2500,9 @@
               "a": "Ödeme, transfer ve hesap yönetimini kolaylaştırır."
             }
           ],
-          "tips": null,
+          "tips": [
+            "Resmî kanal dışında gelen her talep önce doğrulanmalıdır."
+          ],
           "warning": null,
           "video": {
             "title": "Bankacılık Sistemi",
@@ -2390,8 +2515,10 @@
           "title": "DİJİTAL BANKACILIKTA GÜVENLİK",
           "short": "Sahte linke değil, resmî kanala git.",
           "body": [
-            "Dolandırıcılar banka veya kurum gibi davranıp sahte link gönderebilir.",
-            "İşlem yaparken sadece bankanın resmî uygulamasını veya doğrulanmış adresini kullanmak gerekir."
+            "Sosyal medyada hesap bilgilerini paylaşmak dolandırıcılık riskini artırır.",
+            "E-posta veya SMS'te gelen bağlantılara tıklamadan önce gönderici adresini kontrol et.",
+            "İki faktörlü doğrulama (2FA) kullanmak hesap güvenliğini büyük ölçüde artırır.",
+            "Oltalama (phishing) saldırıları genellikle acil aksiyon çağrısı ile gelir."
           ],
           "scenario": "“Hesabınız askıya alındı” mesajı gelirse linke tıklamak yerine bankanın uygulamasını açıp durumu oradan kontrol et.",
           "qa": [
@@ -2401,7 +2528,7 @@
             }
           ],
           "tips": [
-            "Resmî kurumlar mesajla şifre veya OTP kodu istemez."
+            "Her bağlantıya tıklamadan önce düşün: bu mesajı bekliyor muydun?"
           ],
           "warning": null,
           "video": {
@@ -2415,8 +2542,10 @@
           "title": "PARA TRANSFERİNDE SON KONTROL",
           "short": "FAST/EFT/havalede alıcıyı doğrula.",
           "body": [
-            "Para transferlerinde IBAN, alıcı adı ve tutar bilgisi dikkatle kontrol edilmelidir.",
-            "Hızlı işlem baskısı hata riskini artırır; birkaç saniyelik kontrol kaybı önleyebilir."
+            "Para transferlerinde IBAN ve alıcı adını iki kez kontrol et.",
+            "Bilmediğin birinden gelen para veya ödeme taleplerini doğrulamadan işlem yapma.",
+            "Sanal kart kullanarak internet alışverişlerinde ekstra güvenlik sağlayabilirsin.",
+            "Kredi kartı ekstrelerini düzenli kontrol et, tanımadığın işlemleri bankana bildir."
           ],
           "scenario": "Aceleyle gönderim yaparken yanlış IBAN seçersen para başka kişiye gidebilir.",
           "qa": [
@@ -2425,7 +2554,9 @@
               "a": "Alıcı bilgilerini doğrulamaktır."
             }
           ],
-          "tips": null,
+          "tips": [
+            "Telefonuna uzaktan erişim uygulamaları yüklerken dikkatli ol."
+          ],
           "warning": null,
           "video": {
             "title": "Para Transferi",
