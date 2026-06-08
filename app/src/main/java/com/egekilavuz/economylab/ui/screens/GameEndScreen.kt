@@ -16,6 +16,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.style.TextAlign
 import com.egekilavuz.economylab.data.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -258,11 +260,107 @@ private fun StatChip2(text: String, color: androidx.compose.ui.graphics.Color) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameNewsPlaceholder(vm: GameViewModel) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("📰 Haberler", style = MaterialTheme.typography.titleLarge)
-            Spacer(Modifier.height(8.dp))
-            OutlinedButton(onClick = { vm.navigate("home") }) { Text("Geri") }
+    val g = vm.gameState
+    val context = LocalContext.current
+
+    fun eventIcon(msg: String): String = when {
+        msg.contains("kira", true) -> "🏠"
+        msg.contains("maaş", true) || msg.contains("gelir", true) || msg.contains("+$") -> "💰"
+        msg.contains("fatura", true) || msg.contains("elektrik", true) || msg.contains("doğalgaz", true) || msg.contains("internet", true) || msg.contains("aidat", true) -> "📄"
+        msg.contains("market", true) || msg.contains("dolap", true) || msg.contains("bozuldu", true) -> "🛒"
+        msg.contains("kart", true) || msg.contains("borç", true) || msg.contains("ödem", true) -> "💳"
+        msg.contains("yatırım", true) || msg.contains("hisse", true) || msg.contains("altın", true) || msg.contains("dolar", true) || msg.contains("btc", true) || msg.contains("alım", true) || msg.contains("satış", true) || msg.contains("portföy", true) -> "📈"
+        msg.contains("misafir", true) || msg.contains("sinema", true) -> "🎬"
+        msg.contains("tasarruf", true) -> "💡"
+        msg.contains("gün", true) && msg.contains("başladı", true) -> "📅"
+        msg.contains("gider", true) || msg.contains("beklenmedik", true) -> "⚠️"
+        msg.contains("enflasyon", true) || msg.contains("faiz", true) -> "📊"
+        msg.contains("skor", true) -> "🏆"
+        msg.contains("ceza", true) || msg.contains("gecikti", true) || msg.contains("gecikme", true) -> "❌"
+        else -> "📰"
+    }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("📰 Haber Akışı", fontWeight = FontWeight.Bold) },
+                navigationIcon = {
+                    IconButton(onClick = { vm.navigate("home") }) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Geri")
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onBackground
+                )
+            )
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(horizontal = 12.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            Spacer(Modifier.height(4.dp))
+
+            // Summary chips
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
+                SuggestionChip(onClick = {}, label = { Text("Gün ${g.day}/30") })
+                SuggestionChip(onClick = {}, label = { Text("Nakit: ${g.cash.toLocaleString()} TL") })
+                SuggestionChip(onClick = {}, label = { Text("Kart: ${g.cardDebt.toLocaleString()} TL") })
+            }
+
+            Spacer(Modifier.height(12.dp))
+
+            if (g.log.isEmpty()) {
+                Text("Henüz haber yok.", style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+            } else {
+                g.log.reversed().forEachIndexed { idx, msg ->
+                    val icon = eventIcon(msg)
+                    val cardColor = when {
+                        msg.contains("❌") || msg.contains("ceza") || msg.contains("gecikti") ->
+                            MaterialTheme.colorScheme.error.copy(alpha = 0.06f)
+                        msg.contains("💰") || msg.contains("gelir") || msg.contains("+$") ->
+                            MaterialTheme.colorScheme.secondary.copy(alpha = 0.06f)
+                        msg.contains("⚠️") || msg.contains("gider") ->
+                            MaterialTheme.colorScheme.tertiary.copy(alpha = 0.06f)
+                        else -> MaterialTheme.colorScheme.surface.copy(alpha = 0.3f)
+                    }
+
+                    Card(
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
+                        shape = RoundedCornerShape(12.dp),
+                        colors = CardDefaults.cardColors(containerColor = cardColor)
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(10.dp).fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(icon, fontSize = 18.sp, modifier = Modifier.padding(end = 8.dp))
+                            Text(
+                                text = msg,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    }
+
+                    if (idx == 0 && g.log.size > 3) {
+                        Text(
+                            text = "— ${g.log.size - 1} eski olay —",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+            }
+
+            Spacer(Modifier.height(16.dp))
         }
     }
 }
