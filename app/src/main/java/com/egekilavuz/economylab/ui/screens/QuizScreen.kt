@@ -52,18 +52,6 @@ fun QuizScreen(
         category.quiz[questionOrder[currentIndex]]
     } else null
 
-    fun handleAnswer(choiceIndex: Int) {
-        if (isAnswered) return
-        selectedAnswer = choiceIndex
-        isAnswered = true
-        if (choiceIndex == currentQ?.correctIndex) {
-            correctCount++
-            SoundManager.getInstance(context).play(Sfx.CORRECT)
-        } else {
-            SoundManager.getInstance(context).play(Sfx.WRONG)
-        }
-    }
-
     fun nextQuestion() {
         if (currentIndex + 1 >= questionOrder.size) {
             isFinished = true
@@ -90,6 +78,26 @@ fun QuizScreen(
     }
 
     val question = currentQ ?: return
+
+    // Shuffle choices once per question
+    val shuffledState = remember(question.id) {
+        val indices = question.choices.indices.shuffled()
+        val shuffledChoices = indices.map { question.choices[it] }
+        val shuffledCorrect = indices.indexOf(question.correctIndex)
+        ShuffledState(shuffledChoices, shuffledCorrect)
+    }
+
+    fun handleAnswer(choiceIndex: Int) {
+        if (isAnswered) return
+        selectedAnswer = choiceIndex
+        isAnswered = true
+        if (choiceIndex == shuffledState.correctIndex) {
+            correctCount++
+            SoundManager.getInstance(context).play(Sfx.CORRECT)
+        } else {
+            SoundManager.getInstance(context).play(Sfx.WRONG)
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -163,11 +171,30 @@ fun QuizScreen(
                 )
             }
 
+            // Progress
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                LinearProgressIndicator(
+                    progress = { (currentIndex + 1).toFloat() / questionOrder.size },
+                    modifier = Modifier.weight(1f).height(6.dp),
+                    color = MaterialTheme.colorScheme.primary,
+                    trackColor = MaterialTheme.colorScheme.surfaceVariant
+                )
+                Text(
+                    "${currentIndex + 1}/${questionOrder.size}",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
             Spacer(Modifier.height(16.dp))
 
             // Choices
-            question.choices.forEachIndexed { index, choice ->
-                val isCorrect = index == question.correctIndex
+            shuffledState.choices.forEachIndexed { index, choice ->
+                val isCorrect = index == shuffledState.correctIndex
                 val isSelected = index == selectedAnswer
 
                 val backgroundColor by animateColorAsState(
@@ -231,10 +258,10 @@ fun QuizScreen(
                 ) {
                     Column(modifier = Modifier.padding(14.dp)) {
                         Text(
-                            text = if (selectedAnswer == question.correctIndex) "✅ Doğru!" else "❌ Yanlış",
+                            text = if (selectedAnswer == shuffledState.correctIndex) "✅ Doğru!" else "❌ Yanlış",
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.Bold,
-                            color = if (selectedAnswer == question.correctIndex)
+                            color = if (selectedAnswer == shuffledState.correctIndex)
                                 MaterialTheme.colorScheme.secondary
                             else
                                 MaterialTheme.colorScheme.error
@@ -354,3 +381,5 @@ fun QuizResultScreen(
         }
     }
 }
+
+private data class ShuffledState(val choices: List<String>, val correctIndex: Int)

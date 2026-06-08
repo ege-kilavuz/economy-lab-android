@@ -12,6 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
+import com.egekilavuz.economylab.data.MiniGameManager
 import com.egekilavuz.economylab.data.toLocaleString
 import kotlin.math.roundToInt
 import kotlin.random.Random
@@ -73,12 +75,22 @@ private val CANDLE_ROUNDS = listOf(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CandleGame(onBack: () -> Unit) {
+    val context = LocalContext.current
+    val mgm = remember { MiniGameManager(context) }
+    val bestScore = remember { mgm.getHighScore("candle") }
     val order = remember { CANDLE_ROUNDS.shuffled().take(8) }
     var index by remember { mutableIntStateOf(0) }
     var selected by remember { mutableIntStateOf(-1) }
     var score by remember { mutableIntStateOf(0) }
     var finished by remember { mutableStateOf(false) }
     val current = if (index < order.size) order[index] else null
+
+    // Save high score when game finishes
+    LaunchedEffect(finished) {
+        if (finished) {
+            mgm.saveHighScore("candle", score)
+        }
+    }
 
     Scaffold(topBar = {
         TopAppBar(title = { Text("📈 Borsa Oyunu", fontWeight = FontWeight.Bold) },
@@ -110,6 +122,11 @@ fun CandleGame(onBack: () -> Unit) {
                     Column(Modifier.padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                         Text("Bitti", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
                         Text("Skorun: $score / ${order.size}", style = MaterialTheme.typography.bodyLarge)
+                        if (score == bestScore) {
+                            Text("🏆 Yeni Rekor!", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                        } else if (bestScore > 0) {
+                            Text("Rekor: $bestScore / ${order.size}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
                         Spacer(Modifier.height(8.dp))
                         Text("Ders: Borsa tarafında önce kavramları doğru ayırmak gerekir: hisse senedi, halka arz, risk-getiri ve çeşitlendirme birbirinin yerine geçmez.",
                             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -279,6 +296,9 @@ private fun mkCardDeck(): List<CardEvent> = listOf(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CardEscapeGame(onBack: () -> Unit) {
+    val context = LocalContext.current
+    val mgm = remember { MiniGameManager(context) }
+    val bestScore = remember { mgm.getHighScore("card-escape") }
     val deck = remember { mkCardDeck() }
     var state by remember { mutableStateOf(CardState()) }
     var rngSeed by remember { mutableIntStateOf(Random.nextInt()) }
@@ -288,6 +308,11 @@ fun CardEscapeGame(onBack: () -> Unit) {
     val done = state.turn > 10
     val interest = (state.debt * 0.05).roundToInt()
     val net = state.cash - (state.debt + interest)
+
+    // Save high score
+    LaunchedEffect(done) {
+        if (done) mgm.saveHighScore("card-escape", net)
+    }
 
     fun newCard() {
         rngSeed++
@@ -350,7 +375,10 @@ fun CardEscapeGame(onBack: () -> Unit) {
                         Text("Bitti", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
                         Text("Ay sonu faiz (temsili): ${interest.toLocaleString()} TL", style = MaterialTheme.typography.bodyMedium)
                         Text("Net durum (nakit - borç - faiz): ${net.toLocaleString()} TL", style = MaterialTheme.typography.bodyMedium)
-                        Spacer(Modifier.height(8.dp))
+                        if (bestScore > 0) {
+                            Text("En iyi net: $bestScore TL", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        Spacer(Modifier.height(4.dp))
                         val summaryText = when {
                             net >= 2000 && state.debt < 6000 -> "Harika: borcu kontrol ettin."
                             state.debt >= 12000 -> "Zor: borç büyüdü, asgari tuzağına dikkat."

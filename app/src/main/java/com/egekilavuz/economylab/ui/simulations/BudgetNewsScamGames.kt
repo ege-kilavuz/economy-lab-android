@@ -14,7 +14,9 @@ import androidx.compose.ui.graphics.Color as ComposeColor
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalContext
 import com.egekilavuz.economylab.data.toLocaleString
+import com.egekilavuz.economylab.data.MiniGameManager
 import kotlin.random.Random
 
 // ─── BUDGET TETRIS (Sürükle-Bırak) — Yukarıdan düşen parayı kovaya sürükle ───
@@ -43,6 +45,9 @@ private val BT_BUCKETS = listOf(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BudgetTetrisGame(onBack: () -> Unit) {
+    val context = LocalContext.current
+    val mgm = remember { MiniGameManager(context) }
+    val bestScore = remember { mgm.getHighScore("budget-tetris") }
     var score by remember { mutableIntStateOf(0) }
     var turn by remember { mutableIntStateOf(1) }
     var buckets by remember { mutableStateOf(listOf(0, 0, 0, 0)) }
@@ -50,6 +55,11 @@ fun BudgetTetrisGame(onBack: () -> Unit) {
     var finished by remember { mutableStateOf(false) }
     var streak by remember { mutableIntStateOf(0) }
     var feedback by remember { mutableStateOf("") }
+
+    // Save high score
+    LaunchedEffect(finished) {
+        if (finished) mgm.saveHighScore("budget-tetris", score)
+    }
 
     var bX by remember { mutableFloatStateOf(0.5f) }
     var bY by remember { mutableFloatStateOf(0f) }
@@ -195,7 +205,10 @@ fun BudgetTetrisGame(onBack: () -> Unit) {
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
                     Column(Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                         Text("Oyun Bitti!", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                        Text("Skor: $score")
+                        Text("Skor: $score", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                        if (bestScore > 0) {
+                            Text("En iyi: $bestScore", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
                         val tb = buckets.sum().coerceAtLeast(1)
                         BT_BUCKETS.forEachIndexed { i, b ->
                             val pct = (buckets[i] * 100) / tb
