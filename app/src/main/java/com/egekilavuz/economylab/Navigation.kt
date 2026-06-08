@@ -31,7 +31,7 @@ import com.egekilavuz.economylab.ui.simulations.*
 
 sealed class BottomTab(val route: String, val title: String, val icon: ImageVector) {
     data object Learn : BottomTab("learn", "Öğren", Icons.Default.School)
-    data object Simulations : BottomTab("simulations", "Simülasyonlar", Icons.Default.Computer)
+    data object Simulations : BottomTab("simulations", "Keşfet", Icons.Default.Computer)
     data object Game : BottomTab("game", "Oyun", Icons.Default.SportsEsports)
     data object Leaderboard : BottomTab("leaderboard", "Liderlik", Icons.Default.Star)
 }
@@ -54,6 +54,7 @@ fun AppNavigation() {
     val snackbarHostState = remember { SnackbarHostState() }
     var updateMessage by remember { mutableStateOf("") }
     var showUpdate by remember { mutableStateOf(false) }
+    var showNameDialog by remember { mutableStateOf(!progressManager.hasUserName) }
 
     LaunchedEffect(Unit) {
         ContentLoader.checkForUpdate(context) { success, msg ->
@@ -100,7 +101,7 @@ fun AppNavigation() {
                                 Text(
                                     text = tab.title,
                                     fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
-                                    fontSize = 13.sp
+                                    fontSize = 11.sp
                                 )
                             },
                             colors = NavigationBarItemDefaults.colors(
@@ -219,5 +220,15 @@ fun AppNavigation() {
                 }
             }
         }
+    }
+
+    // Name dialog on first launch
+    if (showNameDialog) {
+        UserNameDialog(
+            onSave = { name ->
+                progressManager.userName = name
+                showNameDialog = false
+            }
+        )
     }
 }

@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.egekilavuz.economylab.data.LeaderboardEntry
 import com.egekilavuz.economylab.data.LeaderboardManager
+import com.egekilavuz.economylab.data.ProgressManager
 import com.egekilavuz.economylab.data.XpManager
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -22,6 +23,7 @@ fun LeaderboardScreen() {
     val context = LocalContext.current
     val leaderboardManager = remember { LeaderboardManager(context) }
     val xpManager = remember { XpManager(context) }
+    val progressManager = remember { ProgressManager(context) }
 
     var localScores by remember { mutableStateOf(leaderboardManager.getLocalScores()) }
     var globalScores by remember { mutableStateOf<List<LeaderboardEntry>?>(null) }

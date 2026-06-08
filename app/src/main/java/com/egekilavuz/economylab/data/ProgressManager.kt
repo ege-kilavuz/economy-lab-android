@@ -20,6 +20,12 @@ class ProgressManager(context: Context) {
         get() = prefs.getStringSet("opened_simulations", emptySet()) ?: emptySet()
         set(value) = prefs.edit().putStringSet("opened_simulations", value).apply()
 
+    var userName: String
+        get() = prefs.getString("user_name", "") ?: ""
+        set(value) = prefs.edit().putString("user_name", value).apply()
+
+    val hasUserName: Boolean get() = userName.isNotBlank()
+
     fun isQuizCompleted(id: String): Boolean = completedQuizIds.contains(id)
 
     fun markQuizCompleted(id: String) {
