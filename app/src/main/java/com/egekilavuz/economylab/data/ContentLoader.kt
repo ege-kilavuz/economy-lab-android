@@ -2,15 +2,37 @@ package com.egekilavuz.economylab.data
 
 import android.content.Context
 import kotlinx.serialization.json.Json
+import java.io.File
+import java.net.HttpURLConnection
+import java.net.URL
 
 object ContentLoader {
     private val json = Json { ignoreUnknownKeys = true }
 
     private var cached: JsonContent? = null
+    private var remoteVersion: Int = 0
 
+    /**
+     * Load content: tries cached file first, then bundled assets.
+     * Also triggers a background check for remote updates.
+     */
     fun load(context: Context): JsonContent {
         cached?.let { return it }
 
+        // Try cached file first
+        val cacheFile = File(context.filesDir, "content.json")
+        if (cacheFile.exists()) {
+            try {
+                val text = cacheFile.readText()
+                val content = json.decodeFromString<JsonContent>(text)
+                cached = content
+                return content
+            } catch (_: Exception) {
+                cacheFile.delete()
+            }
+        }
+
+        // Fall back to bundled assets
         val jsonString = context.assets.open("content.json")
             .bufferedReader()
             .use { it.readText() }
@@ -19,6 +41,55 @@ object ContentLoader {
         cached = content
         return content
     }
+
+    /**
+     * Check for remote update in background.
+     * Call this from the main composable on start.
+     */
+    fun checkForUpdate(context: Context, onResult: ((Boolean, String) -> Unit)? = null) {
+        Thread {
+            try {
+                val bundled = try {
+                    context.assets.open("content.json").bufferedReader().use { it.readText() }
+                } catch (_: Exception) { return@Thread }
+
+                val bundledJson = json.decodeFromString<JsonContent>(bundled)
+                val currentVersion = bundledJson._version
+
+                val url = bundledJson._updateUrl.ifEmpty {
+                    "https://raw.githubusercontent.com/ege-kilavuz/economy-lab-android/main/app/src/main/assets/content.json"
+                }
+
+                val conn = URL(url).openConnection() as HttpURLConnection
+                conn.connectTimeout = 5000
+                conn.readTimeout = 5000
+
+                if (conn.responseCode != 200) {
+                    onResult?.invoke(false, "Sunucu yanıt vermedi (${conn.responseCode})")
+                    return@Thread
+                }
+
+                val remoteText = conn.inputStream.bufferedReader().use { it.readText() }
+                val remoteJson = json.decodeFromString<JsonContent>(remoteText)
+
+                if (remoteJson._version > currentVersion) {
+                    // Save to internal storage
+                    val cacheFile = File(context.filesDir, "content.json")
+                    cacheFile.writeText(remoteText)
+                    cached = remoteJson
+                    remoteVersion = remoteJson._version
+                    onResult?.invoke(true, "İçerik güncellendi (v${currentVersion} → v${remoteJson._version})")
+                } else {
+                    onResult?.invoke(false, "Zaten güncel (v$currentVersion)")
+                }
+            } catch (e: Exception) {
+                onResult?.invoke(false, "Güncelleme kontrolü başarısız: ${e.localizedMessage ?: "bağlantı hatası"}")
+            }
+        }.start()
+    }
+
+    fun getCachedVersion(): Int = cached?._version ?: 0
+    fun getRemoteVersion(): Int = remoteVersion
 
     fun getCategoryById(context: Context, id: String): JsonCategory? {
         return load(context).categories.find { it.id == id }

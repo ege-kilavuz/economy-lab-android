@@ -58,5 +58,7 @@ data class JsonScenario(
 data class JsonContent(
     val categories: List<JsonCategory>,
     val scenarios: List<JsonScenario> = emptyList(),
-    val learningPath: List<String> = emptyList()
+    val learningPath: List<String> = emptyList(),
+    val _version: Int = 1,
+    val _updateUrl: String = ""
 )

@@ -48,12 +48,33 @@ fun AppNavigation() {
     val xpManager = remember { XpManager(context) }
     val content = remember { ContentLoader.load(context) }
 
+    // Content update check
+    val snackbarHostState = remember { SnackbarHostState() }
+    var updateMessage by remember { mutableStateOf("") }
+    var showUpdate by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        ContentLoader.checkForUpdate(context) { success, msg ->
+            updateMessage = msg
+            if (success) {
+                showUpdate = true
+            }
+        }
+    }
+
+    LaunchedEffect(showUpdate) {
+        if (showUpdate && updateMessage.isNotEmpty()) {
+            snackbarHostState.showSnackbar(updateMessage)
+        }
+    }
+
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val isSubScreen = currentDestination?.route?.startsWith("category") == true ||
                       currentDestination?.route?.startsWith("quiz") == true
 
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         bottomBar = {
             if (!isSubScreen) {
                 NavigationBar(

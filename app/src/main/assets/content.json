@@ -3118,5 +3118,7 @@
     "sustainability",
     "psychology",
     "safety"
-  ]
+  ],
+  "_version": 14,
+  "_updateUrl": "https://raw.githubusercontent.com/ege-kilavuz/economy-lab-android/main/app/src/main/assets/content.json"
 }
