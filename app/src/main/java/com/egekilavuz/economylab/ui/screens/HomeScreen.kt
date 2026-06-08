@@ -10,8 +10,11 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,6 +33,24 @@ fun HomeScreen(
     onDailyQuizClick: (() -> Unit)? = null,
     onStatsClick: (() -> Unit)? = null
 ) {
+    var searchQuery by remember { mutableStateOf("") }
+
+    val filteredCategories = remember(searchQuery, content) {
+        if (searchQuery.isBlank()) {
+            if (content.learningPath.isNotEmpty()) {
+                val orderMap = content.learningPath.withIndex().associate { (i, id) -> id to i }
+                content.categories.sortedBy { orderMap[it.id] ?: Int.MAX_VALUE }
+            } else content.categories
+        } else {
+            val q = searchQuery.lowercase()
+            content.categories.filter {
+                it.title.lowercase().contains(q) ||
+                it.subtitle.lowercase().contains(q) ||
+                it.items.any { item -> item.title.lowercase().contains(q) }
+            }.sortedBy { it.title }
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -38,24 +59,30 @@ fun HomeScreen(
     ) {
         Spacer(Modifier.height(8.dp))
 
-        Text(
-            text = "📚 Öğren",
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-        Spacer(Modifier.width(8.dp))
-        if (onStatsClick != null) {
-            FilledTonalButton(
-                onClick = onStatsClick,
-                modifier = Modifier.height(32.dp),
-                shape = RoundedCornerShape(8.dp)
-            ) {
-                Text("📊", fontSize = 14.sp)
-                Spacer(Modifier.width(4.dp))
-                Text("İstatistik", fontSize = 12.sp)
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "📚 Öğren",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.weight(1f)
+            )
+            if (onStatsClick != null) {
+                FilledTonalButton(
+                    onClick = onStatsClick,
+                    modifier = Modifier.height(32.dp),
+                    shape = RoundedCornerShape(8.dp)
+                ) {
+                    Text("📊", fontSize = 14.sp)
+                    Spacer(Modifier.width(4.dp))
+                    Text("İstatistik", fontSize = 12.sp)
+                }
             }
         }
+
         Spacer(Modifier.height(4.dp))
         Text(
             text = "Finansal okuryazarlık için 12 konu başlığı",
@@ -63,7 +90,30 @@ fun HomeScreen(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(8.dp))
+
+        // Search bar
+        OutlinedTextField(
+            value = searchQuery,
+            onValueChange = { searchQuery = it },
+            modifier = Modifier.fillMaxWidth(),
+            placeholder = { Text("Kategori ara...") },
+            leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Ara") },
+            trailingIcon = {
+                if (searchQuery.isNotEmpty()) {
+                    IconButton(onClick = { searchQuery = "" }) {
+                        Icon(Icons.Default.Clear, contentDescription = "Temizle")
+                    }
+                }
+            },
+            singleLine = true,
+            shape = RoundedCornerShape(16.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+            )
+        )
+
+        Spacer(Modifier.height(8.dp))
 
         // Daily Quiz banner
         if (onDailyQuizClick != null) {
@@ -92,28 +142,33 @@ fun HomeScreen(
             Spacer(Modifier.height(12.dp))
         }
 
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(max = 1000.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            userScrollEnabled = false
-        ) {
-            // Öğrenme rotasına göre sırala
-            val sortedCategories = if (content.learningPath.isNotEmpty()) {
-                val orderMap = content.learningPath.withIndex().associate { (i, id) -> id to i }
-                content.categories.sortedBy { orderMap[it.id] ?: Int.MAX_VALUE }
-            } else content.categories
-
-            items(sortedCategories) { cat ->
-                CategoryCard(
-                    icon = cat.icon,
-                    title = cat.title,
-                    subtitle = cat.subtitle,
-                    onClick = { onCategoryClick(cat.id) }
-                )
+        if (filteredCategories.isEmpty() && searchQuery.isNotBlank()) {
+            Spacer(Modifier.height(24.dp))
+            Text(
+                text = "\"$searchQuery\" için sonuç bulunamadı",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+        } else {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 1000.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                userScrollEnabled = false
+            ) {
+                items(filteredCategories) { cat ->
+                    CategoryCard(
+                        icon = cat.icon,
+                        title = cat.title,
+                        subtitle = cat.subtitle,
+                        onClick = { onCategoryClick(cat.id) }
+                    )
+                }
             }
         }
 

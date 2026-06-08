@@ -24,6 +24,7 @@ fun GameHomeScreen(
     onNavigate: (String) -> Unit
 ) {
     val g = vm.gameState
+    val showResume by remember { mutableStateOf(vm.hasSaveGame() && g.day > 1 && g.day <= 30) }
 
     Column(
         modifier = Modifier
@@ -39,6 +40,35 @@ fun GameHomeScreen(
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
+        Spacer(Modifier.height(4.dp))
+
+        // Resume or New Game
+        if (showResume) {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Text("💾 Kayıtlı oyun var", fontWeight = FontWeight.Bold)
+                        Text("Gün ${g.day}/30", style = MaterialTheme.typography.bodySmall)
+                    }
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        FilledTonalButton(onClick = {
+                            vm.deleteSave()
+                            vm.startNewGame(g.difficulty)
+                        }) { Text("Yeni") }
+                        Button(onClick = { onNavigate("game/play") }) { Text("Devam") }
+                    }
+                }
+            }
+            Spacer(Modifier.height(8.dp))
+        }
         Spacer(Modifier.height(8.dp))
 
         // Stat chips

@@ -1,12 +1,20 @@
 package com.egekilavuz.economylab.data
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
-class GameViewModel : ViewModel() {
-    var gameState by mutableStateOf(newGame(Difficulty.Easy))
+class GameViewModel(context: Context? = null) : ViewModel() {
+
+    private val prefs: SharedPreferences? = context?.getSharedPreferences("game_save", Context.MODE_PRIVATE)
+    private val json = Json { ignoreUnknownKeys = true }
+
+    var gameState by mutableStateOf(restoreGame() ?: newGame(Difficulty.Easy))
         private set
 
     var useCard by mutableStateOf(false)
@@ -26,10 +34,25 @@ class GameViewModel : ViewModel() {
 
     data class Summary(val cash: Int, val cardDebt: Int, val mood: Int, val day: Int)
 
+    private fun restoreGame(): GameState? {
+        if (prefs == null) return null
+        val raw = prefs.getString("game_state", null) ?: return null
+        return try {
+            json.decodeFromString<GameState>(raw)
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    private fun persistGame(state: GameState) {
+        prefs?.edit()?.putString("game_state", json.encodeToString(state))?.apply()
+    }
+
     fun startNewGame(difficulty: Difficulty = Difficulty.Easy) {
         gameState = newGame(difficulty)
         useCard = false
         currentScreen = "home"
+        persistGame(gameState)
     }
 
     fun toggleUseCard(v: Boolean) { useCard = v }
@@ -38,6 +61,7 @@ class GameViewModel : ViewModel() {
 
     fun act(action: ActionId, amount: Int = 1, asset: HoldingId? = null) {
         gameState = applyAction(gameState, action, useCard, amount, asset)
+        persistGame(gameState)
     }
 
     fun advanceDay() {
@@ -46,9 +70,16 @@ class GameViewModel : ViewModel() {
         } else {
             nextDay(gameState)
         }
+        persistGame(gameState)
     }
 
     fun setDifficulty(d: Difficulty) {
         startNewGame(d)
+    }
+
+    fun hasSaveGame(): Boolean = prefs?.contains("game_state") == true
+
+    fun deleteSave() {
+        prefs?.edit()?.remove("game_state")?.apply()
     }
 }

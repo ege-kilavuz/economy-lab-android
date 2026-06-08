@@ -8,6 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -30,7 +31,6 @@ fun LeaderboardScreen() {
     var showGlobal by remember { mutableStateOf(false) }
     var loading by remember { mutableStateOf(false) }
 
-    // XP summary
     val xpSummary = remember { xpManager.getSummary() }
 
     LaunchedEffect(Unit) {
@@ -42,13 +42,23 @@ fun LeaderboardScreen() {
     }
 
     val displayScores = if (showGlobal && globalScores != null) globalScores!! else localScores
-    // Sort by XP (descending) for local, by score for global
-    val sortedScores = if (showGlobal) displayScores.sortedByDescending { it.score }
-                       else displayScores.sortedByDescending { it.xp + it.score * 2 }
+    val sortedScores = if (showGlobal) {
+        displayScores.sortedByDescending { it.score }
+    } else {
+        displayScores.sortedByDescending { it.xp + it.score * 2 }
+    }
     val scoreType = if (showGlobal && globalScores != null) "🌍 Global" else "🏠 XP Sıralaması"
 
+    val playerName = progressManager.userName
+    val playerRank = if (playerName.isNotBlank()) {
+        sortedScores.indexOfFirst { it.name == playerName.trim() }
+    } else -1
+
     Column(
-        modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp).verticalScroll(rememberScrollState())
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 12.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         Spacer(Modifier.height(8.dp))
 
@@ -57,7 +67,10 @@ fun LeaderboardScreen() {
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.08f))
         ) {
-            Row(Modifier.padding(14.dp).fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(14.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text("🏆 ", fontSize = 24.sp)
                 Column(Modifier.weight(1f)) {
                     Text("Seviye ${xpSummary.level} · ${xpSummary.title}", fontWeight = FontWeight.Bold)
@@ -75,10 +88,12 @@ fun LeaderboardScreen() {
         ) {
             Column(Modifier.padding(14.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("$scoreType Sıralama", fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
-                    TextButton(onClick = {
-                        showGlobal = !showGlobal
-                    }) {
+                    Text(
+                        "$scoreType Sıralama",
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(1f)
+                    )
+                    TextButton(onClick = { showGlobal = !showGlobal }) {
                         Text(if (showGlobal) "Yerel" else "Global", fontWeight = FontWeight.Bold)
                     }
                 }
@@ -90,31 +105,67 @@ fun LeaderboardScreen() {
 
                 Spacer(Modifier.height(8.dp))
 
+                if (playerRank >= 0 && sortedScores.isNotEmpty()) {
+                    Text(
+                        "Sıran: #${playerRank + 1} / ${sortedScores.size}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
                 if (sortedScores.isEmpty()) {
-                    Text("Henüz skor yok. İlk sen ol!",
+                    Text(
+                        "Henüz skor yok. İlk sen ol!",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(vertical = 16.dp))
+                        modifier = Modifier.padding(vertical = 16.dp)
+                    )
                 } else {
                     sortedScores.take(20).forEachIndexed { idx, entry ->
-                        Row(
-                            modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                        val isPlayer = entry.name == playerName.trim()
+                        Surface(
+                            modifier = Modifier.fillMaxWidth(),
+                            color = if (isPlayer) MaterialTheme.colorScheme.primary.copy(alpha = 0.08f) else Color.Transparent,
+                            shape = RoundedCornerShape(8.dp)
                         ) {
-                            val medal = when (idx) { 0 -> "🥇"; 1 -> "🥈"; 2 -> "🥉"; else -> "#${idx + 1}" }
-                            Text(medal, modifier = Modifier.width(32.dp))
-                            Text("${entry.badge} ${entry.name}", modifier = Modifier.weight(1f).padding(horizontal = 4.dp),
-                                fontWeight = FontWeight.SemiBold, maxLines = 1)
-                            Column(horizontalAlignment = Alignment.End) {
-                                val scoreText = if (showGlobal) "${entry.score} puan" else "${entry.xp} XP"
-                                Text(scoreText, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
-                                Text(if (showGlobal) entry.difficulty else "Seviye ${entry.level} ${entry.levelTitle}",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                val medal = when (idx) {
+                                    0 -> "🥇"
+                                    1 -> "🥈"
+                                    2 -> "🥉"
+                                    else -> "#${idx + 1}"
+                                }
+                                Text(medal, modifier = Modifier.width(32.dp))
+                                Text(
+                                    "${entry.badge} ${entry.name}",
+                                    modifier = Modifier.weight(1f).padding(horizontal = 4.dp),
+                                    fontWeight = FontWeight.SemiBold,
+                                    maxLines = 1
+                                )
+                                Column(horizontalAlignment = Alignment.End) {
+                                    val scoreText = if (showGlobal) "${entry.score} puan" else "${entry.xp} XP"
+                                    Text(
+                                        scoreText,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                    Text(
+                                        if (showGlobal) entry.difficulty else "Seviye ${entry.level} ${entry.levelTitle}",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
                             }
                         }
                         if (idx < sortedScores.take(20).lastIndex) {
-                            HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
+                            HorizontalDivider(
+                                thickness = 0.5.dp,
+                                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
+                            )
                         }
                     }
                 }
