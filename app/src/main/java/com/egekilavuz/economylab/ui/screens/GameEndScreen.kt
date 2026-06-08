@@ -314,6 +314,51 @@ fun GameNewsPlaceholder(vm: GameViewModel) {
 
             Spacer(Modifier.height(12.dp))
 
+            // Market data card
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.6f))
+            ) {
+                Column(modifier = Modifier.padding(12.dp)) {
+                    Text("📊 Piyasa Verileri", fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.titleSmall)
+                    Spacer(Modifier.height(8.dp))
+
+                    val marketItems = listOf(
+                        "🥇 Altın" to g.goldPrice.toLocaleString(),
+                        "📈 Borsa" to g.stockIndex.toLocaleString(),
+                        "💵 Dolar" to g.usdTry.toLocaleString(),
+                        "₿ BTC" to "₺${g.btcTry.toLocaleString()}",
+                        "◆ ETH" to "₺${g.ethTry.toLocaleString()}",
+                        "🏦 Politika Faizi" to "%${g.policyRate / 100f}"
+                    )
+
+                    // 3x2 grid
+                    marketItems.chunked(3).forEach { row ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            row.forEach { (name, value) ->
+                                Column(modifier = Modifier.padding(vertical = 2.dp)) {
+                                    Text(name, style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                    Text(value, style = MaterialTheme.typography.bodyMedium,
+                                        fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+                                }
+                            }
+                            // Fill empty slots if row is not full
+                            repeat(3 - row.size) {
+                                Spacer(Modifier.weight(1f))
+                            }
+                        }
+                    }
+                }
+            }
+
+            Spacer(Modifier.height(12.dp))
+
             if (g.log.isEmpty()) {
                 Text("Henüz haber yok.", style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)

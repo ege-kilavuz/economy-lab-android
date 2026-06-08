@@ -11,7 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.egekilavuz.economylab.data.*
+import androidx.compose.ui.Alignment
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -119,16 +121,67 @@ fun GameInvestScreen(vm: GameViewModel, onBack: () -> Unit) {
                     Text("Al / Sat", fontWeight = FontWeight.Bold)
                     Spacer(Modifier.height(8.dp))
                     assets.forEach { h ->
-                        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                            ActionBtn("Al ${holdingLabel(h)}") { vm.act(ActionId.BuyAsset, asset = h) }
-                            if ((g.holdings[h] ?: 0) > 0) {
-                                ActionBtn("Sat ${holdingLabel(h)}") { vm.act(ActionId.SellAsset, asset = h) }
+                        val qty = g.holdings[h] ?: 0
+                        val price = assetPrice(g, h)
+                        val fiyatStr = when {
+                            price >= 100000 -> "${price / 1000}bin"
+                            else -> "$price"
+                        }
+
+                        Card(
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.3f))
+                        ) {
+                            Column(modifier = Modifier.padding(10.dp)) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(holdingLabel(h), fontWeight = FontWeight.Bold,
+                                        modifier = Modifier.weight(1f),
+                                        style = MaterialTheme.typography.bodyMedium)
+                                    Text("${price.toLocaleString()} TL",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.secondary)
+                                }
+                                Text("Portföyde: $qty adet = ${(qty * price).toLocaleString()} TL",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Spacer(Modifier.height(4.dp))
+                                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                    OutlinedButton(
+                                        onClick = { vm.act(ActionId.BuyAsset, asset = h) },
+                                        modifier = Modifier.weight(1f),
+                                        shape = RoundedCornerShape(10.dp)
+                                    ) {
+                                        Text("Al +1", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                                    }
+                                    if (qty > 0) {
+                                        OutlinedButton(
+                                            onClick = { vm.act(ActionId.SellAsset, asset = h) },
+                                            modifier = Modifier.weight(1f),
+                                            shape = RoundedCornerShape(10.dp)
+                                        ) {
+                                            Text("Sat -1", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                                        }
+                                        FilledTonalButton(
+                                            onClick = { vm.act(ActionId.SellAsset, amount = qty, asset = h) },
+                                            modifier = Modifier.weight(1f),
+                                            shape = RoundedCornerShape(10.dp)
+                                        ) {
+                                            Text("Tümünü Sat", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
                     Spacer(Modifier.height(4.dp))
-                    Text("Politika faizi: ${g.policyRate / 100f}%", style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+                        Text("Politika faizi: ${g.policyRate / 100f}%", style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text("Piyasa ruh hali: ${g.marketMood}", style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
                 }
             }
 
