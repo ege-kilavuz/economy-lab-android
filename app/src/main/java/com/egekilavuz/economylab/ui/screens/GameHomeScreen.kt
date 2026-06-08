@@ -76,6 +76,15 @@ fun GameHomeScreen(
 
         Spacer(Modifier.height(12.dp))
 
+        // Trend chart (after day 3)
+        if (g.day > 3 && vm.history.size >= 3) {
+            GameTrendChart(
+                history = vm.history.toList(),
+                modifier = Modifier.padding(horizontal = 4.dp)
+            )
+            Spacer(Modifier.height(12.dp))
+        }
+
         // Daily quest card
         Card(
             modifier = Modifier.fillMaxWidth(),

@@ -3,11 +3,13 @@ package com.egekilavuz.economylab.data
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import com.egekilavuz.economylab.ui.screens.DailySnapshot
 
 class GameViewModel(context: Context? = null) : ViewModel() {
 
@@ -15,6 +17,9 @@ class GameViewModel(context: Context? = null) : ViewModel() {
     private val json = Json { ignoreUnknownKeys = true }
 
     var gameState by mutableStateOf(restoreGame() ?: newGame(Difficulty.Easy))
+        private set
+
+    var history = mutableStateListOf<DailySnapshot>()
         private set
 
     var useCard by mutableStateOf(false)
@@ -52,6 +57,8 @@ class GameViewModel(context: Context? = null) : ViewModel() {
         gameState = newGame(difficulty)
         useCard = false
         currentScreen = "home"
+        history.clear()
+        recordSnapshot()
         persistGame(gameState)
     }
 
@@ -70,7 +77,20 @@ class GameViewModel(context: Context? = null) : ViewModel() {
         } else {
             nextDay(gameState)
         }
+        recordSnapshot()
         persistGame(gameState)
+    }
+
+    private fun recordSnapshot() {
+        val g = gameState
+        history.add(DailySnapshot(
+            day = g.day,
+            cash = g.cash,
+            mood = g.mood,
+            fridge = g.fridge,
+            discipline = g.discipline,
+            cardDebt = g.cardDebt
+        ))
     }
 
     fun setDifficulty(d: Difficulty) {
