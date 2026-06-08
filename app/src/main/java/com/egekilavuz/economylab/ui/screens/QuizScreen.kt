@@ -1,6 +1,7 @@
 package com.egekilavuz.economylab.ui.screens
 
-import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -125,8 +126,16 @@ fun QuizScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            // Question
-            Card(
+            // Soru geçiş animasyonu
+            AnimatedContent(
+                targetState = question.id,
+                transitionSpec = {
+                    fadeIn(animationSpec = tween(250)) togetherWith fadeOut(animationSpec = tween(150))
+                },
+                label = "quizContent"
+            ) { _ ->
+                Column {
+                    Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(20.dp),
                 colors = CardDefaults.cardColors(
@@ -238,6 +247,8 @@ fun QuizScreen(
                         text = if (currentIndex + 1 >= questionOrder.size) "Sonuçları Gör" else "Sonraki Soru",
                         fontWeight = FontWeight.Bold
                     )
+                }
+            }
                 }
             }
 
