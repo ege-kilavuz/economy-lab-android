@@ -14,10 +14,13 @@ import java.util.*
 data class LeaderboardEntry(
     val name: String,
     val score: Int,
-    val difficulty: String,
-    val date: String,
+    val difficulty: String = "",
+    val date: String = "",
     val achievements: Int = 0,
-    val badge: String = ""
+    val badge: String = "",
+    val xp: Int = 0,
+    val level: Int = 0,
+    val levelTitle: String = ""
 )
 
 class LeaderboardManager(context: Context) {
@@ -29,40 +32,21 @@ class LeaderboardManager(context: Context) {
     fun saveLocalScore(entry: LeaderboardEntry) {
         val scores = getLocalScores().toMutableList()
         scores.add(entry)
-        val sorted = scores.sortedByDescending { it.score }.take(100)
-        val data = StringBuilder().apply {
-            append("[")
-            sorted.forEachIndexed { i, e ->
-                if (i > 0) append(",")
-                append("""{"name":"${e.name}","score":${e.score},"difficulty":"${e.difficulty}","date":"${e.date}","achievements":${e.achievements},"badge":"${e.badge}"}""")
-            }
-            append("]")
-        }.toString()
-        prefs.edit().putString("local_scores", data).apply()
+        val sorted = scores.sortedByDescending { it.xp + it.score * 2 }.take(100)
+        prefs.edit().putString("local_scores", json.encodeToString(sorted)).apply()
     }
 
     fun getLocalScores(): List<LeaderboardEntry> {
         val raw = prefs.getString("local_scores", null) ?: return emptyList()
         return try {
-            val entries = mutableListOf<LeaderboardEntry>()
-            val parts = raw.split("},{")
-            parts.forEach { part ->
-                val name = Regex(""""name":"([^"]+)""").find(part)?.groupValues?.get(1) ?: return@forEach
-                val score = Regex(""""score":(\d+)""").find(part)?.groupValues?.get(1)?.toIntOrNull() ?: return@forEach
-                val difficulty = Regex(""""difficulty":"([^"]+)""").find(part)?.groupValues?.get(1) ?: ""
-                val date = Regex(""""date":"([^"]+)""").find(part)?.groupValues?.get(1) ?: ""
-                val achievements = Regex(""""achievements":(\d+)""").find(part)?.groupValues?.get(1)?.toIntOrNull() ?: 0
-                val badge = Regex(""""badge":"([^"]+)""").find(part)?.groupValues?.get(1) ?: ""
-                entries.add(LeaderboardEntry(name, score, difficulty, date, achievements, badge))
-            }
-            entries.sortedByDescending { it.score }
+            json.decodeFromString<List<LeaderboardEntry>>(raw)
         } catch (_: Exception) {
             emptyList()
         }
     }
 
     fun getPlayerBest(name: String): LeaderboardEntry? {
-        return getLocalScores().filter { it.name == name }.maxByOrNull { it.score }
+        return getLocalScores().filter { it.name == name }.maxByOrNull { it.xp + it.score * 2 }
     }
 
     fun fetchGlobalScores(onResult: (List<LeaderboardEntry>) -> Unit) {
@@ -82,13 +66,11 @@ class LeaderboardManager(context: Context) {
                 val body = conn.inputStream.bufferedReader().readText()
                 val entries = mutableListOf<LeaderboardEntry>()
 
-                val issueRegex = Regex(""""title":"Skor: ([^-]+) - (\d+)""")
                 val scoreRegex = Regex("""\*\*Skor:\*\* (\d+)""")
                 val nameRegex = Regex("""\*\*Oyuncu:\*\* ([^\n]+)""")
                 val diffRegex = Regex("""\*\*Zorluk:\*\* ([^\n]+)""")
                 val badgeRegex = Regex("""\*\*Rozet:\*\* ([^\n]+)""")
 
-                // Parse each issue body for scores
                 val issues = Regex("\"body\":\"([^\"]+)\"").findAll(body)
                 for (issue in issues) {
                     val issueBody = issue.groupValues[1].replace("\\n", "\n").replace("\\\"", "\"")
@@ -117,6 +99,8 @@ class LeaderboardManager(context: Context) {
                         "**Skor:** ${entry.score}\n" +
                         "**Zorluk:** ${entry.difficulty}\n" +
                         "**Rozet:** ${entry.badge}\n" +
+                        "**XP:** ${entry.xp}\n" +
+                        "**Seviye:** ${entry.level} ${entry.levelTitle}\n" +
                         "**Tarih:** $dateStr"
 
                 val issueUrl = URL("https://api.github.com/repos/ege-kilavuz/economy-lab-android/issues")

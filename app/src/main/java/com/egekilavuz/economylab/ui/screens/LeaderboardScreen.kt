@@ -42,7 +42,10 @@ fun LeaderboardScreen() {
     }
 
     val displayScores = if (showGlobal && globalScores != null) globalScores!! else localScores
-    val scoreType = if (showGlobal && globalScores != null) "🌍 Global" else "🏠 Yerel"
+    // Sort by XP (descending) for local, by score for global
+    val sortedScores = if (showGlobal) displayScores.sortedByDescending { it.score }
+                       else displayScores.sortedByDescending { it.xp + it.score * 2 }
+    val scoreType = if (showGlobal && globalScores != null) "🌍 Global" else "🏠 XP Sıralaması"
 
     Column(
         modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp).verticalScroll(rememberScrollState())
@@ -87,13 +90,13 @@ fun LeaderboardScreen() {
 
                 Spacer(Modifier.height(8.dp))
 
-                if (displayScores.isEmpty()) {
+                if (sortedScores.isEmpty()) {
                     Text("Henüz skor yok. İlk sen ol!",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(vertical = 16.dp))
                 } else {
-                    displayScores.take(20).forEachIndexed { idx, entry ->
+                    sortedScores.take(20).forEachIndexed { idx, entry ->
                         Row(
                             modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                             verticalAlignment = Alignment.CenterVertically
@@ -103,12 +106,14 @@ fun LeaderboardScreen() {
                             Text("${entry.badge} ${entry.name}", modifier = Modifier.weight(1f).padding(horizontal = 4.dp),
                                 fontWeight = FontWeight.SemiBold, maxLines = 1)
                             Column(horizontalAlignment = Alignment.End) {
-                                Text("${entry.score}", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
-                                Text(entry.difficulty, style = MaterialTheme.typography.bodySmall,
+                                val scoreText = if (showGlobal) "${entry.score} puan" else "${entry.xp} XP"
+                                Text(scoreText, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                                Text(if (showGlobal) entry.difficulty else "Seviye ${entry.level} ${entry.levelTitle}",
+                                    style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                         }
-                        if (idx < displayScores.take(20).lastIndex) {
+                        if (idx < sortedScores.take(20).lastIndex) {
                             HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
                         }
                     }

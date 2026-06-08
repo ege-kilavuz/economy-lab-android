@@ -54,6 +54,11 @@ fun GameEndScreen(vm: GameViewModel, onBack: () -> Unit) {
             globalScores = scores
         }
         xpManager.addXpForAction("game_finish")
+        // Game score → bonus XP (score/2, max 100)
+        val gameXp = (score / 2).coerceIn(0, 100)
+        if (gameXp > 0) {
+            xpManager.addXp(gameXp)
+        }
     }
 
     Scaffold(
@@ -122,13 +127,17 @@ fun GameEndScreen(vm: GameViewModel, onBack: () -> Unit) {
                     keyboardActions = KeyboardActions(onDone = {
                         if (playerName.isNotBlank()) {
                             val badge = unlocked.firstOrNull()?.emoji ?: ""
+                            val xpSummary = xpManager.getSummary()
                             val entry = LeaderboardEntry(
                                 name = playerName.trim(),
                                 score = score,
                                 difficulty = difficultyLabel(g.difficulty),
                                 date = formatScoreDate(),
                                 achievements = unlocked.size,
-                                badge = badge
+                                badge = badge,
+                                xp = xpSummary.total,
+                                level = xpSummary.level,
+                                levelTitle = xpSummary.title
                             )
                             leaderboardManager.saveLocalScore(entry)
                             localScores = leaderboardManager.getLocalScores()
@@ -141,13 +150,17 @@ fun GameEndScreen(vm: GameViewModel, onBack: () -> Unit) {
                     onClick = {
                         if (playerName.isNotBlank()) {
                             val badge = unlocked.firstOrNull()?.emoji ?: ""
+                            val xpSummary = xpManager.getSummary()
                             val entry = LeaderboardEntry(
                                 name = playerName.trim(),
                                 score = score,
                                 difficulty = difficultyLabel(g.difficulty),
                                 date = formatScoreDate(),
                                 achievements = unlocked.size,
-                                badge = badge
+                                badge = badge,
+                                xp = xpSummary.total,
+                                level = xpSummary.level,
+                                levelTitle = xpSummary.title
                             )
                             leaderboardManager.saveLocalScore(entry)
                             leaderboardManager.submitScoreToGitHub(entry) { /* submitted */ }
