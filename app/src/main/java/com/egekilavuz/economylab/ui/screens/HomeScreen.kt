@@ -1,5 +1,7 @@
 package com.egekilavuz.economylab.ui.screens
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -90,6 +92,7 @@ fun CategoryCard(
             .aspectRatio(3 / 2f)
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
+            .animateContentSize(animationSpec = spring(dampingRatio = 0.6f))
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(

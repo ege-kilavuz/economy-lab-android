@@ -2,6 +2,8 @@ package com.egekilavuz.economylab.ui.screens
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -203,7 +205,9 @@ fun ItemCard(
             containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f)
         )
     ) {
-        Column(modifier = Modifier.padding(12.dp)) {
+        Column(
+            modifier = Modifier.padding(12.dp).animateContentSize(animationSpec = tween(300))
+        ) {
             Row(
                 modifier = Modifier.fillMaxWidth().clickable {
                     if (!expanded) onOpen()

@@ -1,5 +1,7 @@
 package com.egekilavuz.economylab.ui.screens
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,6 +14,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import com.egekilavuz.economylab.data.*
 
 @Composable
@@ -195,7 +199,7 @@ fun AppIconGrid(g: GameState, vm: GameViewModel, onNavigate: (String) -> Unit) {
 fun AppIconButton(emoji: String, label: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
     OutlinedCard(
         onClick = onClick,
-        modifier = modifier.padding(2.dp).aspectRatio(1f),
+        modifier = modifier.padding(2.dp).aspectRatio(1f).animateContentSize(animationSpec = tween(150)),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.outlinedCardColors(
             containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.3f)
@@ -205,7 +209,7 @@ fun AppIconButton(emoji: String, label: String, modifier: Modifier = Modifier, o
             modifier = Modifier.padding(8.dp).fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(emoji, fontSize = 28.sp)
+            Text(emoji, fontSize = 28.sp, modifier = Modifier.semantics { contentDescription = label })
             Text(label, fontSize = 11.sp, maxLines = 1, color = MaterialTheme.colorScheme.onSurface)
         }
     }
