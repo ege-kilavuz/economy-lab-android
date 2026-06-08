@@ -5,6 +5,15 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 
 @Serializable
+data class JsonDailyQuestion(
+    val id: String,
+    val q: String,
+    val choices: List<String>,
+    val correctIndex: Int,
+    val explain: String
+)
+
+@Serializable
 data class JsonCategory(
     val id: String,
     val title: String,
@@ -59,6 +68,7 @@ data class JsonContent(
     val categories: List<JsonCategory>,
     val scenarios: List<JsonScenario> = emptyList(),
     val learningPath: List<String> = emptyList(),
+    val dailyQuiz: Map<String, List<JsonDailyQuestion>> = emptyMap(),
     val _version: Int = 1,
     val _updateUrl: String = ""
 )

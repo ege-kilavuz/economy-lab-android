@@ -3119,6 +3119,1450 @@
     "psychology",
     "safety"
   ],
-  "_version": 14,
-  "_updateUrl": "https://raw.githubusercontent.com/ege-kilavuz/economy-lab-android/main/app/src/main/assets/content.json"
+  "_version": 15,
+  "_updateUrl": "https://raw.githubusercontent.com/ege-kilavuz/economy-lab-android/main/app/src/main/assets/content.json",
+  "dailyQuiz": {
+    "2026-06": [
+      {
+        "id": "dq_2026-06_1",
+        "q": "Kripto borsalarında hangi güvenlik önlemi en önemlisidir?",
+        "choices": [
+          "Telefon numarasını gizlemek",
+          "2FA (iki faktörlü doğrulama) ve güçlü şifre",
+          "Sık sık şifre değiştirmek",
+          "Reklamlara güvenmek"
+        ],
+        "correctIndex": 1,
+        "explain": "2FA ek bir güvenlik katmanı sağlar."
+      },
+      {
+        "id": "dq_2026-06_2",
+        "q": "Temettü nedir?",
+        "choices": [
+          "Şirket borcu",
+          "Kârdan hissedarlara dağıtılan pay",
+          "Borsa endeksi",
+          "Hisse artışı"
+        ],
+        "correctIndex": 1,
+        "explain": "Şirket kârından hissedarlara dağıtılan paydır."
+      },
+      {
+        "id": "dq_2026-06_3",
+        "q": "Banka kartı ve hesap güvenliğinde 2FA neden önemlidir?",
+        "choices": [
+          "Komisyonu düşürür",
+          "Şifre ele geçse bile ek doğrulama sağlar",
+          "Faizi siler",
+          "Telefonu hızlandırır"
+        ],
+        "correctIndex": 1,
+        "explain": "Ek doğrulama, hesabın ele geçirilmesini zorlaştırır."
+      },
+      {
+        "id": "dq_2026-06_4",
+        "q": "Kira geliri için hangisi doğrudur?",
+        "choices": [
+          "Hiç vergi ödenmez",
+          "Belirli bir istisna tutarına kadar vergi alınmaz",
+          "Her kuruşu vergilendirilir",
+          "Sadece ticari kiralar vergiye tabidir"
+        ],
+        "correctIndex": 1,
+        "explain": "Konut kira gelirinde yıllık istisna tutarı bulunur (2025: 33.000 TL)."
+      },
+      {
+        "id": "dq_2026-06_5",
+        "q": "Hangisi bir varlık sınıfı DEĞİLDİR?",
+        "choices": [
+          "Tahvil",
+          "Emtia",
+          "Kredi notu",
+          "Hisse senedi"
+        ],
+        "correctIndex": 2,
+        "explain": "Kredi notu varlık değil, borç ödeme puanıdır."
+      },
+      {
+        "id": "dq_2026-06_6",
+        "q": "Kur korumalı mevduat nedir?",
+        "choices": [
+          "Hiç risk içermeyen yatırım",
+          "Döviz kuru artışına karşı koruma sağlayan mevduat",
+          "Tamamen zarar garantili ürün",
+          "Sadece TL mevduat"
+        ],
+        "correctIndex": 1,
+        "explain": "KKM, kur artışına karşı mevduatı korur."
+      },
+      {
+        "id": "dq_2026-06_7",
+        "q": "Fırsat maliyeti ne demek?",
+        "choices": [
+          "Kargo ücreti",
+          "Banka masrafı",
+          "Seçtiğin şey yüzünden vazgeçtiğin diğer seçenek",
+          "Etiket fiyatı"
+        ],
+        "correctIndex": 2,
+        "explain": "Birini seçmek, diğerinden vazgeçmek demektir."
+      },
+      {
+        "id": "dq_2026-06_8",
+        "q": "Tek hisseye tüm parayı koymanın temel sakıncası nedir?",
+        "choices": [
+          "Riski tek noktada toplaması",
+          "Getiriyi düşürmesi",
+          "Borsayı kapatması",
+          "Vergiyi otomatik artırması"
+        ],
+        "correctIndex": 0,
+        "explain": "Tek varlığa yoğunlaşmak zarar ihtimalini büyütebilir."
+      },
+      {
+        "id": "dq_2026-06_9",
+        "q": "Kredi notu sorgularken not düşer mi?",
+        "choices": [
+          "Evet her sorguda düşer",
+          "Hayır, kişisel sorgulamalar notu etkilemez",
+          "Sadece banka sorguları etkiler",
+          "Her sorgu 10 puan düşürür"
+        ],
+        "correctIndex": 1,
+        "explain": "Kendin sorguladığında notun etkilenmez; banka sorgularında çok sayıda olursa etkileyebilir."
+      },
+      {
+        "id": "dq_2026-06_10",
+        "q": "En sağlıklı yatırım tutumu nedir?",
+        "choices": [
+          "Herkesi taklit",
+          "Geçmiş performans",
+          "Sürekli al-sat",
+          "Planlı disiplin"
+        ],
+        "correctIndex": 3,
+        "explain": "Planlı yaklaşım duygusal kararları filtreler."
+      },
+      {
+        "id": "dq_2026-06_11",
+        "q": "Kripto varlıklar Türkiye'de yasal mı?",
+        "choices": [
+          "Tamamen yasak",
+          "Alım-satım yasal, ödeme aracı olarak kullanımı düzenlenmemiş",
+          "Sadece devlet onaylı coinler yasal",
+          "Sadece bankalar kullanabilir"
+        ],
+        "correctIndex": 1,
+        "explain": "Kripto alım-satımı yasal ancak ödeme aracı olarak tanınmıyor."
+      },
+      {
+        "id": "dq_2026-06_12",
+        "q": "BES'te devlet katkısı ne kadardır?",
+        "choices": [
+          "%20",
+          "%10",
+          "%50",
+          "%30"
+        ],
+        "correctIndex": 3,
+        "explain": "Devlet katkısı oranı %30'dur (belirli limitlere kadar)."
+      },
+      {
+        "id": "dq_2026-06_13",
+        "q": "KKDF ve BSMV nedir?",
+        "choices": [
+          "Komisyon",
+          "Krediye eklenen vergi/fon",
+          "Havale ücreti",
+          "Sigorta primi"
+        ],
+        "correctIndex": 1,
+        "explain": "Kredi maliyetine eklenen vergi ve fon kesintileridir."
+      },
+      {
+        "id": "dq_2026-06_14",
+        "q": "ESG kriterleri hangi alanlari kapsar?",
+        "choices": [
+          "Sadece vergi",
+          "Sadece cevre",
+          "Cevre, sosyal ve yonetisim",
+          "Sadece karlilik"
+        ],
+        "correctIndex": 2,
+        "explain": "ESG: Environmental (Cevre), Social (Sosyal), Governance (Yonetisim)."
+      },
+      {
+        "id": "dq_2026-06_15",
+        "q": "Bir yatırım aracını değerlendirirken geçmiş performans için en sağlıklı yaklaşım hangisi?",
+        "choices": [
+          "Geçmiş hep geleceği garanti eder",
+          "Sadece son güne bakılır",
+          "Geçmiş veri fikir verir ama garanti sağlamaz",
+          "Geçmişe hiç bakılmaz"
+        ],
+        "correctIndex": 2,
+        "explain": "Geçmiş performans bilgi sağlar ama kesin sonuç sözü vermez."
+      },
+      {
+        "id": "dq_2026-06_16",
+        "q": "Yatırımda disiplin ne demektir?",
+        "choices": [
+          "Her gün borsa izlemek",
+          "Planına sadık kalmak",
+          "Çok ders çalışmak",
+          "Hiç harcamamak"
+        ],
+        "correctIndex": 1,
+        "explain": "Duygulara kapılmadan planı sürdürmektir."
+      },
+      {
+        "id": "dq_2026-06_17",
+        "q": "TCMB faiz artırınca döviz kuruna kısa vadede etkisi ne olur?",
+        "choices": [
+          "Hiç etkisi olmaz",
+          "Kur düşebilir (TL cazip hale gelir)",
+          "Kur yükselir",
+          "Her şey ücretsiz olur"
+        ],
+        "correctIndex": 1,
+        "explain": "Yüksek faiz TL varlıkları cazip kılarak kur baskısını azaltabilir."
+      },
+      {
+        "id": "dq_2026-06_18",
+        "q": "FAST/EFT/havale işlemi yaparken en kritik kontrol nedir?",
+        "choices": [
+          "Emoji seçmek",
+          "Alıcı bilgilerini doğrulamak",
+          "Ekran parlaklığını artırmak",
+          "Bildirim sesini açmak"
+        ],
+        "correctIndex": 1,
+        "explain": "Yanlış alıcıya gönderim riskini azaltmak için alıcı bilgileri kontrol edilmelidir."
+      },
+      {
+        "id": "dq_2026-06_19",
+        "q": "Acil durum fonu neden gerekir?",
+        "choices": [
+          "Hediye almak için",
+          "Zor zamanda borca girmemek için",
+          "Yatırım yapmak için",
+          "Banka istediği için"
+        ],
+        "correctIndex": 1,
+        "explain": "Beklenmedik masraf için güvenliktir."
+      },
+      {
+        "id": "dq_2026-06_20",
+        "q": "Findeks notu kaç aralığındadır?",
+        "choices": [
+          "0-500",
+          "0-100",
+          "0-1900",
+          "0-10000"
+        ],
+        "correctIndex": 2,
+        "explain": "Findeks kredi notu 0-1900 aralığındadır; yüksek not daha iyidir."
+      },
+      {
+        "id": "dq_2026-06_21",
+        "q": "KDV'nin açılımı nedir?",
+        "choices": [
+          "Kamu Dağıtım Varlığı",
+          "Katma Değer Vergisi",
+          "Kredi Değerleme Verisi",
+          "Kurumsal Denetim Varlığı"
+        ],
+        "correctIndex": 1,
+        "explain": "KDV, mal ve hizmetlerin her aşamasında eklenen değere uygulanan dolaylı vergidir."
+      },
+      {
+        "id": "dq_2026-06_22",
+        "q": "Faiz artışı enflasyonu nasıl yavaşlatır?",
+        "choices": [
+          "Talebi düşürerek",
+          "Maaşları artırarak",
+          "Vergi azaltarak",
+          "Krediyi ucuzlatarak"
+        ],
+        "correctIndex": 0,
+        "explain": "Yüksek faiz borçlanmayı azaltır, talep düşer."
+      },
+      {
+        "id": "dq_2026-06_23",
+        "q": "Döngüsel ekonominin temel amacı nedir?",
+        "choices": [
+          "Daha çok üretmek",
+          "Atığı sıfırlamak ve kaynakları yeniden kullanmak",
+          "Fiyatları düşürmek",
+          "İşçi çıkarmak"
+        ],
+        "correctIndex": 1,
+        "explain": "Döngüsel ekonomi, atıktan beslenen bir üretim modelidir."
+      },
+      {
+        "id": "dq_2026-06_24",
+        "q": "Resesyon ne demektir?",
+        "choices": [
+          "Herkes işe girer",
+          "Ekonomik bayram",
+          "Borsa uçar",
+          "Ekonomik daralma"
+        ],
+        "correctIndex": 3,
+        "explain": "Ekonomi küçülür, üretim düşer."
+      },
+      {
+        "id": "dq_2026-06_25",
+        "q": "Likit varlık ne demektir?",
+        "choices": [
+          "Sadece bankada duran",
+          "Rengi su gibi",
+          "Hızlıca nakde dönen",
+          "Çok pahalı"
+        ],
+        "correctIndex": 2,
+        "explain": "Nakit en likit varlıktır."
+      },
+      {
+        "id": "dq_2026-06_26",
+        "q": "Kredi notu hangi sıklıkta güncellenir?",
+        "choices": [
+          "Her saat",
+          "Ayda bir veya borç ödeme bildirimi yapıldıkça",
+          "Yılda bir",
+          "Sadece kredi başvurusunda"
+        ],
+        "correctIndex": 1,
+        "explain": "Findeks ve benzeri kuruluşlar düzenli olarak günceller."
+      },
+      {
+        "id": "dq_2026-06_27",
+        "q": "Stablecoin nedir?",
+        "choices": [
+          "Her zaman yükselen coin",
+          "Değeri başka bir varlığa sabitlenmiş kripto",
+          "En ucuz coin",
+          "Merkez bankası coini"
+        ],
+        "correctIndex": 1,
+        "explain": "Stablecoin'ler ABD doları gibi varlıklara sabitlenir."
+      },
+      {
+        "id": "dq_2026-06_28",
+        "q": "Karbon ayak izi neden önemlidir?",
+        "choices": [
+          "Sadece şirketleri ilgilendirir",
+          "Bireysel tüketimin çevresel etkisini gösterir",
+          "Vergi hesaplamak içindir",
+          "Enerji üretimiyle ilgili değildir"
+        ],
+        "correctIndex": 1,
+        "explain": "Karbon ayak izi, bir bireyin veya kurumun çevreye etkisini ölçer."
+      },
+      {
+        "id": "dq_2026-06_29",
+        "q": "Yüksek getiri beklentisi olan hisse veya araçlar için hangisi doğrudur?",
+        "choices": [
+          "Asla değer kaybetmez",
+          "Sadece uzmanlar zarar eder",
+          "Yüksek risk de barındırabilir",
+          "Kesin kazandırır"
+        ],
+        "correctIndex": 2,
+        "explain": "Beklenen getiri arttıkça belirsizlik ve oynaklık da artabilir."
+      },
+      {
+        "id": "dq_2026-06_30",
+        "q": "Yatırımda yoğun heyecan hissediyorsan en sağlıklı kısa aksiyon ne olabilir?",
+        "choices": [
+          "Daha fazla borçlanmak",
+          "Sosyal medyayı referans almak",
+          "Hemen tüm parayla girmek",
+          "24 saat bekleyip planı tekrar okumak"
+        ],
+        "correctIndex": 3,
+        "explain": "Kısa bekleme, duygusal kararı filtreler."
+      },
+      {
+        "id": "dq_2026-06_31",
+        "q": "Greenwashing ne demektir?",
+        "choices": [
+          "Geri donusum",
+          "Bitki sulamak",
+          "Urunu oldugundan yesil gostermek",
+          "Camasi yikamak"
+        ],
+        "correctIndex": 2,
+        "explain": "Greenwashing, cevreye duyarli gozukme pazarlamasidir."
+      },
+      {
+        "id": "dq_2026-06_32",
+        "q": "Kredi toplam maliyeti neyi içerir?",
+        "choices": [
+          "Sadece KKDF",
+          "Sadece faiz",
+          "Faiz+masraf+KKDF+BSMV+sigorta",
+          "Sadece masraf"
+        ],
+        "correctIndex": 2,
+        "explain": "Gerçek maliyet faiz+masraf+vergilerin toplamıdır."
+      },
+      {
+        "id": "dq_2026-06_33",
+        "q": "Stopaj vergisi kim tarafından kesilir?",
+        "choices": [
+          "Noter tarafından",
+          "Alıcı tarafından",
+          "Ödemeyi yapan tarafından kaynakta",
+          "Banka tarafından"
+        ],
+        "correctIndex": 2,
+        "explain": "Stopaj, ödeme yapılırken kaynakta kesilen vergidir."
+      },
+      {
+        "id": "dq_2026-06_34",
+        "q": "Dijital bankacılıkta en güvenli giriş yolu hangisidir?",
+        "choices": [
+          "Sosyal medya DM’si",
+          "Forumdaki kısayol",
+          "Bankanın resmî uygulaması veya adresi",
+          "Mesajla gelen link"
+        ],
+        "correctIndex": 2,
+        "explain": "Banka işlemleri yalnızca resmî kanal üzerinden yapılmalıdır."
+      },
+      {
+        "id": "dq_2026-06_35",
+        "q": "Bir hisseye sadece sosyal medyada konuşuluyor diye girmek hangi riski artırır?",
+        "choices": [
+          "Disiplini güçlendirir",
+          "Getiriyi garanti eder",
+          "Sürü psikolojisini ve plansız alımı artırır",
+          "Vergiyi azaltır"
+        ],
+        "correctIndex": 2,
+        "explain": "Popülerlik tek başına sağlıklı yatırım gerekçesi değildir."
+      },
+      {
+        "id": "dq_2026-06_36",
+        "q": "Karbon ayak izini azaltmak icin en etkili yontem?",
+        "choices": [
+          "Sadece cop toplamak",
+          "Daha cok geri donusum",
+          "Ucak yolculugunu azaltmak",
+          "Her seyi cope atmak"
+        ],
+        "correctIndex": 2,
+        "explain": "Ulasim ve gida en buyuk karbon kaynaklaridir."
+      },
+      {
+        "id": "dq_2026-06_37",
+        "q": "Beklenmedik 8.000 TL masraf çıktıysa en sağlıklı ilk kaynak hangisi olabilir?",
+        "choices": [
+          "Acil durum fonu",
+          "Arkadaş gazı",
+          "Asgari ödeme",
+          "Yeni kredi çekmek"
+        ],
+        "correctIndex": 0,
+        "explain": "Acil fon bu tip şoklar içindir."
+      },
+      {
+        "id": "dq_2026-06_38",
+        "q": "Borsada ilk bakılması gerekenlerden biri hangisidir?",
+        "choices": [
+          "Sadece logo rengi",
+          "Arkadaş tavsiyesi",
+          "Şirket ve risk/getiri dengesi",
+          "Sadece forum yorumu"
+        ],
+        "correctIndex": 2,
+        "explain": "Karar verirken şirketin yapısı ve risk-getiri dengesi değerlendirilmelidir."
+      },
+      {
+        "id": "dq_2026-06_39",
+        "q": "Cari denge neyi gösterir?",
+        "choices": [
+          "Ülkeye giren ve çıkan döviz miktarını (ithalat-ihracat farkı)",
+          "Bütçe açığını",
+          "Enflasyon oranını",
+          "Faiz oranını"
+        ],
+        "correctIndex": 0,
+        "explain": "Cari denge, bir ülkenin dış ticaret dengesini gösterir."
+      },
+      {
+        "id": "dq_2026-06_40",
+        "q": "FOMO nedir?",
+        "choices": [
+          "Yatırım aracı",
+          "Kaçırma korkusuyla acele karar",
+          "Borsa terimi",
+          "Para biriktirme yöntemi"
+        ],
+        "correctIndex": 1,
+        "explain": "Fear Of Missing Out: yükselen bir şeyi kaçırma korkusu."
+      },
+      {
+        "id": "dq_2026-06_41",
+        "q": "Kripto para madenciliği nedir?",
+        "choices": [
+          "Banka işlemi",
+          "Karmaşık matematik problemleri çözerek yeni coin üretmek",
+          "Hisse senedi alımı",
+          "Döviz bozdurma"
+        ],
+        "correctIndex": 1,
+        "explain": "Madencilik, işlemleri doğrulayarak yeni coin kazanmaktır."
+      },
+      {
+        "id": "dq_2026-06_42",
+        "q": "Maaş artışı enflasyondan düşükse ne olur?",
+        "choices": [
+          "Reel gelir düşer",
+          "Hiç değişmez",
+          "Tasarruf artar",
+          "Zenginleşirsin"
+        ],
+        "correctIndex": 0,
+        "explain": "Fiyatlar daha hızlı artıyordur."
+      },
+      {
+        "id": "dq_2026-06_43",
+        "q": "Sürdürülebilir yatırımda hangisi daha önemlidir?",
+        "choices": [
+          "En yüksek kısa vadeli getiri",
+          "Uzun vadeli çevresel etki + finansal getiri dengesi",
+          "Sadece düşük risk",
+          "En popüler hisse senedi"
+        ],
+        "correctIndex": 1,
+        "explain": "Sürdürülebilir yatırım, finansal getiri ve çevresel etkiyi birlikte değerlendirir."
+      },
+      {
+        "id": "dq_2026-06_44",
+        "q": "Greenwashing nedir?",
+        "choices": [
+          "Yeşil boya üretimi",
+          "Bir ürünü olduğundan çevreci göstermek",
+          "Geri dönüşüm tesisi",
+          "Organik tarım"
+        ],
+        "correctIndex": 1,
+        "explain": "Şirketlerin yeşil görünüp aslında çevreci olmaması."
+      },
+      {
+        "id": "dq_2026-06_45",
+        "q": "ESG kriterleri neyi ölçer?",
+        "choices": [
+          "Sadece kârlılığı",
+          "Çevresel, sosyal ve yönetişim performansını",
+          "Hisselerin anlık değerini",
+          "Şirketlerin yaşını"
+        ],
+        "correctIndex": 1,
+        "explain": "ESG: Environmental (çevre), Social (sosyal), Governance (yönetişim)."
+      },
+      {
+        "id": "dq_2026-06_46",
+        "q": "50/30/20 kuralındaki %20 genelde ne içindir?",
+        "choices": [
+          "Sadece tatil",
+          "Kripto al-sat",
+          "Sadece kira",
+          "Birikim ve borç kapatma"
+        ],
+        "correctIndex": 3,
+        "explain": "Gelecek payı genelde birikim + borç azaltma içindir."
+      },
+      {
+        "id": "dq_2026-06_47",
+        "q": "Risk ve getiri ilişkisi genelde nasıldır?",
+        "choices": [
+          "Sadece kriptoda vardır",
+          "Hiç ilişki yoktur",
+          "Risk arttıkça olası getiri de artabilir",
+          "Yüksek getiri hep risksizdir"
+        ],
+        "correctIndex": 2,
+        "explain": "Yüksek getiri beklentisi çoğu zaman daha yüksek risk taşır."
+      },
+      {
+        "id": "dq_2026-06_48",
+        "q": "Dongusel ekonominin temel ilkesi nedir?",
+        "choices": [
+          "Kaynaklari dongude tutmak",
+          "Sadece geri donusum",
+          "Surekli yeni urun almak",
+          "Her seyi cope atmak"
+        ],
+        "correctIndex": 0,
+        "explain": "Dongusel ekonomide atik yoktur, her sey yeniden kullanilir."
+      },
+      {
+        "id": "dq_2026-06_49",
+        "q": "Hisse senedi alırken aslında neye ortak olursun?",
+        "choices": [
+          "Şirkete",
+          "Markete",
+          "Devlete",
+          "Bankaya"
+        ],
+        "correctIndex": 0,
+        "explain": "Hisse senedi, şirkete ortaklık payını temsil eder."
+      },
+      {
+        "id": "dq_2026-06_50",
+        "q": "Kredi notunu yükseltmek için en etkili yöntem hangisidir?",
+        "choices": [
+          "Sürekli yeni kredi başvurusu yapmak",
+          "Faturaları düzenli ödeyip kredi kartı borcunu zamanında kapatmak",
+          "Hiç kredi kullanmamak",
+          "Tüm kartları iptal etmek"
+        ],
+        "correctIndex": 1,
+        "explain": "Düzenli ödeme alışkanlığı notu istikrarlı şekilde yükseltir."
+      },
+      {
+        "id": "dq_2026-06_51",
+        "q": "Acil durum fonunun temel amacı nedir?",
+        "choices": [
+          "Vergi ödememek",
+          "Daha çok alışveriş yapmak",
+          "Beklenmedik masrafta borca girmemek",
+          "Kur farkı kovalamak"
+        ],
+        "correctIndex": 2,
+        "explain": "Acil fon, şok giderlerde güvenlik yastığıdır."
+      },
+      {
+        "id": "dq_2026-06_52",
+        "q": "Potansiyel büyüme nedir?",
+        "choices": [
+          "Enflasyonsuz sürdürülebilir büyüme",
+          "En hızlı büyüme anı",
+          "Teorik kavram",
+          "Ulaşılamaz büyüme"
+        ],
+        "correctIndex": 0,
+        "explain": "Enflasyonist baskı yaratmayan sürdürülebilir büyüme oranıdır."
+      },
+      {
+        "id": "dq_2026-06_53",
+        "q": "Borsada bilinçli yatırımcı ne yapar?",
+        "choices": [
+          "Bilgi toplar, riski değerlendirir",
+          "Her gün panikle işlem açar",
+          "Borçla sürekli alım yapar",
+          "Tek söylentiyle karar verir"
+        ],
+        "correctIndex": 0,
+        "explain": "Bilinçli yatırım, veri ve planla hareket etmeyi gerektirir."
+      },
+      {
+        "id": "dq_2026-06_54",
+        "q": "Borsada çeşitlendirme neden yapılır?",
+        "choices": [
+          "Tek bir riske bağlı kalmamak için",
+          "Her gün al-sat yapmak için",
+          "Daha çok işlem ücreti ödemek için",
+          "Takibi zorlaştırmak için"
+        ],
+        "correctIndex": 0,
+        "explain": "Çeşitlendirme, riskin tek bir varlıkta toplanmasını azaltır."
+      },
+      {
+        "id": "dq_2026-06_55",
+        "q": "Bütçede “istekler” bölümü neyi kapsar?",
+        "choices": [
+          "Vergi ve sigorta",
+          "Borç faizi",
+          "Eğlence ve keyfi harcamalar",
+          "Kira ve faturalar"
+        ],
+        "correctIndex": 2,
+        "explain": "İstekler, ertelenebilir/keyfi harcamalardır."
+      },
+      {
+        "id": "dq_2026-06_56",
+        "q": "GSYH açılımı nedir?",
+        "choices": [
+          "Güncel Satın Alma",
+          "Gelişmiş Sermaye",
+          "Genel Sistem Yönetimi",
+          "Gayri Safi Yurtiçi Hasıla"
+        ],
+        "correctIndex": 3,
+        "explain": "Ülkedeki toplam nihai mal ve hizmet değeridir."
+      },
+      {
+        "id": "dq_2026-06_57",
+        "q": "BTC'nin toplam arzı neden sınırlıdır (21 milyon)?",
+        "choices": [
+          "Madenler tükendiği için",
+          "Protokol koduyla sabitlenmiştir, enflasyonu önler",
+          "Bankalar anlaştığı için",
+          "Hükümet kararıyla"
+        ],
+        "correctIndex": 1,
+        "explain": "Sınırlı arz, kıtlık yaratarak değer koruma aracı olmasını sağlar."
+      },
+      {
+        "id": "dq_2026-06_58",
+        "q": "Kredi notu hangi amaçla kullanılır?",
+        "choices": [
+          "Telefon faturanı düşürmek için",
+          "Hangi okula gideceğini belirler",
+          "Bankaların kredi/kart başvurunda riskini değerlendirmesi için",
+          "Pasaport almak için"
+        ],
+        "correctIndex": 2,
+        "explain": "Kredi notu, geri ödeme güvenilirliğinin sayısal göstergesidir."
+      },
+      {
+        "id": "dq_2026-06_59",
+        "q": "Okun yasası neyi açıklar?",
+        "choices": [
+          "Borsa her an yükselebilir",
+          "Büyüme-işsizlik ters ilişki",
+          "Enflasyon-işsizlik doğru ilişki",
+          "Faiz-döviz ilişkisi"
+        ],
+        "correctIndex": 1,
+        "explain": "Büyüme hızlanınca işsizlik düşme eğilimindedir."
+      },
+      {
+        "id": "dq_2026-06_60",
+        "q": "Başkasının kazancını görünce stratejiyi bozmak hangi probleme yakındır?",
+        "choices": [
+          "Bileşik getiri",
+          "Likidite",
+          "Disiplin",
+          "Sürü psikolojisi"
+        ],
+        "correctIndex": 3,
+        "explain": "Başkalarını kör taklit etmek sürü psikolojisidir."
+      },
+      {
+        "id": "dq_2026-06_61",
+        "q": "İthalat artarsa ne olur?",
+        "choices": [
+          "Döviz ihtiyacı artar, TL değer kaybedebilir",
+          "Borsa düşer",
+          "İşsizlik biter",
+          "Her şey ucuzlar"
+        ],
+        "correctIndex": 0,
+        "explain": "Çok ithalat döviz talebini artırır, bu da yerel parayı zayıflatabilir."
+      },
+      {
+        "id": "dq_2026-06_62",
+        "q": "Kart limiti neye göre olmalı?",
+        "choices": [
+          "İstediğin harcama",
+          "Cüzdan boyutu",
+          "Gelir ve ödeme gücü",
+          "Arkadaşının limiti"
+        ],
+        "correctIndex": 2,
+        "explain": "Ödeyebileceğin kadar limit sağlıklıdır."
+      },
+      {
+        "id": "dq_2026-06_63",
+        "q": "DCA’nın (kademeli alım) en büyük faydası nedir?",
+        "choices": [
+          "Stresi azaltıp ortalama maliyeti dengelemek",
+          "Hiç zarar etmemek",
+          "En dipten alma garantisi",
+          "Hemen zengin etmek"
+        ],
+        "correctIndex": 0,
+        "explain": "Düzenli alım duygusal hatayı azaltır."
+      },
+      {
+        "id": "dq_2026-06_64",
+        "q": "Enflasyon olunca ne olur?",
+        "choices": [
+          "Krediler biter",
+          "Aynı parayla daha az şey alınır",
+          "Paranın gücü artar",
+          "İşsizlik sıfırlanır"
+        ],
+        "correctIndex": 1,
+        "explain": "Fiyatlar artınca alım gücü düşer."
+      },
+      {
+        "id": "dq_2026-06_65",
+        "q": "Kayıptan kaçınma hangi davranışta görülür?",
+        "choices": [
+          "Zarar kesip plana dönmek",
+          "Portföyü çeşitlendirmek",
+          "Acil fon ayırmak",
+          "Zarardaki pozisyonu “belki döner” diye sonsuza dek tutmak"
+        ],
+        "correctIndex": 3,
+        "explain": "Zararı kabullenmeyi ertelemek, kayıptan kaçınmadır."
+      },
+      {
+        "id": "dq_2026-06_66",
+        "q": "Kripto paranın temel özelliği nedir?",
+        "choices": [
+          "Fiziksel olarak cüzdanda taşınır",
+          "Merkeziyetsiz ve blokzincir üzerinde çalışır",
+          "Merkez bankası tarafından basılır",
+          "Her ülkenin resmî para birimidir"
+        ],
+        "correctIndex": 1,
+        "explain": "Kripto paralar merkezi bir otoriteye bağlı olmadan çalışır."
+      },
+      {
+        "id": "dq_2026-06_67",
+        "q": "Kredi notu düşükken kredi çekmek neden zordur?",
+        "choices": [
+          "Banka istemez",
+          "Riskli görüldüğün için ya reddedilirsin ya da yüksek faiz alırsın",
+          "Sadece uzun vade verilir",
+          "Hiç fark etmez"
+        ],
+        "correctIndex": 1,
+        "explain": "Düşük not = yüksek risk, banka ya reddeder ya da yüksek faizle verir."
+      },
+      {
+        "id": "dq_2026-06_68",
+        "q": "Kredi notunda 'kara liste' ne demektir?",
+        "choices": [
+          "Çok yüksek not",
+          "Ödenmemiş borç nedeniyle olumsuz kayıt",
+          "Yeni müşteri",
+          "Banka çalışanı olmak"
+        ],
+        "correctIndex": 1,
+        "explain": "Kara liste, ödenmemiş borçların kaydedildiği olumsuz sicildir."
+      },
+      {
+        "id": "dq_2026-06_69",
+        "q": "Küresel ekonomik kriz Türkiye'yi nasıl etkiler?",
+        "choices": [
+          "Hiç etkilemez",
+          "Sadece borsayı etkiler",
+          "Herkes zengin olur",
+          "Sermaye çıkışı, kur artışı ve talep daralması yaşanabilir"
+        ],
+        "correctIndex": 3,
+        "explain": "Küresel krizler gelişmekte olan ülkeleri daha sert etkiler."
+      },
+      {
+        "id": "dq_2026-06_70",
+        "q": "Küresel krizler yerel ekonomiyi nasıl etkiler?",
+        "choices": [
+          "Hiç etkilemez",
+          "Ticaret, yatırım ve döviz kanallarıyla etkiler",
+          "Sadece büyük ülkeleri etkiler",
+          "Sadece olumlu etkiler"
+        ],
+        "correctIndex": 1,
+        "explain": "Küreselleşmiş dünyada krizler hızla yayılır."
+      },
+      {
+        "id": "dq_2026-06_71",
+        "q": "Hangi kredi türünde faiz en düşüktür?",
+        "choices": [
+          "İhtiyaç",
+          "Kredi kartı",
+          "Konut",
+          "Taşıt"
+        ],
+        "correctIndex": 2,
+        "explain": "Konut kredisi ipotekli olduğu için faizi en düşüktür."
+      },
+      {
+        "id": "dq_2026-06_72",
+        "q": "ATM'de kartını sıkıştıran birine yardım etmek isteyen ne yapmalı?",
+        "choices": [
+          "Hemen yardım etmeli",
+          "Kesinlikle yardım etmemeli, bankayı aramalı",
+          "Polis çağırmalı",
+          "Kartı çekip vermeli"
+        ],
+        "correctIndex": 1,
+        "explain": "ATM kartı sıkışması genelde dolandırıcılık yöntemidir. Bankanı ara."
+      },
+      {
+        "id": "dq_2026-06_73",
+        "q": "TCMB enflasyon hedefi yaklaşık yüzde kaçtır?",
+        "choices": [
+          "%50",
+          "%10",
+          "%0",
+          "%5"
+        ],
+        "correctIndex": 3,
+        "explain": "TCMB'nin resmî hedefi %5'tir."
+      },
+      {
+        "id": "dq_2026-06_74",
+        "q": "Kredi notu olmayan biri ne yapmalı?",
+        "choices": [
+          "Hiç kredi kullanmamalı",
+          "İlk kredi kartını alıp düzenli ödeme yaparak başlamalı",
+          "Banka hesabı açmalı",
+          "Kefil bulmalı"
+        ],
+        "correctIndex": 1,
+        "explain": "Kredi geçmişi olmayanlar küçük limitli kartla başlayıp düzenli ödeyerek not oluşturabilir."
+      },
+      {
+        "id": "dq_2026-06_75",
+        "q": "İhtiyaç ve istek arasındaki fark nedir?",
+        "choices": [
+          "İhtiyaç hayatta kalmak için gerekli, istek ertelenebilir",
+          "Fark yoktur",
+          "İstek daha önemlidir",
+          "İhtiyaç lükstür"
+        ],
+        "correctIndex": 0,
+        "explain": "İhtiyaçlar zorunlu, istekler keyfi harcamalardır."
+      },
+      {
+        "id": "dq_2026-06_76",
+        "q": "Kefil olduğun ödemezse ne olur?",
+        "choices": [
+          "Borç sana kalır",
+          "Sadece arkadaşlık biter",
+          "Hiçbir şey",
+          "Devlet öder"
+        ],
+        "correctIndex": 0,
+        "explain": "Kefil borcun yasal sorumlusudur, notun da düşer."
+      },
+      {
+        "id": "dq_2026-06_77",
+        "q": "TCMB hedefi kaçırınca ne yapmak zorunda?",
+        "choices": [
+          "Parayı toplatmak",
+          "Açıklama yapmak",
+          "Hiçbir şey",
+          "Başkanı değiştirmek"
+        ],
+        "correctIndex": 1,
+        "explain": "Şeffaflık gereği kamuya açıklama yapılır."
+      },
+      {
+        "id": "dq_2026-06_78",
+        "q": "Çeşitlendirme neden yapılır?",
+        "choices": [
+          "Banka istediği için",
+          "Takibi kolay olsun diye",
+          "Çok hisse olsun diye",
+          "Tek riske bağlı kalmamak için"
+        ],
+        "correctIndex": 3,
+        "explain": "Riski dağıtmak için yapılır."
+      },
+      {
+        "id": "dq_2026-06_79",
+        "q": "Risk ve getiri ilişkisi genelde nasıldır?",
+        "choices": [
+          "Risk artarsa potansiyel getiri de artar",
+          "Ters orantılı",
+          "Hep sabittir",
+          "Hiç ilişki yok"
+        ],
+        "correctIndex": 0,
+        "explain": "Yüksek getiri genelde yüksek risk getirir."
+      },
+      {
+        "id": "dq_2026-06_80",
+        "q": "Mağazadan aldığın ürünün fişinde KDV oranı nerede yazar?",
+        "choices": [
+          "Sadece online alışverişte",
+          "Hiç yazmaz",
+          "Sadece barkodda",
+          "Fişin alt kısmında ayrı satırda"
+        ],
+        "correctIndex": 3,
+        "explain": "KDV tutarı fişte ayrıca gösterilir. Temel gıdada %1, çoğu üründe %10, lükste %20."
+      },
+      {
+        "id": "dq_2026-06_81",
+        "q": "Bütçe yaparken ilk sıraya genelde ne yazılır?",
+        "choices": [
+          "Hediyeler",
+          "Temel ihtiyaçlar",
+          "Sosyal medya abonelikleri",
+          "Lüks harcamalar"
+        ],
+        "correctIndex": 1,
+        "explain": "Kira, gıda, ulaşım gibi temel ihtiyaçlar önce gelir."
+      },
+      {
+        "id": "dq_2026-06_82",
+        "q": "Enflasyona karşı hangisi daha koruyucu olabilir?",
+        "choices": [
+          "Gömülü para",
+          "Yastık altı TL",
+          "Değer üreten varlıklar",
+          "Eski kıyafetler"
+        ],
+        "correctIndex": 2,
+        "explain": "Değer üreten varlıklar parayı korur."
+      },
+      {
+        "id": "dq_2026-06_83",
+        "q": "Kripto yatırımında en büyük risk nedir?",
+        "choices": [
+          "Banka garantisi olmaması",
+          "Düşük getiri",
+          "Aşırı volatilite ve düzenleme belirsizliği",
+          "Kullanımının yasak olması"
+        ],
+        "correctIndex": 2,
+        "explain": "Kripto fiyatları çok hızlı değişebilir ve düzenlemeler ülkeden ülkeye farklılık gösterir."
+      },
+      {
+        "id": "dq_2026-06_84",
+        "q": "Kredi kartı borcunu yönetirken en sağlıklı yaklaşım hangisidir?",
+        "choices": [
+          "Şifreyi paylaşmak",
+          "Sadece minimumu düşünmek",
+          "Harcamayı takip edip ödeme planı yapmak",
+          "Sürekli yeni kart açmak"
+        ],
+        "correctIndex": 2,
+        "explain": "Kart kullanımı ödeme planı ve harcama takibiyle sağlıklı yönetilir."
+      },
+      {
+        "id": "dq_2026-06_85",
+        "q": "Yesil tahvil hangi amacla kullanilir?",
+        "choices": [
+          "CEO maaslari",
+          "Hisse geri alimi",
+          "Cevre projeleri (gunes, ruzgar)",
+          "Reklam"
+        ],
+        "correctIndex": 2,
+        "explain": "Yesil tahviller cevre odakli projeleri finanse eder."
+      },
+      {
+        "id": "dq_2026-06_86",
+        "q": "İnternet bankacılığı şifresi ne sıklıkla değiştirilmeli?",
+        "choices": [
+          "Hiç gerekmez",
+          "Ayda bir veya şüphede değiştir",
+          "Her gün",
+          "Sadece banka isterse"
+        ],
+        "correctIndex": 1,
+        "explain": "Düzenli şifre değişikliği ve şüpheli durumda hemen değiştirme önemlidir."
+      },
+      {
+        "id": "dq_2026-06_87",
+        "q": "Cari açık ne demektir?",
+        "choices": [
+          "Bütçe fazlası",
+          "İthalat > İhracat",
+          "Devletin geliri",
+          "Banka hesabı"
+        ],
+        "correctIndex": 1,
+        "explain": "Bir ülkenin dışarıya ödediği, dışarıdan kazandığından fazlaysa cari açık vardır."
+      },
+      {
+        "id": "dq_2026-06_88",
+        "q": "Müteselsil kefil ne demek?",
+        "choices": [
+          "Sorumluluk yok",
+          "Referans olmak",
+          "Banka direkt senden isteyebilir",
+          "Noter onayı"
+        ],
+        "correctIndex": 2,
+        "explain": "Banka önce asıl borçluya gitmeden senden tahsil edebilir."
+      },
+      {
+        "id": "dq_2026-06_89",
+        "q": "Hangisi kredi notunu en çok düşürür?",
+        "choices": [
+          "Birikim yapmak",
+          "Bordro hesabı kullanmak",
+          "Yeni hesap açmak",
+          "Faturaları geciktirmek ve borcu ödememek"
+        ],
+        "correctIndex": 3,
+        "explain": "Ödeme düzensizliği kredi notunu en olumsuz etkileyen faktördür."
+      },
+      {
+        "id": "dq_2026-06_90",
+        "q": "Aşırı güven yatırımcıya ne yaptırır?",
+        "choices": [
+          "Tek yatırıma odaklanma",
+          "Az işlem",
+          "Çok araştırma",
+          "Çeşitlendirme"
+        ],
+        "correctIndex": 0,
+        "explain": "'Ben biliyorum' hissiyle çeşitlendirme azalır, risk yoğunlaşır."
+      },
+      {
+        "id": "dq_2026-06_91",
+        "q": "NFT nedir?",
+        "choices": [
+          "Yeni bir kripto para",
+          "Benzersiz dijital varlık sertifikası",
+          "Borsa endeksi",
+          "Ödeme yöntemi"
+        ],
+        "correctIndex": 1,
+        "explain": "NFT'ler dijital varlıkların sahipliğini kanıtlayan tokenlardır."
+      },
+      {
+        "id": "dq_2026-06_92",
+        "q": "Sabırlı yatırımcı ne yapar?",
+        "choices": [
+          "Planına sadık kalır",
+          "Her gün al-sat",
+          "Tüm parayı tek seferde kullanır",
+          "Sürekli haber bekler"
+        ],
+        "correctIndex": 0,
+        "explain": "Uzun vade en büyük avantajdır."
+      },
+      {
+        "id": "dq_2026-06_93",
+        "q": "Merkez bankalarının rezervleri ne işe yarar?",
+        "choices": [
+          "Vatandaşa dağıtmak için",
+          "Kriz anında müdahale gücü sağlar",
+          "Sadece istatistik için",
+          "Banka kârı için"
+        ],
+        "correctIndex": 1,
+        "explain": "Rezervler, olası krizlerde piyasaya müdahale gücü verir."
+      },
+      {
+        "id": "dq_2026-06_94",
+        "q": "Merkez Bankası neden faiz artırabilir?",
+        "choices": [
+          "Dolar bitsin diye",
+          "Harcama artsın diye",
+          "Herkesi zengin etmek için",
+          "Enflasyonu yavaşlatmak için"
+        ],
+        "correctIndex": 3,
+        "explain": "Amaç genelde fiyat artışını yavaşlatmaktır."
+      },
+      {
+        "id": "dq_2026-06_95",
+        "q": "Kredi notu sorgulama hangi sıklıkta ücretsiz yapılabilir?",
+        "choices": [
+          "Sınırsız",
+          "Yılda 2 kez (Findeks)",
+          "Haftada 1 kez",
+          "Ayda 1 kez"
+        ],
+        "correctIndex": 1,
+        "explain": "Findeks yılda 2 kez ücretsiz rapor hakkı verir."
+      },
+      {
+        "id": "dq_2026-06_96",
+        "q": "Döviz kuru neden dalgalanır?",
+        "choices": [
+          "Hava durumuna göre",
+          "Hiç değişmez",
+          "Sadece seçim zamanı",
+          "Arz-talep, faiz farkı ve ekonomik beklentilere göre"
+        ],
+        "correctIndex": 3,
+        "explain": "Kur, piyasa dinamikleri ve beklentilerle sürekli değişir."
+      },
+      {
+        "id": "dq_2026-06_97",
+        "q": "Aşırı güven yatırımda neye yol açar?",
+        "choices": [
+          "Daha iyi analiz",
+          "Az çeşitlendirme ve yüksek risk",
+          "Daha düşük risk",
+          "Garanti kazanç"
+        ],
+        "correctIndex": 1,
+        "explain": "Kendine aşırı güvenen yatırımcılar daha fazla risk alır."
+      },
+      {
+        "id": "dq_2026-06_98",
+        "q": "Sosyal mühendislik saldırısında amaç nedir?",
+        "choices": [
+          "Şifre kırmak",
+          "Kişiyi kandırarak bilgi sızdırtmak",
+          "Ağa fiziksel girmek",
+          "Virüs yazmak"
+        ],
+        "correctIndex": 1,
+        "explain": "Sosyal mühendislik, insan psikolojisini kullanarak bilgi almaktır."
+      },
+      {
+        "id": "dq_2026-06_99",
+        "q": "Soğuk cüzdan (cold wallet) ne işe yarar?",
+        "choices": [
+          "Anlık al-sat yapmak",
+          "Kredi çekmek",
+          "Kripto madenciliği yapmak",
+          "İnternet bağlantısı olmadan kriptoları güvenle saklamak"
+        ],
+        "correctIndex": 3,
+        "explain": "Soğuk cüzdan çevrimdışı olduğu için hacker saldırılarına karşı daha güvenlidir."
+      },
+      {
+        "id": "dq_2026-06_100",
+        "q": "Resmî kurumlar mesajla genelde ne istemez?",
+        "choices": [
+          "Şifre/OTP kodu",
+          "Çalışma saati bilgisi",
+          "Genel duyuru okumanı",
+          "Randevu teyidi"
+        ],
+        "correctIndex": 0,
+        "explain": "Şifre ve doğrulama kodu paylaşılmaz."
+      },
+      {
+        "id": "dq_2026-06_101",
+        "q": "Faiz artarsa kredi maliyeti ne olur?",
+        "choices": [
+          "Sıfırlanır",
+          "Artar",
+          "Düşer",
+          "Aynı kalır"
+        ],
+        "correctIndex": 1,
+        "explain": "Faiz yükselince kredi pahalanır."
+      },
+      {
+        "id": "dq_2026-06_102",
+        "q": "Döviz kuru neden dalgalanır?",
+        "choices": [
+          "Sadece hükümet kararıyla",
+          "Arz-talep, faiz, enflasyon ve güven gibi faktörlerle",
+          "Her gün saat 12'de",
+          "Sadece seçim dönemlerinde"
+        ],
+        "correctIndex": 1,
+        "explain": "Döviz kuru birçok ekonomik faktöre bağlıdır."
+      },
+      {
+        "id": "dq_2026-06_103",
+        "q": "Acil durum fonu nerede tutulmalı?",
+        "choices": [
+          "Borsada",
+          "Kriptoda",
+          "Kolay erişilebilir hesapta",
+          "Yastık altında"
+        ],
+        "correctIndex": 2,
+        "explain": "Acil durumda hızlıca nakde dönülebilmeli."
+      },
+      {
+        "id": "dq_2026-06_104",
+        "q": "Temettü verimi %5 ne demek?",
+        "choices": [
+          "Her yıl %5 zarar",
+          "Garanti verim",
+          "100 TL'lik hisseden 5 TL temettü",
+          "Fiyat değişmez"
+        ],
+        "correctIndex": 2,
+        "explain": "Hisse başı temettü / hisse fiyatı x 100."
+      },
+      {
+        "id": "dq_2026-06_105",
+        "q": "Hisse senedi alırken aslında neye güvenirsin?",
+        "choices": [
+          "Borsa binasına",
+          "Arkadaşına",
+          "Şansa",
+          "Şirketin gelecekte para kazanmasına"
+        ],
+        "correctIndex": 3,
+        "explain": "Şirkete ortak oluyorsun."
+      },
+      {
+        "id": "dq_2026-06_106",
+        "q": "Kira geliri vergisi kimleri kapsar?",
+        "choices": [
+          "Sadece ev sahiplerini",
+          "Kira geliri olan herkesi (istisna altı hariç)",
+          "Sadece iş yeri sahiplerini",
+          "Öğrencileri"
+        ],
+        "correctIndex": 1,
+        "explain": "Konut kira gelirinde istisna tutarına kadar vergi alınmaz, üstü beyan edilir."
+      },
+      {
+        "id": "dq_2026-06_107",
+        "q": "Bileşik getiri en çok ne zaman büyür?",
+        "choices": [
+          "Kısa vadede",
+          "Sadece büyük parayla",
+          "Sadece altınla",
+          "Uzun vadede ve düzenli yatırımda"
+        ],
+        "correctIndex": 3,
+        "explain": "Zaman, bileşiği güçlendirir."
+      },
+      {
+        "id": "dq_2026-06_108",
+        "q": "Finansal okuryazarlık neden önemli?",
+        "choices": [
+          "Havalı görünmek için",
+          "Sadece bankacı olmak için",
+          "Matematik çözmek için",
+          "Parayı daha bilinçli yönetmek için"
+        ],
+        "correctIndex": 3,
+        "explain": "Bilinçli karar daha az hata demektir."
+      },
+      {
+        "id": "dq_2026-06_109",
+        "q": "FOMO yaşayan biri en çok hangi riski alır?",
+        "choices": [
+          "Nakit biriktirme",
+          "Planlı hareket etme",
+          "Aceleyle yüksekten alma",
+          "Daha düşük komisyon ödeme"
+        ],
+        "correctIndex": 2,
+        "explain": "FOMO, plansız ve pahalı girişe yol açabilir."
+      },
+      {
+        "id": "dq_2026-06_110",
+        "q": "Asgari ödeme hakkında hangisi doğru?",
+        "choices": [
+          "Hediye kazandırır",
+          "Borcu bitirir",
+          "Borcu uzatır ve faizi artırır",
+          "Sadece zenginlere özeldir"
+        ],
+        "correctIndex": 2,
+        "explain": "Asgari ödeme borcu bitirmez."
+      },
+      {
+        "id": "dq_2026-06_111",
+        "q": "Çıpalama önyargısı nedir?",
+        "choices": [
+          "Bir fiyata takılıp kalma",
+          "Limana yanaşma",
+          "Düşük fiyattan alım",
+          "Portföy çeşitlendirme"
+        ],
+        "correctIndex": 0,
+        "explain": "İlk görülen fiyata takılıp objektif karar vermeyi engeller."
+      },
+      {
+        "id": "dq_2026-06_112",
+        "q": "Oltalama (phishing) e-postası nasıl anlaşılır?",
+        "choices": [
+          "Gönderici adı tanıdık gelirse güvenilir",
+          "Acil aksiyon çağrısı, yazım hataları, şüpheli link içerir",
+          "Sadece siyah beyazsa",
+          "Çok uzunsa güvenlidir"
+        ],
+        "correctIndex": 1,
+        "explain": "Phishing e-postaları aciliyet vurgusu, link ve yazım hatalarıyla anlaşılır."
+      },
+      {
+        "id": "dq_2026-06_113",
+        "q": "İki faktörlü doğrulama (2FA) ne işe yarar?",
+        "choices": [
+          "İnternet hızını artırır",
+          "Şifren çalınsa bile hesabı korur",
+          "Reklamları engeller",
+          "Uygulamayı hızlandırır"
+        ],
+        "correctIndex": 1,
+        "explain": "2FA ekstra güvenlik katmanı ekler."
+      },
+      {
+        "id": "dq_2026-06_114",
+        "q": "Ankraj (çıpalama) nedir?",
+        "choices": [
+          "Son bilgiye güvenme",
+          "Kaybetme korkusu",
+          "Hep haklı olma",
+          "İlk bilgiye aşırı bağlanma"
+        ],
+        "correctIndex": 3,
+        "explain": "İlk karşılaşılan fiyat/sayıya takılıp kalma eğilimi."
+      },
+      {
+        "id": "dq_2026-06_115",
+        "q": "SMART hedef belirlemede 'R' neyi ifade eder?",
+        "choices": [
+          "Rasyonel",
+          "Relevant (İlgili)",
+          "Reel",
+          "Riskli"
+        ],
+        "correctIndex": 1,
+        "explain": "Relevant = Hedefin genel planınla uyumlu olması."
+      },
+      {
+        "id": "dq_2026-06_116",
+        "q": "BES'te devlet katkısı nasıl çalışır?",
+        "choices": [
+          "Devlet katkıyı geri alır",
+          "Yatırılan tutarın belirli yüzdesine kadar devlet katkı sağlar",
+          "Sadece ilk yıl geçerlidir",
+          "Herkes eşit katkı alır"
+        ],
+        "correctIndex": 1,
+        "explain": "BES'te devlet, yatırdığın tutarın %30'una kadar katkı sağlar."
+      },
+      {
+        "id": "dq_2026-06_117",
+        "q": "Kredi notunu ne yükseltir?",
+        "choices": [
+          "Limitleri sonuna kadar kullanmak",
+          "Hesap açmamak",
+          "Sürekli kredi başvurusu",
+          "Faturaları zamanında ödemek"
+        ],
+        "correctIndex": 3,
+        "explain": "Düzenli ödeme güven demektir."
+      },
+      {
+        "id": "dq_2026-06_118",
+        "q": "Halka arz neyi ifade eder?",
+        "choices": [
+          "Devletin vergi toplamasını",
+          "Bankanın faiz indirmesini",
+          "Şirketin borcunu silmesini",
+          "Şirket paylarının yatırımcılara sunulmasını"
+        ],
+        "correctIndex": 3,
+        "explain": "Halka arzda şirket payları yatırımcılara açılır."
+      },
+      {
+        "id": "dq_2026-06_119",
+        "q": "Gelir vergisinde “dilim” ne demektir?",
+        "choices": [
+          "Ödeme tarihini ertelemek",
+          "Muafiyet süresi",
+          "Artan gelirle yükselen vergi oranı",
+          "Vergi borcunu taksitlendirmek"
+        ],
+        "correctIndex": 2,
+        "explain": "Türkiye'de artan oranlı vergi dilimleri vardır; kazandıkça daha yüksek oran uygulanır."
+      },
+      {
+        "id": "dq_2026-06_120",
+        "q": "DeFi nedir?",
+        "choices": [
+          "Devlet finansmanı",
+          "Merkeziyetsiz finans uygulamaları",
+          "Bir banka türü",
+          "Yatırım fonu"
+        ],
+        "correctIndex": 1,
+        "explain": "DeFi, aracısız finansal hizmetler sunan merkeziyetsiz uygulamalardır."
+      }
+    ]
+  }
 }

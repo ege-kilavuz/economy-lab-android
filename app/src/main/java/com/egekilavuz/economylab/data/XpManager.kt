@@ -116,6 +116,27 @@ class XpManager(context: Context) {
         return cal.get(Calendar.YEAR) * 10000 + (cal.get(Calendar.MONTH) + 1) * 100 + cal.get(Calendar.DAY_OF_MONTH)
     }
 
+    fun getCurrentMonthKey(): String {
+        val cal = Calendar.getInstance()
+        return "${cal.get(Calendar.YEAR)}-${String.format("%02d", cal.get(Calendar.MONTH) + 1)}"
+    }
+
+    fun getTodayDayOfMonth(): Int {
+        return Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+    }
+
+    fun getUsedDailyQuestionIds(): Set<String> {
+        val monthKey = getCurrentMonthKey()
+        return prefs.getStringSet("used_dq_$monthKey", emptySet()) ?: emptySet()
+    }
+
+    fun markDailyQuestionUsed(questionId: String) {
+        val monthKey = getCurrentMonthKey()
+        val used = getUsedDailyQuestionIds().toMutableSet()
+        used.add(questionId)
+        prefs.edit().putStringSet("used_dq_$monthKey", used).apply()
+    }
+
     fun isDailyQuizDone(): Boolean {
         val today = normalizeDate(System.currentTimeMillis())
         return prefs.getLong("daily_quiz_date", 0L) == today

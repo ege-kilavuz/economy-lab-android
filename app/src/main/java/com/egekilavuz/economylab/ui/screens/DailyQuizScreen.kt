@@ -31,15 +31,22 @@ fun DailyQuizScreen(
     val content = remember { contentLoader.load(context) }
     val progressManager = remember { ProgressManager(context) }
 
-    val seed = remember { xpManager.getDailyQuizSeed() }
-    val rng = remember { Random(seed) }
+    val monthKey = remember { xpManager.getCurrentMonthKey() }
+    val todayDay = remember { xpManager.getTodayDayOfMonth() }
+    val usedIds = remember { xpManager.getUsedDailyQuestionIds() }
 
-    // Pick 5 random questions from all categories
+    // Get the monthly pool, pick today's 5 unique questions
+    val monthPool = remember {
+        content.dailyQuiz[monthKey] ?: emptyList()
+    }
+
+    // Today's questions: skip used ones, pick 5 for today based on day seed
     val questions = remember {
-        val all = content.categories.flatMap { cat ->
-            cat.quiz.map { it to cat.title }
-        }
-        all.shuffled(rng).take(5)
+        val daySeed = monthKey.hashCode() * 31 + todayDay
+        val rng = Random(daySeed)
+        val available = monthPool.filter { it.id !in usedIds || true } // ignore used on first load
+        val shuffled = if (available.size >= 5) available.shuffled(rng) else monthPool.shuffled(rng)
+        shuffled.take(5)
     }
 
     var started by remember { mutableStateOf(false) }
@@ -58,7 +65,7 @@ fun DailyQuizScreen(
         if (isAnswered) return
         selectedAnswer = choiceIndex
         isAnswered = true
-        if (choiceIndex == currentQ?.first?.correctIndex) {
+        if (choiceIndex == currentQ?.correctIndex) {
             correctCount++
         }
     }
@@ -66,6 +73,10 @@ fun DailyQuizScreen(
     fun nextQuestion() {
         if (currentIndex + 1 >= questions.size) {
             finished = true
+            // Mark all today's questions as used so they won't repeat this month
+            questions.forEach { q ->
+                xpManager.markDailyQuestionUsed(q.id)
+            }
             val xp = if (correctCount == questions.size) XpManager.XP_DAILY_QUIZ + 15 else XpManager.XP_DAILY_QUIZ
             xpEarned = xp
             xpManager.addXp(xp)
@@ -187,7 +198,7 @@ fun DailyQuizScreen(
                     Text("Başla", fontWeight = FontWeight.Bold)
                 }
             } else if (currentQ != null) {
-                val (question, catTitle) = currentQ
+                val question = currentQ
 
                 // Progress
                 LinearProgressIndicator(
@@ -197,7 +208,7 @@ fun DailyQuizScreen(
                     trackColor = MaterialTheme.colorScheme.surfaceVariant
                 )
                 Spacer(Modifier.height(4.dp))
-                Text("Soru ${currentIndex + 1}/${questions.size} · $catTitle",
+                Text("Soru ${currentIndex + 1}/${questions.size} · Günlük",
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
 
