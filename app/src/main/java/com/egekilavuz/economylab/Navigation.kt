@@ -5,6 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Computer
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.SportsEsports
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -32,9 +33,10 @@ sealed class BottomTab(val route: String, val title: String, val icon: ImageVect
     data object Learn : BottomTab("learn", "Öğren", Icons.Default.School)
     data object Simulations : BottomTab("simulations", "Simülasyonlar", Icons.Default.Computer)
     data object Game : BottomTab("game", "Oyun", Icons.Default.SportsEsports)
+    data object Leaderboard : BottomTab("leaderboard", "Liderlik", Icons.Default.Star)
 }
 
-private val tabs = listOf(BottomTab.Learn, BottomTab.Simulations, BottomTab.Game)
+private val tabs = listOf(BottomTab.Learn, BottomTab.Simulations, BottomTab.Game, BottomTab.Leaderboard)
 
 const val ROUTE_CATEGORY = "category/{catId}"
 const val ROUTE_QUIZ = "quiz/{catId}"
@@ -169,6 +171,13 @@ fun AppNavigation() {
                     else -> CandleGame { navController.popBackStack() }
                 }
             }
+            composable(BottomTab.Leaderboard.route) {
+                Column {
+                    XpBar(xpManager = xpManager)
+                    LeaderboardScreen()
+                }
+            }
+
             // Daily quiz route
             composable(route = "daily-quiz") {
                 DailyQuizScreen(
