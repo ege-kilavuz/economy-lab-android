@@ -1668,7 +1668,11 @@
             "En az 10 yıl kalmayı hedefle, yoksa devlet katkısı geri alınabilir."
           ],
           "warning": null,
-          "video": null
+          "video": {
+            "title": "BES ve Vergi Avantajları",
+            "url": "https://finansalokuryazarlik.gov.tr/i/bes-vergi",
+            "source": "finansalokuryazarlik.gov.tr"
+          }
         }
       ],
       "quiz": [
