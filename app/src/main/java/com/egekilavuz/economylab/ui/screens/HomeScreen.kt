@@ -58,7 +58,13 @@ fun HomeScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             userScrollEnabled = false
         ) {
-            items(content.categories) { cat ->
+            // Öğrenme rotasına göre sırala
+            val sortedCategories = if (content.learningPath.isNotEmpty()) {
+                val orderMap = content.learningPath.withIndex().associate { (i, id) -> id to i }
+                content.categories.sortedBy { orderMap[it.id] ?: Int.MAX_VALUE }
+            } else content.categories
+
+            items(sortedCategories) { cat ->
                 CategoryCard(
                     icon = cat.icon,
                     title = cat.title,

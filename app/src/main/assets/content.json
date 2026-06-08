@@ -359,6 +359,51 @@
           "correctIndex": 2,
           "explain": "İstekler, ertelenebilir/keyfi harcamalardır.",
           "relatedItemIds": null
+        },
+        {
+          "id": "bu6",
+          "q": "SMART hedef belirlemede 'R' neyi ifade eder?",
+          "choices": [
+            "Rasyonel",
+            "Relevant (İlgili)",
+            "Reel",
+            "Riskli"
+          ],
+          "correctIndex": 1,
+          "explain": "Relevant = Hedefin genel planınla uyumlu olması.",
+          "relatedItemIds": [
+            "finansal-hedef"
+          ]
+        },
+        {
+          "id": "bu7",
+          "q": "Acil durum fonu nerede tutulmalı?",
+          "choices": [
+            "Borsada",
+            "Kriptoda",
+            "Kolay erişilebilir hesapta",
+            "Yastık altında"
+          ],
+          "correctIndex": 2,
+          "explain": "Acil durumda hızlıca nakde dönülebilmeli.",
+          "relatedItemIds": [
+            "emergency-fund"
+          ]
+        },
+        {
+          "id": "bu8",
+          "q": "İhtiyaç ve istek arasındaki fark nedir?",
+          "choices": [
+            "İhtiyaç hayatta kalmak için gerekli, istek ertelenebilir",
+            "Fark yoktur",
+            "İstek daha önemlidir",
+            "İhtiyaç lükstür"
+          ],
+          "correctIndex": 0,
+          "explain": "İhtiyaçlar zorunlu, istekler keyfi harcamalardır.",
+          "relatedItemIds": [
+            "50-30-20"
+          ]
         }
       ]
     },
@@ -418,15 +463,15 @@
         },
         {
           "id": "kredi-turleri",
-          "title": "KREDI TURLERI",
-          "short": "Ihtiyac, konut, tasit hangisi ne ise yarar?",
+          "title": "KREDİ TÜRLERİ",
+          "short": "İhtiyaç, konut, taşıt hangisi ne ise yarar?",
           "body": [
-            "Ihtiyac kredisi: en yaygin, amac serbest, faizi en yuksek.",
+            "İhtiyaç kredisi: en yaygin, amac serbest, faizi en yuksek.",
             "Konut kredisi: ev almak icin, vade en uzun (10-20 yil), faiz en dusuk.",
             "Tasit kredisi: araba icin, vade 5 yila kadar, arac rehinli.",
             "Toplam maliyet: faiz + dosya + KKDF + BSMV + sigorta."
           ],
-          "scenario": "30.000 TL ihtiyac kredisi %4 faizle 12 ayda ~36.000 TL odeme. Kartta tasirsan daha pahali.",
+          "scenario": "30.000 TL ihtiyaç kredisi %4 faizle 12 ayda ~36.000 TL odeme. Kartta tasirsan daha pahali.",
           "qa": [
             {
               "q": "En ucuz kredi?",
@@ -440,12 +485,12 @@
           "tips": [
             "Kredi oncesi toplam maliyeti hesapla."
           ],
-          "warning": "Ihtiyac kredisini yatirim icin kullanma, riskli.",
+          "warning": "İhtiyaç kredisini yatirim icin kullanma, riskli.",
           "video": null
         },
         {
           "id": "kefillik",
-          "title": "KEFILLIK & MUESELSIL BORC",
+          "title": "KEFİLLİK & MÜTESELSİL BORÇ",
           "short": "Kefil olmak borca ortak olmak.",
           "body": [
             "Kefil: borc odenmezse ustlenen kisi.",
@@ -663,18 +708,18 @@
         {
           "id": "temettu",
           "title": "TEMETTU YATIRIMI",
-          "short": "Sirket karindan sana pay.",
+          "short": "Şirket karindan sana pay.",
           "body": [
-            "Temettu: sirket karindan hissedarlara dagitilan pay. Nakit/hisse olarak odenir.",
+            "Temettu: şirket karindan hissedarlara dagitilan pay. Nakit/hisse olarak odenir.",
             "Temettu verimi: hisse basi temettu / hisse fiyati x 100.",
             "Duzenli nakit akisi isteyenler icin ideal.",
-            "Temettu garantisi yok, sirket zarar ederse odenmez."
+            "Temettu garantisi yok, şirket zarar ederse odenmez."
           ],
           "scenario": "100 hissen var, her biri 100 TL. Hisse basi 5 TL temettu = 500 TL. Yilda 2 kez pasif gelir.",
           "qa": [
             {
               "q": "Temettu garanti mi?",
-              "a": "Hayir, sirket yonetimi kararina bagli."
+              "a": "Hayir, şirket yonetimi kararina bagli."
             },
             {
               "q": "Temettu verimi hesabi?",
@@ -682,7 +727,7 @@
             }
           ],
           "tips": [
-            "Yuksek temettu tek basina yetmez, sirket karliligina da bak."
+            "Yuksek temettu tek basina yetmez, şirket karliligina da bak."
           ],
           "warning": null,
           "video": {
@@ -1112,27 +1157,27 @@
         },
         {
           "id": "unemployment-growth",
-          "title": "ISSIZLIK & BUYUME",
+          "title": "İŞSİZLİK & BÜYÜME",
           "short": "Ekonomi buyuyunce herkes is bulur mu?",
           "body": [
-            "Ekonomik buyume: ulkenin urettigi mal ve hizmetin (GSYH) artmasi.",
-            "Okun yasasi: buyume yavaslarsa issizlik artar, hizlanirsa azalir.",
-            "Buyume her zaman herkese is demek degil, sektorel farklar onemli.",
-            "Potansiyel buyume: enflasyonsuz surdurulebilir en yuksek buyume."
+            "Ekonomik büyüme: ulkenin urettigi mal ve hizmetin (GSYH) artmasi.",
+            "Okun yasasi: büyüme yavaslarsa işsizlik artar, hizlanirsa azalir.",
+            "Büyüme her zaman herkese is demek degil, sektorel farklar onemli.",
+            "Potansiyel büyüme: enflasyonsuz surdurulebilir en yuksek büyüme."
           ],
-          "scenario": "Turkiye %5 buyurken issizlik %10 dan %9 a dustu. Ertesi yil %1 e geriledi, issizlik %12 ye cikti.",
+          "scenario": "Turkiye %5 buyurken işsizlik %10 dan %9 a dustu. Ertesi yil %1 e geriledi, işsizlik %12 ye cikti.",
           "qa": [
             {
               "q": "Neden herkes is bulamiyor?",
-              "a": "Buyumenin niteligi onemli, her sektor istihdam yaratmaz."
+              "a": "Büyümenin niteligi onemli, her sektor istihdam yaratmaz."
             },
             {
               "q": "Okun yasasi nedir?",
-              "a": "Buyume-issizlik arasinda ters iliski."
+              "a": "Büyüme-işsizlik arasinda ters iliski."
             }
           ],
           "tips": [
-            "Buyume rakami kadar dagilimi da onemli."
+            "Büyüme rakami kadar dagilimi da onemli."
           ],
           "warning": null,
           "video": null
@@ -1270,7 +1315,11 @@
             "Yoğun heyecan varsa 24 saat beklemek iyi bir filtredir."
           ],
           "warning": null,
-          "video": null
+          "video": {
+            "title": "Yatırım Psikolojisi ve FOMO",
+            "url": "https://finansalokuryazarlik.gov.tr/i/yatirim-psikolojisi",
+            "source": "finansalokuryazarlik.gov.tr"
+          }
         },
         {
           "id": "loss-aversion",
@@ -1289,7 +1338,11 @@
           ],
           "tips": null,
           "warning": null,
-          "video": null
+          "video": {
+            "title": "Kayıptan Kaçınma ve Rasyonel Karar",
+            "url": "https://finansalokuryazarlik.gov.tr/i/kayiptan-kacinma",
+            "source": "finansalokuryazarlik.gov.tr"
+          }
         },
         {
           "id": "ankraj",
@@ -1315,7 +1368,11 @@
             "En az 3 kaynaktan fiyat al, ilk duyduguna guvenme."
           ],
           "warning": null,
-          "video": null
+          "video": {
+            "title": "Çıpalama ve Bilişsel Önyargılar",
+            "url": "https://finansalokuryazarlik.gov.tr/i/cipalama-bilissel-teknikler",
+            "source": "finansalokuryazarlik.gov.tr"
+          }
         },
         {
           "id": "overconfidence",
@@ -1342,7 +1399,11 @@
             "Portfoyune disaridan bir fikir al."
           ],
           "warning": null,
-          "video": null
+          "video": {
+            "title": "Aşırı Güven ve Bilinçli Yatırım",
+            "url": "https://finansalokuryazarlik.gov.tr/i/olcekle-asiri-guveni-tani",
+            "source": "finansalokuryazarlik.gov.tr"
+          }
         }
       ],
       "quiz": [
@@ -1627,7 +1688,11 @@
             "Anlamadığın bir projeye asla yatırım yapma."
           ],
           "warning": null,
-          "video": null
+          "video": {
+            "title": "Kripto Varlıklar ve Blokzincir",
+            "url": "https://finansalokuryazarlik.gov.tr/i/kripto-varliklar-blokzincir",
+            "source": "finansalokuryazarlik.gov.tr"
+          }
         },
         {
           "id": "crypto-risk",
@@ -1650,7 +1715,11 @@
             "Kaldıraçlı işlemlerden uzak dur — amatör için kumar gibidir."
           ],
           "warning": null,
-          "video": null
+          "video": {
+            "title": "Kripto Riskleri ve Korunma Yolları",
+            "url": "https://finansalokuryazarlik.gov.tr/i/kripto-riskler",
+            "source": "finansalokuryazarlik.gov.tr"
+          }
         },
         {
           "id": "crypto-security",
@@ -1673,7 +1742,11 @@
             "Kimseyle özel anahtarını paylaşma — \"destek\" bahanesiyle gelen mesajlara inanma."
           ],
           "warning": null,
-          "video": null
+          "video": {
+            "title": "Dijital Varlık Güvenliği",
+            "url": "https://finansalokuryazarlik.gov.tr/i/dijital-varlik-guvenligi",
+            "source": "finansalokuryazarlik.gov.tr"
+          }
         }
       ],
       "quiz": [
@@ -1741,6 +1814,82 @@
           "correctIndex": 1,
           "explain": "Sınırlı arz, kıtlık yaratarak değer koruma aracı olmasını sağlar.",
           "relatedItemIds": null
+        },
+        {
+          "id": "cr6",
+          "q": "Kripto para madenciliği nedir?",
+          "choices": [
+            "Banka işlemi",
+            "Karmaşık matematik problemleri çözerek yeni coin üretmek",
+            "Hisse senedi alımı",
+            "Döviz bozdurma"
+          ],
+          "correctIndex": 1,
+          "explain": "Madencilik, işlemleri doğrulayarak yeni coin kazanmaktır.",
+          "relatedItemIds": [
+            "crypto-basics"
+          ]
+        },
+        {
+          "id": "cr7",
+          "q": "Stablecoin nedir?",
+          "choices": [
+            "Her zaman yükselen coin",
+            "Değeri başka bir varlığa sabitlenmiş kripto",
+            "En ucuz coin",
+            "Merkez bankası coini"
+          ],
+          "correctIndex": 1,
+          "explain": "Stablecoin'ler ABD doları gibi varlıklara sabitlenir.",
+          "relatedItemIds": [
+            "crypto-basics"
+          ]
+        },
+        {
+          "id": "cr8",
+          "q": "NFT nedir?",
+          "choices": [
+            "Yeni bir kripto para",
+            "Benzersiz dijital varlık sertifikası",
+            "Borsa endeksi",
+            "Ödeme yöntemi"
+          ],
+          "correctIndex": 1,
+          "explain": "NFT'ler dijital varlıkların sahipliğini kanıtlayan tokenlardır.",
+          "relatedItemIds": [
+            "crypto-basics"
+          ]
+        },
+        {
+          "id": "cr9",
+          "q": "DeFi nedir?",
+          "choices": [
+            "Devlet finansmanı",
+            "Merkeziyetsiz finans uygulamaları",
+            "Bir banka türü",
+            "Yatırım fonu"
+          ],
+          "correctIndex": 1,
+          "explain": "DeFi, aracısız finansal hizmetler sunan merkeziyetsiz uygulamalardır.",
+          "relatedItemIds": [
+            "crypto-risk"
+          ]
+        },
+        {
+          "id": "cr10",
+          "q": "Kripto varlıklar Türkiye'de yasal mı?",
+          "choices": [
+            "Tamamen yasak",
+            "Alım-satım yasal, ödeme aracı olarak kullanımı düzenlenmemiş",
+            "Sadece devlet onaylı coinler yasal",
+            "Sadece bankalar kullanabilir"
+          ],
+          "correctIndex": 1,
+          "explain": "Kripto alım-satımı yasal ancak ödeme aracı olarak tanınmıyor.",
+          "relatedItemIds": [
+            "crypto-basics",
+            "crypto-risk"
+          ]
         }
       ]
     },
@@ -1771,7 +1920,11 @@
             "Notun sadece kredi değil, cep telefonu sözleşmesinde bile etkili olabilir."
           ],
           "warning": null,
-          "video": null
+          "video": {
+            "title": "Kredi Notu Nedir?",
+            "url": "https://finansalokuryazarlik.gov.tr/i/kredi-notu-nedir",
+            "source": "finansalokuryazarlik.gov.tr"
+          }
         },
         {
           "id": "score-improve",
@@ -1794,7 +1947,11 @@
             "Asgari ödeme hayat kurtarır ama notuna zarar verir, full ödemeye çalış."
           ],
           "warning": null,
-          "video": null
+          "video": {
+            "title": "Kredi Notu Nasıl Yükseltilir?",
+            "url": "https://finansalokuryazarlik.gov.tr/i/kredi-notu-nasil-artar",
+            "source": "finansalokuryazarlik.gov.tr"
+          }
         },
         {
           "id": "score-findeks",
@@ -1817,7 +1974,11 @@
             "Kefil olmak da notunu etkiler — kefil olduğun kişi ödemezse senin notun düşer."
           ],
           "warning": "Başkasına kefil olmak finansal intihar olabilir. Çok güvendiğin biri bile olsa riski hesapla.",
-          "video": null
+          "video": {
+            "title": "Findeks ve Kredi Notu Takibi",
+            "url": "https://finansalokuryazarlik.gov.tr/i/kredi-notu-takibi",
+            "source": "finansalokuryazarlik.gov.tr"
+          }
         }
       ],
       "quiz": [
@@ -1885,6 +2046,82 @@
           "correctIndex": 1,
           "explain": "Findeks yılda 2 kez ücretsiz rapor hakkı verir.",
           "relatedItemIds": null
+        },
+        {
+          "id": "cs6",
+          "q": "Kredi notu düşükken kredi çekmek neden zordur?",
+          "choices": [
+            "Banka istemez",
+            "Riskli görüldüğün için ya reddedilirsin ya da yüksek faiz alırsın",
+            "Sadece uzun vade verilir",
+            "Hiç fark etmez"
+          ],
+          "correctIndex": 1,
+          "explain": "Düşük not = yüksek risk, banka ya reddeder ya da yüksek faizle verir.",
+          "relatedItemIds": [
+            "score-basics"
+          ]
+        },
+        {
+          "id": "cs7",
+          "q": "Kredi notu sorgularken not düşer mi?",
+          "choices": [
+            "Evet her sorguda düşer",
+            "Hayır, kişisel sorgulamalar notu etkilemez",
+            "Sadece banka sorguları etkiler",
+            "Her sorgu 10 puan düşürür"
+          ],
+          "correctIndex": 1,
+          "explain": "Kendin sorguladığında notun etkilenmez; banka sorgularında çok sayıda olursa etkileyebilir.",
+          "relatedItemIds": [
+            "score-findeks"
+          ]
+        },
+        {
+          "id": "cs8",
+          "q": "Kredi notu olmayan biri ne yapmalı?",
+          "choices": [
+            "Hiç kredi kullanmamalı",
+            "İlk kredi kartını alıp düzenli ödeme yaparak başlamalı",
+            "Banka hesabı açmalı",
+            "Kefil bulmalı"
+          ],
+          "correctIndex": 1,
+          "explain": "Kredi geçmişi olmayanlar küçük limitli kartla başlayıp düzenli ödeyerek not oluşturabilir.",
+          "relatedItemIds": [
+            "score-improve"
+          ]
+        },
+        {
+          "id": "cs9",
+          "q": "Kredi notu hangi sıklıkta güncellenir?",
+          "choices": [
+            "Her saat",
+            "Ayda bir veya borç ödeme bildirimi yapıldıkça",
+            "Yılda bir",
+            "Sadece kredi başvurusunda"
+          ],
+          "correctIndex": 1,
+          "explain": "Findeks ve benzeri kuruluşlar düzenli olarak günceller.",
+          "relatedItemIds": [
+            "score-findeks"
+          ]
+        },
+        {
+          "id": "cs10",
+          "q": "Kredi notunda 'kara liste' ne demektir?",
+          "choices": [
+            "Çok yüksek not",
+            "Ödenmemiş borç nedeniyle olumsuz kayıt",
+            "Yeni müşteri",
+            "Banka çalışanı olmak"
+          ],
+          "correctIndex": 1,
+          "explain": "Kara liste, ödenmemiş borçların kaydedildiği olumsuz sicildir.",
+          "relatedItemIds": [
+            "score-basics",
+            "score-improve"
+          ]
         }
       ]
     },
@@ -1915,7 +2152,11 @@
             "Anlık kur yerine ortalama kura bakmak daha sağlıklıdır."
           ],
           "warning": null,
-          "video": null
+          "video": {
+            "title": "Döviz ve Ekonomi",
+            "url": "https://finansalokuryazarlik.gov.tr/i/ekonomiyi-saglikli-yorumlama-doviz",
+            "source": "finansalokuryazarlik.gov.tr"
+          }
         },
         {
           "id": "trade-balance",
@@ -1937,7 +2178,11 @@
             "Yerli üretimi desteklemek cari açığı azaltır — \"yerli malı\" sadece slogan değil."
           ],
           "warning": null,
-          "video": null
+          "video": {
+            "title": "Dış Ticaret ve Ekonomi",
+            "url": "https://finansalokuryazarlik.gov.tr/i/dis-ticaret-ekonomi",
+            "source": "finansalokuryazarlik.gov.tr"
+          }
         },
         {
           "id": "global-crises",
@@ -1960,7 +2205,11 @@
             "Kriz dönemlerinde panik satışı yapma, fırsat da doğabilir."
           ],
           "warning": null,
-          "video": null
+          "video": {
+            "title": "Küresel Ekonomik Krizler",
+            "url": "https://finansalokuryazarlik.gov.tr/i/kuresel-ekonomi-krizler",
+            "source": "finansalokuryazarlik.gov.tr"
+          }
         }
       ],
       "quiz": [
@@ -2028,6 +2277,82 @@
           "correctIndex": 1,
           "explain": "Yüksek faiz TL varlıkları cazip kılarak kur baskısını azaltabilir.",
           "relatedItemIds": null
+        },
+        {
+          "id": "ge1",
+          "q": "Döviz kuru neden dalgalanır?",
+          "choices": [
+            "Sadece hükümet kararıyla",
+            "Arz-talep, faiz, enflasyon ve güven gibi faktörlerle",
+            "Her gün saat 12'de",
+            "Sadece seçim dönemlerinde"
+          ],
+          "correctIndex": 1,
+          "explain": "Döviz kuru birçok ekonomik faktöre bağlıdır.",
+          "relatedItemIds": [
+            "forex"
+          ]
+        },
+        {
+          "id": "ge2",
+          "q": "Cari açık ne demektir?",
+          "choices": [
+            "Bütçe fazlası",
+            "İthalat > İhracat",
+            "Devletin geliri",
+            "Banka hesabı"
+          ],
+          "correctIndex": 1,
+          "explain": "Bir ülkenin dışarıya ödediği, dışarıdan kazandığından fazlaysa cari açık vardır.",
+          "relatedItemIds": [
+            "trade-balance"
+          ]
+        },
+        {
+          "id": "ge3",
+          "q": "Küresel krizler yerel ekonomiyi nasıl etkiler?",
+          "choices": [
+            "Hiç etkilemez",
+            "Ticaret, yatırım ve döviz kanallarıyla etkiler",
+            "Sadece büyük ülkeleri etkiler",
+            "Sadece olumlu etkiler"
+          ],
+          "correctIndex": 1,
+          "explain": "Küreselleşmiş dünyada krizler hızla yayılır.",
+          "relatedItemIds": [
+            "global-crises"
+          ]
+        },
+        {
+          "id": "ge4",
+          "q": "Merkez bankalarının rezervleri ne işe yarar?",
+          "choices": [
+            "Vatandaşa dağıtmak için",
+            "Kriz anında müdahale gücü sağlar",
+            "Sadece istatistik için",
+            "Banka kârı için"
+          ],
+          "correctIndex": 1,
+          "explain": "Rezervler, olası krizlerde piyasaya müdahale gücü verir.",
+          "relatedItemIds": [
+            "forex",
+            "trade-balance"
+          ]
+        },
+        {
+          "id": "ge5",
+          "q": "Kur korumalı mevduat nedir?",
+          "choices": [
+            "Hiç risk içermeyen yatırım",
+            "Döviz kuru artışına karşı koruma sağlayan mevduat",
+            "Tamamen zarar garantili ürün",
+            "Sadece TL mevduat"
+          ],
+          "correctIndex": 1,
+          "explain": "KKM, kur artışına karşı mevduatı korur.",
+          "relatedItemIds": [
+            "forex"
+          ]
         }
       ]
     },
@@ -2174,6 +2499,81 @@
           "correctIndex": 2,
           "explain": "Kart kullanımı ödeme planı ve harcama takibiyle sağlıklı yönetilir.",
           "relatedItemIds": null
+        },
+        {
+          "id": "sf6",
+          "q": "Sosyal mühendislik saldırısında amaç nedir?",
+          "choices": [
+            "Şifre kırmak",
+            "Kişiyi kandırarak bilgi sızdırtmak",
+            "Ağa fiziksel girmek",
+            "Virüs yazmak"
+          ],
+          "correctIndex": 1,
+          "explain": "Sosyal mühendislik, insan psikolojisini kullanarak bilgi almaktır.",
+          "relatedItemIds": [
+            "dijital-guvenlik"
+          ]
+        },
+        {
+          "id": "sf7",
+          "q": "İnternet bankacılığı şifresi ne sıklıkla değiştirilmeli?",
+          "choices": [
+            "Hiç gerekmez",
+            "Ayda bir veya şüphede değiştir",
+            "Her gün",
+            "Sadece banka isterse"
+          ],
+          "correctIndex": 1,
+          "explain": "Düzenli şifre değişikliği ve şüpheli durumda hemen değiştirme önemlidir.",
+          "relatedItemIds": [
+            "dijital-guvenlik"
+          ]
+        },
+        {
+          "id": "sf8",
+          "q": "ATM'de kartını sıkıştıran birine yardım etmek isteyen ne yapmalı?",
+          "choices": [
+            "Hemen yardım etmeli",
+            "Kesinlikle yardım etmemeli, bankayı aramalı",
+            "Polis çağırmalı",
+            "Kartı çekip vermeli"
+          ],
+          "correctIndex": 1,
+          "explain": "ATM kartı sıkışması genelde dolandırıcılık yöntemidir. Bankanı ara.",
+          "relatedItemIds": [
+            "guvenlik-temel"
+          ]
+        },
+        {
+          "id": "sf9",
+          "q": "Oltalama (phishing) e-postası nasıl anlaşılır?",
+          "choices": [
+            "Gönderici adı tanıdık gelirse güvenilir",
+            "Acil aksiyon çağrısı, yazım hataları, şüpheli link içerir",
+            "Sadece siyah beyazsa",
+            "Çok uzunsa güvenlidir"
+          ],
+          "correctIndex": 1,
+          "explain": "Phishing e-postaları aciliyet vurgusu, link ve yazım hatalarıyla anlaşılır.",
+          "relatedItemIds": [
+            "dijital-guvenlik"
+          ]
+        },
+        {
+          "id": "sf10",
+          "q": "İki faktörlü doğrulama (2FA) ne işe yarar?",
+          "choices": [
+            "İnternet hızını artırır",
+            "Şifren çalınsa bile hesabı korur",
+            "Reklamları engeller",
+            "Uygulamayı hızlandırır"
+          ],
+          "correctIndex": 1,
+          "explain": "2FA ekstra güvenlik katmanı ekler.",
+          "relatedItemIds": [
+            "dijital-guvenlik"
+          ]
         }
       ]
     },
@@ -2241,7 +2641,11 @@
             "İkinci el alışveriş ve takas, etik tüketimin en kolay yollarından."
           ],
           "warning": null,
-          "video": null
+          "video": {
+            "title": "Etik Tüketim ve Sürdürülebilirlik",
+            "url": "https://finansalokuryazarlik.gov.tr/i/surdurulebilirlik-etik-tuketim",
+            "source": "finansalokuryazarlik.gov.tr"
+          }
         },
         {
           "id": "circular-economy",
@@ -2269,7 +2673,11 @@
             "Bir ürünü tamir ettirmenin maliyeti yenisinin %50'sinden azsa tamir etmek genelde daha mantıklı."
           ],
           "warning": "Bazı firmalar \"yeşil\" görünüp aslında çevreye zarar vermeye devam eder (greenwashing). Sertifikalara ve bağımsız raporlara güven.",
-          "video": null
+          "video": {
+            "title": "Döngüsel Ekonomi",
+            "url": "https://finansalokuryazarlik.gov.tr/i/dongusel-ekonomi",
+            "source": "finansalokuryazarlik.gov.tr"
+          }
         }
       ],
       "quiz": [
@@ -2337,6 +2745,81 @@
           "correctIndex": 0,
           "explain": "Dongusel ekonomide atik yoktur, her sey yeniden kullanilir.",
           "relatedItemIds": null
+        },
+        {
+          "id": "su6",
+          "q": "ESG kriterleri neyi ölçer?",
+          "choices": [
+            "Sadece kârlılığı",
+            "Çevresel, sosyal ve yönetişim performansını",
+            "Hisselerin anlık değerini",
+            "Şirketlerin yaşını"
+          ],
+          "correctIndex": 1,
+          "explain": "ESG: Environmental (çevre), Social (sosyal), Governance (yönetişim).",
+          "relatedItemIds": [
+            "yesil-yatirim"
+          ]
+        },
+        {
+          "id": "su7",
+          "q": "Greenwashing nedir?",
+          "choices": [
+            "Yeşil boya üretimi",
+            "Bir ürünü olduğundan çevreci göstermek",
+            "Geri dönüşüm tesisi",
+            "Organik tarım"
+          ],
+          "correctIndex": 1,
+          "explain": "Şirketlerin yeşil görünüp aslında çevreci olmaması.",
+          "relatedItemIds": [
+            "yesil-yatirim"
+          ]
+        },
+        {
+          "id": "su8",
+          "q": "Döngüsel ekonominin temel amacı nedir?",
+          "choices": [
+            "Daha çok üretmek",
+            "Atığı sıfırlamak ve kaynakları yeniden kullanmak",
+            "Fiyatları düşürmek",
+            "İşçi çıkarmak"
+          ],
+          "correctIndex": 1,
+          "explain": "Döngüsel ekonomi, atıktan beslenen bir üretim modelidir.",
+          "relatedItemIds": [
+            "circular-economy"
+          ]
+        },
+        {
+          "id": "su9",
+          "q": "Sürdürülebilir yatırımda hangisi daha önemlidir?",
+          "choices": [
+            "En yüksek kısa vadeli getiri",
+            "Uzun vadeli çevresel etki + finansal getiri dengesi",
+            "Sadece düşük risk",
+            "En popüler hisse senedi"
+          ],
+          "correctIndex": 1,
+          "explain": "Sürdürülebilir yatırım, finansal getiri ve çevresel etkiyi birlikte değerlendirir.",
+          "relatedItemIds": [
+            "yesil-yatirim"
+          ]
+        },
+        {
+          "id": "su10",
+          "q": "Karbon ayak izi neden önemlidir?",
+          "choices": [
+            "Sadece şirketleri ilgilendirir",
+            "Bireysel tüketimin çevresel etkisini gösterir",
+            "Vergi hesaplamak içindir",
+            "Enerji üretimiyle ilgili değildir"
+          ],
+          "correctIndex": 1,
+          "explain": "Karbon ayak izi, bir bireyin veya kurumun çevreye etkisini ölçer.",
+          "relatedItemIds": [
+            "surdurulebilirlik-temel"
+          ]
         }
       ]
     }

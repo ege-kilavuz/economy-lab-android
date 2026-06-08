@@ -47,7 +47,9 @@ fun GameEndScreen(vm: GameViewModel, onBack: () -> Unit) {
     var showGlobal by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        /* leaderboard okuma yakinda */
+        leaderboardManager.fetchGlobalScores { scores ->
+            globalScores = scores
+        }
     }
 
     Scaffold(
