@@ -65,8 +65,10 @@
           "title": "LİKİDİTE",
           "short": "Paraya hızlı ulaşabilmek.",
           "body": [
-            "Nakit en likit varlıktır. Ev/arsa ise likiditesi düşüktür.",
-            "Acil durumda nakde hızlı dönebilen şey daha güvenlidir."
+            "Nakit, en likit varlıktır. Bir ev veya arsa ise likiditesi düşüktür, çünkü hemen satmak kolay olmayabilir.",
+            "Acil durumda hızlıca nakde dönüşebilen varlıklar (vadesiz hesap, kısa vadeli fonlar) size güvenlik sağlar.",
+            "Yatırım yaparken portföyünüzün bir kısmını likit varlıklarda tutmak, beklenmedik bir masraf durumunda size esneklik kazandırır.",
+            "Unutma: Yüksek getirili yatırımlar genelde düşük likiditeyle gelir. Paranı ne zaman çekmen gerekebileceğini önceden düşün."
           ],
           "scenario": "Acil para lazım oldu: nakit hemen kullanılır, ev satmak ise haftalar sürer.",
           "qa": [
@@ -278,10 +280,10 @@
           "title": "FINANSAL HEDEF BELIRLEME",
           "short": "Hedefi olmayan, ruzgarda savrulur.",
           "body": [
-            "SMART: Spesifik, Olculebilir, Ulasilabilir, Gercekci, Sureli.",
-            "Kisa vade (0-1 yil): acil fon, kucuk borclari kapat.",
-            "Orta vade (1-5 yil): araba, ev pesinati.",
-            "Uzun vade (5+ yil): emeklilik, cocuk egitimi."
+            "SMART: Spesifik, Ölçülebilir, Ulaşılabilir, Gerçekçi, Süreli.",
+            "Kısa vade (0-1 yil): acil fon, küçük borclari kapat.",
+            "Orta vade (1-5 yil): araba, ev peşinatı.",
+            "Uzun vade (5+ yil): emeklilik, çocuk eğitimi."
           ],
           "scenario": "\"5 yilda 100K birikim\" SMART degil. \"Her ay 1500TL kenara koyarak 5 yilda 90bin TL birikim\" SMART.",
           "qa": [
@@ -290,7 +292,7 @@
               "a": "Spesifik, Measurable, Achievable, Relevant, Time-bound."
             },
             {
-              "q": "Kisa vade ornek?",
+              "q": "Kısa vade ornek?",
               "a": "3 ayda 6000 TL acil fon."
             }
           ],
@@ -430,8 +432,10 @@
           "title": "ASGARİ ÖDEME TUZAĞI",
           "short": "Borcu uzatır, faizi büyütür.",
           "body": [
-            "Asgari ödeme gecikmeyi önler ama borcun büyük kısmı kalır.",
-            "Her ay asgari ödemek borcu uzatır ve faiz yükünü artırır."
+            "Asgari ödeme, kredi kartı borcunun çok küçük bir kısmını kapatır (%20-30 civarı). Kalan borç bir sonraki aya devreder ve üzerine faiz işler.",
+            "Her ay sadece asgari ödemek, borcun katlanarak büyümesine yol açar çünkü faiz işlemeye devam eder.",
+            "Örnek: 10.000 TL borcun varsa ve her ay asgari ödersen, borcun kapanması yıllar sürebilir ve ödediğin toplam tutar neredeyse iki katına çıkabilir.",
+            "Kural: Mümkün olduğunca yüksek ödeme yap. Tam kapanmıyorsa, asgari tutarın üstünde ödeyerek faiz yükünü azalt."
           ],
           "scenario": "10.000 TL borcun var, asgariyi ödedin → borç yavaş azalır ama faiz işlemeye devam eder.",
           "qa": [
@@ -455,8 +459,10 @@
           "title": "KREDİ NOTU (FİNDEKS)",
           "short": "Bankaların sana duyduğu güven puanı.",
           "body": [
-            "Ödemeleri geciktirirsen not düşer. Not düşükse kredi almak zorlaşır.",
-            "Düzenli ödeme yapmak puanı yükseltir."
+            "Kredi notu, bir bireyin borç ödeme geçmişine göre hesaplanan sayısal puandır. Türkiye'de en yaygın sistem Findeks'tir (0-1900 arası).",
+            "Düzenli fatura ödemeleri, kredi kartı borcunu zamanında kapatmak ve limit kullanım oranını düşük tutmak notu yükseltir.",
+            "Sık kredi başvurusu yapmak notu düşürür çünkü her başvuru bir sorgu kaydı oluşturur. Aynı anda birden çok krediye başvurmaktan kaçının.",
+            "Kredi notu yüksek olanlar daha düşük faizle kredi alabilir. Not düşükse ya kredi alamazsın ya da yüksek faiz ödersin."
           ],
           "scenario": "Faturaları hep zamanında ödersen bankalar seni daha güvenilir görür.",
           "qa": [
@@ -478,9 +484,9 @@
           "title": "KREDİ TÜRLERİ",
           "short": "İhtiyaç, konut, taşıt hangisi ne ise yarar?",
           "body": [
-            "İhtiyaç kredisi: en yaygin, amac serbest, faizi en yuksek.",
+            "İhtiyaç kredisi: en yaygın, amac serbest, faizi en yüksek.",
             "Konut kredisi: ev almak icin, vade en uzun (10-20 yil), faiz en dusuk.",
-            "Tasit kredisi: araba icin, vade 5 yila kadar, arac rehinli.",
+            "Taşıt kredisi: araba icin, vade 5 yila kadar, arac rehinli.",
             "Toplam maliyet: faiz + dosya + KKDF + BSMV + sigorta."
           ],
           "scenario": "30.000 TL ihtiyaç kredisi %4 faizle 12 ayda ~36.000 TL odeme. Kartta tasirsan daha pahali.",
@@ -509,15 +515,15 @@
           "title": "KEFİLLİK & MÜTESELSİL BORÇ",
           "short": "Kefil olmak borca ortak olmak.",
           "body": [
-            "Kefil: borc odenmezse ustlenen kisi.",
-            "Muteselsil kefalet: banka direkt senden tahsil edebilir.",
+            "Kefil: borc odenmezse üstlenen kisi.",
+            "Müteselsil kefalet: banka direkt senden tahsil edebilir.",
             "Kefil oldugun borc senin kredi notunu da etkiler.",
             "Kefillik finansal intihar olabilir."
           ],
           "scenario": "Arkadas 50.000 TL kredi cekti, sen kefil. Isinden cikti, odeyemedi. Banka senden istedi, maastan kesinti basladi.",
           "qa": [
             {
-              "q": "Muteselsil kefil?",
+              "q": "Müteselsil kefil?",
               "a": "Banka direkt senden isteyebilir."
             },
             {
@@ -655,8 +661,10 @@
           "title": "KADEMELİ ALIM (DCA)",
           "short": "Düzenli alım yapma yöntemi.",
           "body": [
-            "DCA: Her ay sabit bir tutarla alım yapmak.",
-            "Fiyat düşünce daha çok, yükselince daha az alırsın. Ortalama maliyet dengelenir."
+            "Kademeli alım (DCA), belirli aralıklarla sabit tutarda yatırım yaparak ortalama maliyeti dengeleme stratejisidir.",
+            "Fiyat düşükken daha fazla, yüksekken daha az alım yaparsın. Bu sayede piyasanın zamanlamasını bilmene gerek kalmaz.",
+            "DCA özellikle uzun vadeli yatırımcılar için idealdir. Kısa vadede en yüksek getiriyi sağlamaz ama panik satışı yapma riskini azaltır.",
+            "Örnek: Her ay 1.000 TL ile altın alırsan, fiyat düşünce daha çok gram alır, yükselince daha az alırsın. Ortalaman dengelenir."
           ],
           "scenario": "Her ay 500 TL ile alım yaparsan, fiyat dalgalansa da ortalama maliyet dengelenir.",
           "qa": [
@@ -680,8 +688,10 @@
           "title": "ÇEŞİTLENDİRME",
           "short": "Riski tek yere bağlama.",
           "body": [
-            "Tek bir varlığa bağlanırsan, o düşerse tüm para zarar görür.",
-            "Hisse, fon, altın ve döviz gibi farklı araçlara dağıtmak riski azaltır."
+            "Çeşitlendirme, yatırımları farklı varlık sınıflarına ve sektörlere dağıtarak riski yönetme stratejisidir.",
+            "Tek bir varlığa bağlanmak, o varlık düştüğünde tüm portföyün zarar görmesi anlamına gelir.",
+            "İyi çeşitlendirilmiş bir portföyde hisse senedi, tahvil, altın, döviz ve nakit gibi farklı araçlar bulunur.",
+            "Unutma: Çeşitlendirme getiriyi garanti etmez ama tek bir olayın portföyü yok etme riskini azaltır."
           ],
           "scenario": "Sadece tek hisse yerine, 3–4 farklı araca dağıtınca risk düşer.",
           "qa": [
@@ -703,10 +713,10 @@
           "title": "VARLIK SINIFLARI",
           "short": "Hisse, tahvil, emtia, nakit hangisi sana gore?",
           "body": [
-            "Varlik siniflari: hisse, tahvil, emtia, doviz, nakit, kripto.",
-            "Hisse: yuksek risk/getiri. Tahvil: dusuk risk/getiri.",
+            "Varlık sınıfları: hisse, tahvil, emtia, döviz, nakit, kripto.",
+            "Hisse: yüksek risk/getiri. Tahvil: dusuk risk/getiri.",
             "Altin: enflasyon korumasi, guvenli liman.",
-            "Portfoy dagilimi risk ve getirini belirler."
+            "Portfoy dağılımı risk ve getirini belirler."
           ],
           "scenario": "100bin TL nin %50 si hisse, %30 u altin, %20 si nakit. Hisse dusunce altin yukseldi. Cesitlendirme!",
           "qa": [
@@ -732,21 +742,21 @@
         {
           "id": "temettu",
           "title": "TEMETTU YATIRIMI",
-          "short": "Şirket karindan sana pay.",
+          "short": "Şirket kârından sana pay.",
           "body": [
-            "Temettu: şirket karindan hissedarlara dagitilan pay. Nakit/hisse olarak odenir.",
-            "Temettu verimi: hisse basi temettu / hisse fiyati x 100.",
+            "Temettü: şirket kârından hissedarlara dağıtılan pay. Nakit/hisse olarak odenir.",
+            "Temettü verimi: hisse basi temettu / hisse fiyati x 100.",
             "Duzenli nakit akisi isteyenler icin ideal.",
-            "Temettu garantisi yok, şirket zarar ederse odenmez."
+            "Temettü garantisi yok, şirket zarar ederse odenmez."
           ],
           "scenario": "100 hissen var, her biri 100 TL. Hisse basi 5 TL temettu = 500 TL. Yilda 2 kez pasif gelir.",
           "qa": [
             {
-              "q": "Temettu garanti mi?",
+              "q": "Temettü garanti mi?",
               "a": "Hayir, şirket yonetimi kararina bagli."
             },
             {
-              "q": "Temettu verimi hesabi?",
+              "q": "Temettü verimi hesabi?",
               "a": "Hisse basi temettu / fiyat x 100."
             }
           ],
@@ -755,7 +765,7 @@
           ],
           "warning": null,
           "video": {
-            "title": "Temettu Nedir?",
+            "title": "Temettü Nedir?",
             "url": "https://finansalokuryazarlik.gov.tr/i/temettu-nedir",
             "source": "finansalokuryazarlik.gov.tr"
           }
@@ -879,8 +889,10 @@
           "title": "HİSSE SENEDİ NEDİR?",
           "short": "Bir şirkete ortaklık payı.",
           "body": [
-            "Hisse senedi, bir şirketin paylarını temsil eder; alan kişi o şirkete ortak olur.",
-            "Bu yüzden hisse yatırımı yalnızca fiyat hareketi değil, şirketin geleceğiyle de ilgilidir."
+            "Hisse senedi, bir şirketin sermayesinin küçük bir parçasını temsil eder. Satın alan kişi o şirkete ortak olur.",
+            "Hisse senedi yatırımı yalnızca fiyat hareketlerine bakmak değil, şirketin geleceğini değerlendirmeyi de gerektirir.",
+            "Şirket kâr ettikçe hisse değeri artabilir ve temettü ödemesi alabilirsin. Zarar ederse hisse değeri düşer.",
+            "BIST 100 endeksi, Borsa İstanbul'daki en büyük 100 şirketin performansını gösterir ve genel piyasa trendi hakkında fikir verir."
           ],
           "scenario": "Bir şirket büyür ve kârlılığını artırırsa yatırımcı ilgisi artabilir; ama her şirkette risk de vardır.",
           "qa": [
@@ -904,8 +916,10 @@
           "title": "RİSK VE GETİRİ DENGESİ",
           "short": "Yüksek getiri beklentisi, yüksek risk de taşıyabilir.",
           "body": [
-            "Borsada daha yüksek getiri beklentisi genelde daha yüksek oynaklık ve belirsizlik anlamına gelir.",
-            "Bu yüzden sadece “çok kazandırır” cümlesiyle değil, risk tarafıyla birlikte düşünmek gerekir."
+            "Risk ve getiri, finansta birbirinden ayrılmaz iki kavramdır. Yüksek getiri vaadi genelde yüksek riskle birlikte gelir.",
+            "Düşük riskli yatırımlar (mevduat, tahvil) daha güvenlidir ama getirisi de sınırlıdır. Yüksek riskliler (hisse, kripto) daha çok kazandırabilir ama kaybettirebilir de.",
+            "Yatırım kararı verirken sadece 'ne kazanırım?' değil, 'ne kaybederim?' sorusunu da sormak gerekir.",
+            "Risk toleransını bil: kaybettiğinde uyuyamayacağın parayı yatırma. Genç yatırımcılar daha fazla risk alabilir çünkü kaybı telafi edecek zamanları vardır."
           ],
           "scenario": "Bir hisse kısa sürede çok yükselmiş olabilir; ama aynı hızla düşme riski de taşıyabilir.",
           "qa": [
@@ -929,8 +943,10 @@
           "title": "ÇEŞİTLENDİRME",
           "short": "Tek hisseye bağlı kalma.",
           "body": [
-            "Tüm parayı tek şirkete veya tek araca koymak riskin tek noktada toplanmasına yol açar.",
-            "Farklı şirketlere ve farklı yatırım araçlarına yayılmak, zararı sınırlamaya yardımcı olabilir."
+            "Tüm parayı tek bir şirkete veya araca koymak, riski tek noktada toplamak demektir. O şirket kötü giderse tüm paranı kaybedebilirsin.",
+            "Farklı şirketlere, sektörlere ve varlık sınıflarına yatırım yapmak zararı sınırlar.",
+            "Örneğin teknoloji hisseleri düşerken gıda veya enerji hisseleri yükselebilir. Her ikisi de portföydeyse denge korunur.",
+            "Çeşitlendirme getiriyi maksimize etmez ama oynaklığı azaltır ve uzun vadede daha istikrarlı bir büyüme sağlar."
           ],
           "scenario": "Sadece bir hisse düşerse tüm portföy etkilenir; birkaç farklı araç varsa darbe daha sınırlı kalabilir.",
           "qa": [
@@ -955,8 +971,10 @@
           "title": "HALKA ARZ",
           "short": "Şirket paylarının yatırımcıya sunulması.",
           "body": [
-            "Halka arz, bir şirketin paylarını yatırımcıların alıp satabileceği şekilde piyasaya sunmasıdır.",
-            "Halka arz ilgi çekebilir; ama her halka arz otomatik olarak kazanç anlamına gelmez."
+            "Halka arz (IPO), bir şirketin hisselerini ilk kez halka açarak borsada işlem görmeye başlamasıdır.",
+            "Şirket halka arzla yeni yatırımcılardan fon toplar, yatırımcılar da şirkete erken aşamada ortak olma şansı yakalar.",
+            "Halka arzlar genelde yüksek talep görür ve ilk günlerde fiyatı yükselebilir. Ancak her halka arz kazanç garantisi değildir.",
+            "Katılmadan önce şirketin finansallarını, sektörünü ve halka arz fiyatının makul olup olmadığını araştırmak gerekir."
           ],
           "scenario": "Yeni halka arz olan bir şirket yoğun ilgi görebilir; yine de şirketi ve riskleri anlamadan karar vermek sağlıklı değildir.",
           "qa": [
@@ -1121,8 +1139,10 @@
           "title": "MERKEZ BANKASI NEDİR?",
           "short": "Bankaların bankası; ticari banka gibi çalışmaz.",
           "body": [
-            "Merkez Bankası, bireylerin gidip hesap açtığı veya kredi kullandığı bir banka değildir; para politikasını şekillendiren temel kurumdur.",
-            "Banknot basmak, rezervleri yönetmek ve fiyat istikrarı için politika araçlarını kullanmak gibi görevleri vardır."
+            "Merkez Bankası, bir ülkenin para politikasını yöneten ana finansal kurumdur. Bireylerin hesap açtığı bir banka değildir.",
+            "Temel görevleri: para basmak, politika faizini belirlemek, döviz rezervlerini yönetmek ve fiyat istikrarını sağlamak.",
+            "TCMB, enflasyonu kontrol altında tutmak için faiz kararları alır. Faiz artarsa krediler pahalanır, enflasyon yavaşlar.",
+            "Merkez Bankası bağımsızlığı önemlidir: politik baskı olmadan ekonomik verilere göre karar alabilmesi uzun vadeli istikrar için kritiktir."
           ],
           "scenario": "Merkez Bankası doğrudan sana kredi vermez; ama aldığı kararlar kredi maliyetini ve ekonomideki dengeleri etkileyebilir.",
           "qa": [
@@ -1144,8 +1164,10 @@
           "title": "POLİTİKA FAİZİ VE EKONOMİ",
           "short": "Faiz kararı kredi, talep ve enflasyonu etkileyebilir.",
           "body": [
-            "Politika faizindeki değişimler kredi maliyetleri, harcama eğilimi ve tasarruf davranışı üzerinde etkili olabilir.",
-            "Amaç çoğu zaman fiyat istikrarına katkı sağlamak ve ekonomideki aşırı ısınma veya zayıflama risklerini dengelemektir."
+            "Politika faizi, merkez bankasının bankalara uyguladığı kısa vadeli faiz oranıdır ve ekonomideki diğer faizler için referanstır.",
+            "Faiz artarsa krediler pahalanır, tüketim yavaşlar, enflasyon düşer. Faiz düşerse krediler ucuzlar, tüketim artar.",
+            "Merkez bankası faiz kararlarını enflasyon, büyüme, işsizlik ve döviz kuru verilerine bakarak alır.",
+            "Faiz değişiklikleri domino etkisi yaratır: kredi kartı faizleri, mevduat getirileri, konut kredileri ve döviz kuru da etkilenir."
           ],
           "scenario": "Faiz yükselince kredi daha pahalı hâle gelebilir; bu da bazı harcamaların ertelenmesine yol açabilir.",
           "qa": [
@@ -1201,7 +1223,7 @@
             "Ekonomik büyüme: ulkenin urettigi mal ve hizmetin (GSYH) artmasi.",
             "Okun yasasi: büyüme yavaslarsa işsizlik artar, hizlanirsa azalir.",
             "Büyüme her zaman herkese is demek degil, sektorel farklar onemli.",
-            "Potansiyel büyüme: enflasyonsuz surdurulebilir en yuksek büyüme."
+            "Potansiyel büyüme: enflasyonsuz sürdürülebilir en yüksek büyüme."
           ],
           "scenario": "Turkiye %5 buyurken işsizlik %10 dan %9 a dustu. Ertesi yil %1 e geriledi, işsizlik %12 ye cikti.",
           "qa": [
@@ -1215,7 +1237,7 @@
             }
           ],
           "tips": [
-            "Büyüme rakami kadar dagilimi da onemli."
+            "Büyüme rakami kadar dağılımı da onemli."
           ],
           "warning": null,
           "video": {
@@ -1343,8 +1365,10 @@
           "title": "FOMO",
           "short": "“Herkes kazanıyor” paniği.",
           "body": [
-            "Başkaları kazanıyor diye aceleyle alım yapmak.",
-            "Duygusal kararlar genelde pahalıya patlar."
+            "FOMO (Fear Of Missing Out), başkalarının kazandığını görüp kaçırma korkusuyla acele karar verme eğilimidir.",
+            "Sosyal medyada bir coin'in veya hissenin yükseldiğini görmek hemen alım yapma dürtüsü yaratır. Bu dürtü genelde pahalıya patlar.",
+            "FOMO ile yapılan alımların sorunu: fiyat zaten yükselmişken alırsın ve düzeltme geldiğinde zararda olursun.",
+            "En iyi savunma: önceden belirlenmiş bir yatırım planına sadık kalmak ve ani kararlardan önce 24 saat beklemek."
           ],
           "scenario": "Herkes bir coinden bahsedince hemen almak, çoğu zaman en pahalı noktaya denk gelir.",
           "qa": [
@@ -1368,8 +1392,10 @@
           "title": "KAYIPTAN KAÇINMA",
           "short": "Zararı kabul etmeyi ertelemek.",
           "body": [
-            "Zararını kabul etmemek daha büyük kayıplara yol açabilir.",
-            "Planlı yatırımcı gerektiğinde zarar durdur uygular."
+            "Kayıptan kaçınma, bir kaybın verdiği acının aynı miktardaki kazancın verdiği mutluluktan daha güçlü olmasıdır.",
+            "Araştırmalar gösteriyor: 100 TL kaybetmek, 200 TL kazanmaktan daha fazla üzer. Bu da yatırımcıları mantıksız kararlara iter.",
+            "Zararına olan hisseyi satmayıp 'döner' diye beklemek tipik bir örnektir. Bazen zararı kesip çıkmak daha akıllıcadır.",
+            "Çözüm: önceden belirlenmiş stop-loss seviyeleri kullanmak, duygusal kararları engellemek için en etkili yöntemdir."
           ],
           "scenario": "Zararda olan hissede “belki döner” diye beklemek, zararı büyütebilir.",
           "qa": [
@@ -1391,8 +1417,8 @@
           "title": "ANKRAJ (CIPALAMA)",
           "short": "Ilk gordugun fiyat aklinda kalir.",
           "body": [
-            "Cipalama: ilk duyulan sayiya takilip kalma egilimi.",
-            "Hisse 200TL den 150 ye dusunce ucuz sanirsin, ama 100 olmali.",
+            "Çıpalama: ilk duyulan sayiya takilip kalma egilimi.",
+            "Hisse 200TL den 150 ye dusunce ucuz sanırsın, ama 100 olmali.",
             "Indirimler: \"1000 den 700 e dustu\" diye alirsin ama aslinda 500."
           ],
           "scenario": "Urun once 1000 TL sonra 750. Hemen alirsin. Ama baska yerde 500 TL. Cipaya takildin.",
@@ -1421,14 +1447,14 @@
           "title": "ASIRI GUVEN",
           "short": "\"Ben hata yapmam\" diyenin hatasi buyuk olur.",
           "body": [
-            "Asiri guven: kendi yeteneklerini oldugundan fazla gorme.",
+            "Aşırı guven: kendi yeteneklerini oldugundan fazla gorme.",
             "Yatirimda: \"Ben cozdum\" diye tum parayi tek hisseye koymak.",
             "Arastirmalar: erkekler kadinlardan %20 fazla islem yapar ama az kazanir."
           ],
           "scenario": "Ali 2 dogru tahmin yapinca \"Borsayi cozdum\" deyip tum parayi tek hisseye yatirdi. %40 kaybetti.",
           "qa": [
             {
-              "q": "Asiri guven neden kotu?",
+              "q": "Aşırı guven neden kotu?",
               "a": "Cesitlendirmeyi azaltir, riski artirir."
             },
             {
@@ -2279,7 +2305,7 @@
           "warning": null,
           "video": {
             "title": "Döviz ve Ekonomi",
-            "url": "https://finansalokuryazarlik.gov.tr/i/ekonomiyi-saglikli-yorumlama-doviz",
+            "url": "https://finansalokuryazarlik.gov.tr/i/ekonomiyi-saglikli-yorumlama-döviz",
             "source": "finansalokuryazarlik.gov.tr"
           }
         },
@@ -2746,7 +2772,7 @@
           "warning": "Yeşil yatırım da risktir. ESG puanı yüksek diye otomatik olarak iyi bir yatırım olduğu anlamına gelmez.",
           "video": {
             "title": "Yeşil Yatırım ve Sürdürülebilir Finans",
-            "url": "https://finansalokuryazarlik.gov.tr/i/yesil-yatirim-ve-surdurulebilir-finans",
+            "url": "https://finansalokuryazarlik.gov.tr/i/yesil-yatirim-ve-sürdürülebilir-finans",
             "source": "finansalokuryazarlik.gov.tr"
           }
         },
@@ -2778,7 +2804,7 @@
           "warning": null,
           "video": {
             "title": "Etik Tüketim ve Sürdürülebilirlik",
-            "url": "https://finansalokuryazarlik.gov.tr/i/surdurulebilirlik-etik-tuketim",
+            "url": "https://finansalokuryazarlik.gov.tr/i/sürdürülebilirlik-etik-tuketim",
             "source": "finansalokuryazarlik.gov.tr"
           }
         },
@@ -2953,7 +2979,7 @@
           "correctIndex": 1,
           "explain": "Karbon ayak izi, bir bireyin veya kurumun çevreye etkisini ölçer.",
           "relatedItemIds": [
-            "surdurulebilirlik-temel"
+            "sürdürülebilirlik-temel"
           ]
         }
       ]
