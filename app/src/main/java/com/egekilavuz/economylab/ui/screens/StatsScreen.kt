@@ -37,7 +37,9 @@ fun StatsScreen(
     content: JsonContent,
     progressManager: ProgressManager,
     xpManager: XpManager,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    currentVersion: String = "",
+    onCheckUpdates: () -> Unit = {}
 ) {
     val stats = remember {
         val totalItems = content.categories.sumOf { it.items.size }
@@ -194,6 +196,35 @@ fun StatsScreen(
                                     color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                         }
+                    }
+                }
+            }
+
+            Spacer(Modifier.height(16.dp))
+
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f)
+                )
+            ) {
+                Column(modifier = Modifier.padding(14.dp)) {
+                    Text("🔄 Uygulama Güncelleme", fontWeight = FontWeight.Bold)
+                    Spacer(Modifier.height(2.dp))
+                    Text(
+                        if (currentVersion.isBlank()) "Sürüm bilgisi alınamadı"
+                        else "Yüklü sürüm: v$currentVersion",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    OutlinedButton(
+                        onClick = onCheckUpdates,
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text("Güncelleme Kontrol Et")
                     }
                 }
             }

@@ -5,7 +5,7 @@
     <img src="https://img.shields.io/badge/Kotlin-2.1.0-purple?logo=kotlin" alt="Kotlin" />
     <img src="https://img.shields.io/badge/Compose-BOM_2025.01-blue?logo=jetpackcompose" alt="Compose" />
     <img src="https://img.shields.io/badge/API-24%2B-brightgreen" alt="API" />
-    <img src="https://img.shields.io/badge/sürüm-1.6.2-orange" alt="Version" />
+    <img src="https://img.shields.io/badge/sürüm-1.7.0-orange" alt="Version" />
     <img src="https://img.shields.io/badge/license-MIT-lightgrey" alt="License" />
   </p>
 </div>
@@ -78,6 +78,17 @@ Türkiye'de yeni mezun bir gencin ilk maaş ayını 30 bölümde yaşa:
 | 🧩 Bütçe Tetris | 2 dk | Para bloklarını doğru kovaya koy |
 | 📰 Haber mi Gürültü mü? | 2 dk | Sinyal/gürültü ayırt etme |
 | 🛡️ Dolandırıcılık Radar | 2 dk | Dolandırıcılık senaryo seçimi |
+
+### 🔄 Uygulama İçi Güncelleme
+
+APK’yı her seferinde elle indirmene gerek yok:
+- Uygulama açılışta **GitHub Releases** üzerinden yeni sürümü kontrol eder
+- Yeni sürüm varsa sürüm notlarını gösterir ve **“İndir ve Kur”** ile APK’yı indirip kurulum ekranını açar
+- **İstatistikler → Güncelleme Kontrol Et** ile manuel kontrol
+- “Bu sürümü atla” ile o sürüm için uyarıyı kapatabilirsin
+- Kontrol sonucu 6 saat önbelleğe alınır (GitHub API limiti için)
+
+> Not: İlk kurulumu yine elle yapman gerekir. v1.7.0 kurulduktan sonraki sürümler uygulama içinden güncellenebilir. Kurulum sırasında Android “bilinmeyen uygulamaları yükleme” izni isteyebilir.
 
 ### 🏆 Rozetler & Puan
 

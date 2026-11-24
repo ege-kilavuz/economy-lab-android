@@ -1,3 +1,23 @@
+# v1.7.0 — Uygulama İçi Güncelleme
+
+## 🔄 Güncelleme mekanizması
+- Açılışta **GitHub Releases** kontrolü (`/releases/latest`)
+- Yeni sürüm varsa sürüm notları + **“İndir ve Kur”**
+- APK uygulama önbelleğine indirilir, FileProvider ile kurulum ekranı açılır
+- Android 8+ “bilinmeyen uygulamaları yükleme” izni yönlendirmesi
+- **İstatistikler → Güncelleme Kontrol Et** ile manuel kontrol
+- “Bu sürümü atla” seçeneği ve 6 saatlik kontrol önbelleği
+- `REQUEST_INSTALL_PACKAGES` izni + FileProvider yapılandırması
+
+## 🧪 Teknik
+- Sürüm karşılaştırma ve GitHub yanıtı ayrıştırma için birim testleri (8 test)
+- Toplam 42 test
+- Sürüm 1.7.0 (versionCode 21)
+
+> Not: İlk kurulum elle yapılır; sonraki sürümler uygulama içinden güncellenebilir. Tüm sürümler aynı imza (debug) ile üretilmelidir.
+
+---
+
 # v1.6.2 — Senaryo Çeşitliliği & Hafta Özeti Düzeni
 
 ## 🎲 Senaryolar

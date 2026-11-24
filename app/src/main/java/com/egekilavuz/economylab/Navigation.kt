@@ -25,6 +25,7 @@ import androidx.navigation.navArgument
 import com.egekilavuz.economylab.data.ContentLoader
 import com.egekilavuz.economylab.data.ProgressManager
 import com.egekilavuz.economylab.data.SoundManager
+import com.egekilavuz.economylab.data.UpdateViewModel
 import com.egekilavuz.economylab.data.XpManager
 import com.egekilavuz.economylab.data.story.StoryViewModel
 import com.egekilavuz.economylab.ui.screens.*
@@ -52,6 +53,11 @@ fun AppNavigation() {
     val xpManager = remember { XpManager(context) }
     val soundManager = remember { SoundManager(context) }
     val content = remember { ContentLoader.load(context) }
+    val updateVm: UpdateViewModel = viewModel()
+
+    LaunchedEffect(Unit) {
+        updateVm.check(force = false)
+    }
 
     // Content update check
     val snackbarHostState = remember { SnackbarHostState() }
@@ -230,7 +236,9 @@ fun AppNavigation() {
                     content = content,
                     progressManager = progressManager,
                     xpManager = xpManager,
-                    onBack = { navController.popBackStack() }
+                    onBack = { navController.popBackStack() },
+                    currentVersion = updateVm.currentVersion,
+                    onCheckUpdates = { updateVm.check(force = true) }
                 )
             }
         }
@@ -244,5 +252,9 @@ fun AppNavigation() {
                 showNameDialog = false
             }
         )
+    }
+
+    if (!showNameDialog) {
+        AppUpdateDialog(updateVm)
     }
 }
