@@ -32,7 +32,8 @@ class StoryRandom(seed: Int) {
 fun newStory(
     difficulty: Difficulty = Difficulty.Normal,
     seed: Int = Random.nextInt(1, 1_000_000),
-    alreadySeen: Set<String> = emptySet()
+    alreadySeen: Set<String> = emptySet(),
+    objective: StoryObjective = StoryObjective.DebtFree
 ): StoryState {
     val stats = when (difficulty) {
         Difficulty.Easy -> StoryStats(
@@ -53,7 +54,8 @@ fun newStory(
         stats = stats,
         seed = seed,
         difficulty = difficulty,
-        seenScenarios = alreadySeen.toList()
+        seenScenarios = alreadySeen.toList(),
+        objective = objective
     )
     val event = eventForDay(1, base)
     return base.copy(goalText = goalForDay(base, event)?.text ?: "")
@@ -67,6 +69,9 @@ fun requirementMet(state: StoryState, requirement: ChoiceRequirement?): Boolean 
     if (requirement == null) return true
     if (state.stats.knowledge < requirement.minKnowledge) return false
     if (state.stats.cash < requirement.minCash) return false
+    if (state.stats.landlord < requirement.minLandlord) return false
+    if (state.stats.boss < requirement.minBoss) return false
+    if (state.stats.friend < requirement.minFriend) return false
     if (requirement.requireFlag != null && requirement.requireFlag !in state.flags) return false
     if (requirement.forbidFlag != null && requirement.forbidFlag in state.flags) return false
     return true
@@ -158,7 +163,10 @@ private fun computeStats(state: StoryState, choice: StoryChoice): AppliedStats {
             portfolioValue = newPortfolio,
             knowledge = clampInt(old.knowledge + effect.knowledge, 0, 100),
             wellbeing = clampInt(old.wellbeing + effect.wellbeing, 0, 100),
-            risk = clampInt(old.risk + effect.risk, 0, 100)
+            risk = clampInt(old.risk + effect.risk, 0, 100),
+            landlord = clampInt(old.landlord + effect.landlord, 0, 100),
+            boss = clampInt(old.boss + effect.boss, 0, 100),
+            friend = clampInt(old.friend + effect.friend, 0, 100)
         ),
         overflowDebt = overflowDebt,
         cashFromDivest = cashIn,
@@ -226,6 +234,24 @@ fun applyChoice(state: StoryState, event: StoryEvent, choice: StoryChoice): Stor
         goalDone = goalDone
     )
 
+    val scheduled = choice.effect.delayed.map { delayed ->
+        PendingEffect(
+            id = delayed.id.ifBlank { "delayed-${state.day}-${delayed.title}" },
+            title = delayed.title,
+            dueDay = (state.day + delayed.days).coerceIn(state.day + 1, totalChapters()),
+            message = delayed.message,
+            cash = delayed.cash,
+            debt = delayed.debt,
+            knowledge = delayed.knowledge,
+            wellbeing = delayed.wellbeing,
+            risk = delayed.risk,
+            landlord = delayed.landlord,
+            boss = delayed.boss,
+            friend = delayed.friend,
+            setFlags = delayed.setFlags
+        )
+    }
+
     return state.copy(
         stats = newStats,
         flags = flags,
@@ -238,7 +264,8 @@ fun applyChoice(state: StoryState, event: StoryEvent, choice: StoryChoice): Stor
         goalDone = goalDone,
         goalStreak = newStreak,
         goalHits = newGoalHits,
-        seenScenarios = (state.seenScenarios + eventKey(event)).distinct()
+        seenScenarios = (state.seenScenarios + eventKey(event)).distinct(),
+        pendingEffects = state.pendingEffects + scheduled
     )
 }
 
@@ -259,32 +286,56 @@ fun advanceDay(state: StoryState): StoryState {
     val newPortfolio = nextPortfolio(state, newMarket)
 
     var stats = state.stats.copy(portfolioValue = newPortfolio)
-    var notice: String? = null
+    var flags = state.flags
+    val notices = mutableListOf<String>()
+
+    // Gecikmeli sonuçlar (kart faizi, taksit, vergi cezası, karakter tepkileri…)
+    val due = state.pendingEffects.filter { it.dueDay <= nextDay }
+    val remainingEffects = state.pendingEffects.filter { it.dueDay > nextDay }
+    due.forEach { effect ->
+        var cash = stats.cash + effect.cash
+        var debt = stats.debt + effect.debt
+        if (cash < 0) {
+            debt += -cash
+            cash = 0
+        }
+        stats = stats.copy(
+            cash = cash,
+            debt = debt.coerceAtLeast(0),
+            knowledge = clampInt(stats.knowledge + effect.knowledge, 0, 100),
+            wellbeing = clampInt(stats.wellbeing + effect.wellbeing, 0, 100),
+            risk = clampInt(stats.risk + effect.risk, 0, 100),
+            landlord = clampInt(stats.landlord + effect.landlord, 0, 100),
+            boss = clampInt(stats.boss + effect.boss, 0, 100),
+            friend = clampInt(stats.friend + effect.friend, 0, 100)
+        )
+        if (effect.setFlags.isNotEmpty()) flags = flags + effect.setFlags
+        notices += "⏳ ${effect.title}: ${effect.message}"
+    }
 
     // Haftalık kart faizi (7, 14, 21, 28. günler)
     if (nextDay % 7 == 0 && stats.debt > 0) {
         val interest = (stats.debt * 0.012).roundToInt().coerceAtLeast(25)
         stats = stats.copy(debt = stats.debt + interest)
-        notice = "💳 Kart faizi işledi: +${formatTL(interest)} borç (haftalık %1,2)"
+        notices += "💳 Kart faizi işledi: +${formatTL(interest)} borç (haftalık %1,2)"
     }
 
     // Rastgele ara olay
     val rng = StoryRandom(state.seed + nextDay * 3571)
     if (rng.next() < 0.28) {
-        val event = RANDOM_EVENTS[rng.nextInt(RANDOM_EVENTS.size)]
-        if (event.cash < 0) {
-            val remaining = stats.cash + event.cash
-            stats = if (remaining >= 0) {
-                stats.copy(cash = remaining)
+        val randomEvent = RANDOM_EVENTS[rng.nextInt(RANDOM_EVENTS.size)]
+        if (randomEvent.cash < 0) {
+            val afterCash = stats.cash + randomEvent.cash
+            stats = if (afterCash >= 0) {
+                stats.copy(cash = afterCash)
             } else {
-                stats.copy(cash = 0, debt = stats.debt - remaining)
+                stats.copy(cash = 0, debt = stats.debt - afterCash)
             }
         } else {
-            stats = stats.copy(cash = stats.cash + event.cash)
+            stats = stats.copy(cash = stats.cash + randomEvent.cash)
         }
-        stats = stats.copy(wellbeing = clampInt(stats.wellbeing + event.wellbeing, 0, 100))
-        val line = "🎲 ${event.text}"
-        notice = if (notice == null) line else "$notice\n$line"
+        stats = stats.copy(wellbeing = clampInt(stats.wellbeing + randomEvent.wellbeing, 0, 100))
+        notices += "🎲 ${randomEvent.text}"
     }
 
     var next = state.copy(
@@ -292,11 +343,13 @@ fun advanceDay(state: StoryState): StoryState {
         pendingResult = null,
         market = newMarket,
         stats = stats,
+        flags = flags,
         portfolioDelta = newPortfolio - oldPortfolio,
         lastXpGain = 0,
         newBadges = emptyList(),
         checkpointAct = 0,
-        notice = notice
+        notice = notices.joinToString("\n").takeIf { it.isNotEmpty() },
+        pendingEffects = remainingEffects
     )
 
     val event = eventForDay(nextDay, next)
@@ -369,6 +422,38 @@ fun storyScore(state: StoryState): Int {
     score += clampInt(state.stats.wellbeing, 0, 100) * 22 / 100
     score += (100 - clampInt(state.stats.risk, 0, 100)) * 15 / 100
     return clampInt(score, 0, 100)
+}
+
+// ─────────────────────────────────────────────────────────────
+//  Ayın hedefi
+// ─────────────────────────────────────────────────────────────
+
+fun objectiveReached(state: StoryState): Boolean = when (state.objective) {
+    StoryObjective.DebtFree -> state.stats.debt == 0
+    StoryObjective.EmergencyFund -> (state.stats.cash + investmentValue(state)) >= 25_000
+    StoryObjective.Investor -> investmentValue(state) >= 15_000
+}
+
+fun objectiveProgress(state: StoryState): Float = when (state.objective) {
+    StoryObjective.DebtFree ->
+        if (state.stats.debt <= 0) 1f
+        else (1f - state.stats.debt / 20_000f).coerceIn(0f, 1f)
+    StoryObjective.EmergencyFund ->
+        ((state.stats.cash + investmentValue(state)) / 25_000f).coerceIn(0f, 1f)
+    StoryObjective.Investor ->
+        (investmentValue(state) / 15_000f).coerceIn(0f, 1f)
+}
+
+fun objectiveStatusText(state: StoryState): String = when (state.objective) {
+    StoryObjective.DebtFree ->
+        if (state.stats.debt <= 0) "Borçsuzsun 🎉"
+        else "Kart borcu: ${formatTL(state.stats.debt)}"
+    StoryObjective.EmergencyFund -> {
+        val buffer = state.stats.cash + investmentValue(state)
+        "Tampon: ${formatTL(buffer)} / ${formatTL(25_000)}"
+    }
+    StoryObjective.Investor ->
+        "Portföy: ${formatTL(investmentValue(state))} / ${formatTL(15_000)}"
 }
 
 data class StoryArchetype(

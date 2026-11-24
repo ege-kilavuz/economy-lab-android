@@ -455,3 +455,108 @@ fun BadgeRow(ids: List<String>) {
         }
     }
 }
+
+// ─────────────────────────────────────────────────────────────
+//  Hedef ve karakter ilişkileri
+// ─────────────────────────────────────────────────────────────
+
+@Composable
+fun ObjectiveCard(state: StoryState) {
+    val progress = objectiveProgress(state)
+    val done = objectiveReached(state)
+    Surface(
+        shape = RoundedCornerShape(14.dp),
+        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.08f),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(modifier = Modifier.padding(12.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(objectiveEmoji(state.objective), fontSize = 20.sp)
+                Spacer(Modifier.width(8.dp))
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        "Ayın hedefi · ${objectiveTitle(state.objective)}",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Text(
+                        objectiveStatusText(state),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                if (done) Text("✅", fontSize = 16.sp)
+            }
+            Spacer(Modifier.height(6.dp))
+            LinearProgressIndicator(
+                progress = { progress },
+                modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(3.dp)),
+                color = if (done) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary,
+                trackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+            )
+            if (state.pendingEffects.isNotEmpty()) {
+                Spacer(Modifier.height(6.dp))
+                val nextDue = state.pendingEffects.minOf { it.dueDay }
+                Text(
+                    "⏳ ${state.pendingEffects.size} bekleyen sonuç · en yakın gün $nextDue",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.tertiary
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun RelationsRow(stats: StoryStats) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(6.dp)
+    ) {
+        RelationChip("🏠", "Necmi", stats.landlord, Modifier.weight(1f))
+        RelationChip("💼", "Patron", stats.boss, Modifier.weight(1f))
+        RelationChip("🤝", "Deniz", stats.friend, Modifier.weight(1f))
+    }
+}
+
+@Composable
+private fun RelationChip(
+    emoji: String,
+    name: String,
+    value: Int,
+    modifier: Modifier = Modifier
+) {
+    val color = when {
+        value >= 65 -> MaterialTheme.colorScheme.secondary
+        value <= 35 -> MaterialTheme.colorScheme.error
+        else -> MaterialTheme.colorScheme.onSurface
+    }
+    Surface(
+        shape = RoundedCornerShape(10.dp),
+        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f),
+        modifier = modifier
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(emoji, fontSize = 14.sp)
+            Spacer(Modifier.width(5.dp))
+            Column {
+                Text(
+                    name,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1
+                )
+                Text(
+                    "$value",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = color
+                )
+            }
+        }
+    }
+}

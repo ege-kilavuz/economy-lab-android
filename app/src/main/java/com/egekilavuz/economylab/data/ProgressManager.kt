@@ -20,6 +20,14 @@ class ProgressManager(context: Context) {
         get() = prefs.getStringSet("opened_simulations", emptySet()) ?: emptySet()
         set(value) = prefs.edit().putStringSet("opened_simulations", value).apply()
 
+    var unlockedEndings: Set<String>
+        get() = prefs.getStringSet("unlocked_endings", emptySet()) ?: emptySet()
+        set(value) = prefs.edit().putStringSet("unlocked_endings", value).apply()
+
+    fun unlockEnding(id: String) {
+        unlockedEndings = unlockedEndings + id
+    }
+
     var userName: String
         get() = prefs.getString("user_name", "") ?: ""
         set(value) = prefs.edit().putString("user_name", value).apply()

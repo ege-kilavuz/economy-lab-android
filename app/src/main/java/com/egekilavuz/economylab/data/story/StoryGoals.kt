@@ -131,6 +131,19 @@ data class StoryEnding(
     val paragraphs: List<String>
 )
 
+data class EndingMeta(val id: String, val emoji: String, val title: String)
+
+/** Final koleksiyonunda gösterilen tüm sonlar. */
+val ENDING_CATALOG: List<EndingMeta> = listOf(
+    EndingMeta("debt-spiral", "🔗", "Borç Sarmalı"),
+    EndingMeta("scam-lesson", "🕵️", "Pahalı Bir Ders"),
+    EndingMeta("investor", "📈", "Yatırımcı"),
+    EndingMeta("career", "🪜", "Kariyer Basamağı"),
+    EndingMeta("solid-base", "🧯", "Sağlam Temel"),
+    EndingMeta("balanced", "🌿", "Dengeli Hayat"),
+    EndingMeta("beginning", "🌱", "Yolun Başı")
+)
+
 fun endingFor(state: StoryState): StoryEnding {
     val stats = state.stats
     val portfolio = investmentValue(state)

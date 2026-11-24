@@ -30,6 +30,7 @@ fun StoryEndScreen(vm: StoryViewModel) {
     val score = storyScore(state)
     val archetype = archetypeFor(state)
     val ending = endingFor(state)
+    val objectiveDone = objectiveReached(state)
     val runBadges = state.earnedBadges.mapNotNull { badgeById(it) }
     val invested = state.stats.invested
     val investedValue = investmentValue(state)
@@ -38,6 +39,7 @@ fun StoryEndScreen(vm: StoryViewModel) {
     val leaderboardManager = remember { LeaderboardManager(context) }
     val progressManager = remember { ProgressManager(context) }
     val xpManager = remember { XpManager(context) }
+    var unlockedEndings by remember { mutableStateOf(progressManager.unlockedEndings) }
 
     val unlocked = remember(state) {
         checkAchievements(
@@ -61,9 +63,14 @@ fun StoryEndScreen(vm: StoryViewModel) {
 
     LaunchedEffect(Unit) {
         leaderboardManager.fetchGlobalScores { scores -> globalScores = scores }
-        xpManager.addXpForAction("game_finish")
-        val gameXp = (score / 2).coerceIn(0, 100)
-        if (gameXp > 0) xpManager.addXp(gameXp)
+        if (vm.claimEndRewards()) {
+            xpManager.addXpForAction("game_finish")
+            val gameXp = (score / 2).coerceIn(0, 100)
+            if (gameXp > 0) xpManager.addXp(gameXp)
+            if (objectiveDone) xpManager.addXp(100)
+        }
+        progressManager.unlockEnding(ending.id)
+        unlockedEndings = progressManager.unlockedEndings
         val sounds = SoundManager.getInstance(context)
         if (unlocked.isNotEmpty()) {
             sounds.play(Sfx.BADGE)
@@ -138,6 +145,56 @@ fun StoryEndScreen(vm: StoryViewModel) {
                         EndChip(difficultyLabel(state.difficulty), MaterialTheme.colorScheme.primary)
                         EndChip("${state.log.size} karar", MaterialTheme.colorScheme.tertiary)
                         EndChip(archetype.emoji, MaterialTheme.colorScheme.secondary)
+                    }
+                }
+            }
+
+            Spacer(Modifier.height(12.dp))
+
+            // ── Ayın hedefi ──
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(18.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = if (objectiveDone)
+                        MaterialTheme.colorScheme.secondary.copy(alpha = 0.10f)
+                    else
+                        MaterialTheme.colorScheme.surface.copy(alpha = 0.55f)
+                )
+            ) {
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(objectiveEmoji(state.objective), fontSize = 34.sp)
+                    Spacer(Modifier.width(12.dp))
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            "AYIN HEDEFİ · ${objectiveTitle(state.objective)}",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text(
+                            if (objectiveDone) "Tamamlandı · +100 XP" else "Bu kez tamamlanmadı",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = if (objectiveDone) MaterialTheme.colorScheme.secondary
+                            else MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Spacer(Modifier.height(4.dp))
+                        Text(
+                            objectiveStatusText(state),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Spacer(Modifier.height(6.dp))
+                        LinearProgressIndicator(
+                            progress = { objectiveProgress(state) },
+                            modifier = Modifier.fillMaxWidth().height(6.dp),
+                            color = if (objectiveDone) MaterialTheme.colorScheme.secondary
+                            else MaterialTheme.colorScheme.primary,
+                            trackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+                        )
                     }
                 }
             }
@@ -225,6 +282,64 @@ fun StoryEndScreen(vm: StoryViewModel) {
                 }
                 Spacer(Modifier.height(12.dp))
             }
+
+            // ── Final koleksiyonu ──
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.55f)
+                )
+            ) {
+                Column(modifier = Modifier.padding(14.dp)) {
+                    SectionTitle("Final koleksiyonu · ${unlockedEndings.size}/${ENDING_CATALOG.size}")
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        "Farklı hedefler ve kararlarla diğer finalleri aç.",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    ENDING_CATALOG.chunked(2).forEach { row ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            row.forEach { meta ->
+                                val got = meta.id in unlockedEndings
+                                Surface(
+                                    modifier = Modifier.weight(1f),
+                                    shape = RoundedCornerShape(10.dp),
+                                    color = if (got)
+                                        MaterialTheme.colorScheme.tertiary.copy(alpha = 0.12f)
+                                    else
+                                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.25f)
+                                ) {
+                                    Row(
+                                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 7.dp),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Text(if (got) meta.emoji else "❔", fontSize = 16.sp)
+                                        Spacer(Modifier.width(6.dp))
+                                        Text(
+                                            if (got) meta.title else "???",
+                                            style = MaterialTheme.typography.labelSmall,
+                                            fontWeight = if (got) FontWeight.Bold else FontWeight.Normal,
+                                            color = if (got) MaterialTheme.colorScheme.tertiary
+                                            else MaterialTheme.colorScheme.onSurfaceVariant,
+                                            maxLines = 1
+                                        )
+                                    }
+                                }
+                            }
+                            if (row.size == 1) Spacer(Modifier.weight(1f))
+                        }
+                        Spacer(Modifier.height(6.dp))
+                    }
+                }
+            }
+
+            Spacer(Modifier.height(12.dp))
 
             // ── Arketip ──
             Card(
@@ -461,7 +576,7 @@ fun StoryEndScreen(vm: StoryViewModel) {
             Spacer(Modifier.height(16.dp))
 
             Button(
-                onClick = { vm.startNewGame(state.difficulty) },
+                onClick = { vm.startNewGame(state.difficulty, state.objective) },
                 modifier = Modifier.fillMaxWidth().height(50.dp),
                 shape = RoundedCornerShape(14.dp)
             ) { Text("Yeni Bir Ay Başlat", fontWeight = FontWeight.Bold) }

@@ -5,7 +5,7 @@
     <img src="https://img.shields.io/badge/Kotlin-2.1.0-purple?logo=kotlin" alt="Kotlin" />
     <img src="https://img.shields.io/badge/Compose-BOM_2025.01-blue?logo=jetpackcompose" alt="Compose" />
     <img src="https://img.shields.io/badge/API-24%2B-brightgreen" alt="API" />
-    <img src="https://img.shields.io/badge/sürüm-1.7.0-orange" alt="Version" />
+    <img src="https://img.shields.io/badge/sürüm-1.8.0-orange" alt="Version" />
     <img src="https://img.shields.io/badge/license-MIT-lightgrey" alt="License" />
   </p>
 </div>
@@ -49,6 +49,10 @@ Türkiye'de yeni mezun bir gencin ilk maaş ayını 30 bölümde yaşa:
 - 📅 **30 bölüm** — Her gün bir olay, 2-4 seçim
 - 🧭 **Seçim mekaniği** — Kararlar Nakit, Kart Borcu, Yatırım, Bilgi, Refah ve Risk'i değiştirir
 - 🎯 **Günün hedefi** — Her bölümde mikro hedef; tutturan XP ve seri kazanır
+- 🏁 **Ayın hedefi** — Başlangıçta Borçsuz / Acil Fon / Yatırımcı hedefi seç, ilerlemeni takip et
+- ⏳ **Gecikmeli sonuçlar** — Kart faizi, taksit, vergi cezası ve karakter tepkileri 5-10 gün sonra geri döner
+- 🧑‍🤝‍🧑 **Karakterler** — Ev sahibi Necmi Bey, patron ve Deniz ile ilişki puanı; kararlar gelecek olayları değiştirir
+- ⚖️ **İkilemler** — İki seçeneğin de bir şeyden feragat ettirdiği 12 yeni senaryo
 - ⚡ **Hızlı mod** — Kısa metin + otomatik geçiş
 - 🔒 **Bilgi kilitleri** — Bazı seçenekler yeterli finans bilgisi veya nakit ister
 - 🔀 **Dallanan olaylar** — Borsa, taşınma, kira pazarlığı gibi seçimler sonraki bölümleri etkiler
@@ -59,6 +63,7 @@ Türkiye'de yeni mezun bir gencin ilk maaş ayını 30 bölümde yaşa:
 - 🏅 **Rozetler & XP** — Bölüm, hedef, seri ve rozetlerden anında XP
 - 📓 **Karar günlüğü** — Verdiğin her karar ve sonucu kayıt altında
 - 🎭 **Çoklu final** — Borç sarmalı, yatırımcı, kariyer, dengeli hayat ve daha fazlası
+- 🏅 **Final koleksiyonu** — Gördüğün sonları kalıcı olarak topla
 
 ### 🏛️ Simülasyonlar (4 Adet)
 

@@ -50,7 +50,13 @@ fun StoryPlayScreen(vm: StoryViewModel) {
                 Spacer(Modifier.height(8.dp))
             }
 
+            ObjectiveCard(state)
+
+            Spacer(Modifier.height(8.dp))
             StoryStatsPanel(state)
+
+            Spacer(Modifier.height(8.dp))
+            RelationsRow(state.stats)
 
             Spacer(Modifier.height(8.dp))
             MarketTicker(state.market)

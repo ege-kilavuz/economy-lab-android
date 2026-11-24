@@ -1,3 +1,35 @@
+# v1.8.0 — Strateji & Karakter
+
+## 🎯 Ayın hedefi
+- Başlangıçta 3 hedeften biri seçilir: **Borçsuz Ay**, **Acil Fon (25.000 TL)**, **Yatırımcı (15.000 TL portföy)**
+- Oyun boyunca hedef ilerleme çubuğu ve durum metni
+- Hedefi tutturan oyuncuya ay sonunda **+100 XP**
+
+## ⏳ Gecikmeli sonuçlar
+- Kartla ödeme, taksit, kredi ve vergi kaçırma gibi seçimler 5-10 gün sonra geri dönüyor
+- Örnekler: kart faizi, telefon taksiti, vergi cezası, sigortasız hasar, kurs tamamlama, gecikmeli prim
+- Bekleyen sonuç sayısı ve en yakın gün oyun ekranında gösteriliyor
+
+## 🧑‍🤝‍🧑 Karakterler ve ilişki puanı
+- **Necmi Bey** (ev sahibi), **Patron**, **Deniz** (arkadaş) için 0-100 ilişki puanı
+- Kira, mesai, terfi, borç verme gibi kararlar ilişkileri değiştiriyor
+- İlişkiye bağlı yeni olaylar: Necmi Bey'in teklifi, patron baskısı, Deniz'in geri dönüşü
+
+## ⚖️ İkilemler
+- 12 yeni senaryo: zam/zaman, uzak ev, peşin/taksit, sigorta/nakit, kurs/tatil, kripto/acil fon, iş/sağlık, kefillik, vergi şeffaflığı, borç/yatırım, konfor/tasarruf, bugün/yarın
+
+## 🏅 Meta
+- **Final koleksiyonu**: 7 finalin kaçını gördüğün kalıcı olarak kaydedilir
+- Toplam **70+ senaryo**
+
+## 🧪 Teknik
+- 37 oyun + 8 güncelleme + 2 XP testi = **47 test**
+- Sürüm 1.8.0 (versionCode 22)
+
+> v1.7.0 kullananlar bu sürümü artık **uygulama içindeki güncelleme** ile kurabilir.
+
+---
+
 # v1.7.0 — Uygulama İçi Güncelleme
 
 ## 🔄 Güncelleme mekanizması

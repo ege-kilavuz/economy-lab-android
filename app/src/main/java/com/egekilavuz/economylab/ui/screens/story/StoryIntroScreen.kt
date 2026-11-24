@@ -8,16 +8,18 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.egekilavuz.economylab.data.Difficulty
 import com.egekilavuz.economylab.data.difficultyLabel
-import com.egekilavuz.economylab.data.story.StoryViewModel
+import com.egekilavuz.economylab.data.story.*
 
 @Composable
 fun StoryIntroScreen(vm: StoryViewModel) {
     var difficulty by remember { mutableStateOf(vm.state.difficulty) }
+    var objective by remember { mutableStateOf(vm.state.objective) }
     val hasOngoing = vm.hasSave && !vm.state.finished
     val hasFinished = vm.hasSave && vm.state.finished
 
@@ -128,6 +130,68 @@ fun StoryIntroScreen(vm: StoryViewModel) {
             }
         }
 
+        Spacer(Modifier.height(14.dp))
+
+        // ── Ayın hedefi ──
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.6f)
+            )
+        ) {
+            Column(modifier = Modifier.padding(14.dp)) {
+                SectionTitle("Ayın hedefin")
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    "Seçtiğin hedef oyunun stratejisini değiştirir. Ay sonunda başarırsan bonus XP kazanırsın.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(Modifier.height(8.dp))
+                StoryObjective.entries.forEach { option ->
+                    OutlinedCard(
+                        onClick = { objective = option },
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp),
+                        colors = CardDefaults.outlinedCardColors(
+                            containerColor = if (objective == option)
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+                            else Color.Transparent
+                        )
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(10.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(objectiveEmoji(option), fontSize = 22.sp)
+                            Spacer(Modifier.width(10.dp))
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    objectiveTitle(option),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Text(
+                                    objectiveDescription(option),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            if (objective == option) {
+                                Text(
+                                    "✓",
+                                    color = MaterialTheme.colorScheme.primary,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
+                    }
+                    Spacer(Modifier.height(6.dp))
+                }
+            }
+        }
+
         Spacer(Modifier.height(16.dp))
 
         if (hasOngoing) {
@@ -140,7 +204,7 @@ fun StoryIntroScreen(vm: StoryViewModel) {
             }
             Spacer(Modifier.height(8.dp))
             OutlinedButton(
-                onClick = { vm.startNewGame(difficulty) },
+                onClick = { vm.startNewGame(difficulty, objective) },
                 modifier = Modifier.fillMaxWidth().height(48.dp),
                 shape = RoundedCornerShape(14.dp)
             ) {
@@ -155,7 +219,7 @@ fun StoryIntroScreen(vm: StoryViewModel) {
             )
         } else {
             Button(
-                onClick = { vm.startNewGame(difficulty) },
+                onClick = { vm.startNewGame(difficulty, objective) },
                 modifier = Modifier.fillMaxWidth().height(52.dp),
                 shape = RoundedCornerShape(14.dp)
             ) {

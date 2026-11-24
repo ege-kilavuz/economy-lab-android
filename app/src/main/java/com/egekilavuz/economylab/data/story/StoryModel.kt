@@ -17,7 +17,65 @@ data class StoryStats(
     val portfolioValue: Int = 0,
     val knowledge: Int = 25,
     val wellbeing: Int = 55,
-    val risk: Int = 15
+    val risk: Int = 15,
+    // ── Karakter ilişkileri (0-100) ──
+    val landlord: Int = 50,
+    val boss: Int = 50,
+    val friend: Int = 50
+)
+
+@Serializable
+enum class StoryObjective { DebtFree, EmergencyFund, Investor }
+
+fun objectiveTitle(objective: StoryObjective): String = when (objective) {
+    StoryObjective.DebtFree -> "Borçsuz Ay"
+    StoryObjective.EmergencyFund -> "Acil Fon"
+    StoryObjective.Investor -> "Yatırımcı"
+}
+
+fun objectiveEmoji(objective: StoryObjective): String = when (objective) {
+    StoryObjective.DebtFree -> "🐷"
+    StoryObjective.EmergencyFund -> "🧯"
+    StoryObjective.Investor -> "📈"
+}
+
+fun objectiveDescription(objective: StoryObjective): String = when (objective) {
+    StoryObjective.DebtFree -> "Ayı kart borcun sıfırken kapat. Faiz ödemeden bitirmek en büyük kazanç."
+    StoryObjective.EmergencyFund -> "Ay sonunda 25.000 TL nakit/birikim tamponu oluştur."
+    StoryObjective.Investor -> "Ay sonunda portföyünü 15.000 TL'nin üstüne çıkar."
+}
+
+data class DelayedEffect(
+    val id: String = "",
+    val title: String,
+    val days: Int,
+    val message: String,
+    val cash: Int = 0,
+    val debt: Int = 0,
+    val knowledge: Int = 0,
+    val wellbeing: Int = 0,
+    val risk: Int = 0,
+    val landlord: Int = 0,
+    val boss: Int = 0,
+    val friend: Int = 0,
+    val setFlags: List<String> = emptyList()
+)
+
+@Serializable
+data class PendingEffect(
+    val id: String,
+    val title: String,
+    val dueDay: Int,
+    val message: String,
+    val cash: Int = 0,
+    val debt: Int = 0,
+    val knowledge: Int = 0,
+    val wellbeing: Int = 0,
+    val risk: Int = 0,
+    val landlord: Int = 0,
+    val boss: Int = 0,
+    val friend: Int = 0,
+    val setFlags: List<String> = emptyList()
 )
 
 @Serializable
@@ -75,7 +133,11 @@ data class StoryState(
     val portfolioDelta: Int = 0,
     val notice: String? = null,
     // ── Senoryo tekrar kontrolü ──
-    val seenScenarios: List<String> = emptyList()
+    val seenScenarios: List<String> = emptyList(),
+    // ── Strateji / karakter ──
+    val objective: StoryObjective = StoryObjective.DebtFree,
+    val pendingEffects: List<PendingEffect> = emptyList(),
+    val endXpAwarded: Boolean = false
 ) {
     val isResolved: Boolean get() = pendingResult != null
     val progress: Float get() = ((day - 1).coerceIn(0, 30)) / 30f
@@ -90,6 +152,9 @@ enum class ChoiceTone { Safe, Balanced, Risky, Social }
 data class ChoiceRequirement(
     val minKnowledge: Int = 0,
     val minCash: Int = 0,
+    val minLandlord: Int = 0,
+    val minBoss: Int = 0,
+    val minFriend: Int = 0,
     val requireFlag: String? = null,
     val forbidFlag: String? = null,
     val note: String = ""
@@ -107,8 +172,13 @@ data class ChoiceEffect(
     val knowledge: Int = 0,
     val wellbeing: Int = 0,
     val risk: Int = 0,
+    val landlord: Int = 0,
+    val boss: Int = 0,
+    val friend: Int = 0,
     val setFlags: List<String> = emptyList(),
-    val clearFlags: List<String> = emptyList()
+    val clearFlags: List<String> = emptyList(),
+    /** Bu seçimin 5-10 gün sonra geri dönecek sonuçları. */
+    val delayed: List<DelayedEffect> = emptyList()
 )
 
 data class StoryChoice(

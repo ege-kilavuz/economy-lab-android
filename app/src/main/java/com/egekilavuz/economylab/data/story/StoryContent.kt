@@ -67,21 +67,21 @@ val STORY_EVENTS: List<StoryEvent> = listOf(
                 id = "d2-cash",
                 label = "Kirayı nakit öde",
                 tone = ChoiceTone.Safe,
-                effect = ChoiceEffect(cash = -11_000, wellbeing = 2, risk = -2),
+                effect = ChoiceEffect(cash = -11_000, wellbeing = 2, risk = -2, landlord = 3),
                 result = "Kirayı ödedin. Ay başında büyük gideri halletmek, kalan günler için rahat bir nefes aldırdı."
             ),
             StoryChoice(
                 id = "d2-card",
                 label = "Kartla öde, nakit elimde kalsın",
                 tone = ChoiceTone.Risky,
-                effect = ChoiceEffect(debt = 11_000, risk = 8, knowledge = 1),
+                effect = ChoiceEffect(debt = 11_000, risk = 8, knowledge = 1, landlord = -3),
                 result = "Kirayı karta yazdın. Nakit elinde kaldı ama bu borç ay sonunda faizle geri dönecek."
             ),
             StoryChoice(
                 id = "d2-roommate",
                 label = "Kirayı öde ve ev arkadaşı aramaya başla",
                 tone = ChoiceTone.Balanced,
-                effect = ChoiceEffect(cash = -11_000, knowledge = 4, wellbeing = -3, setFlags = listOf("roommate_search")),
+                effect = ChoiceEffect(cash = -11_000, knowledge = 4, wellbeing = -3, landlord = 2, setFlags = listOf("roommate_search")),
                 result = "Kirayı ödedin ve ilan sitelerine bir ilan bıraktın. Ev arkadaşı bulmak zaman alacak ama gideri yarıya indirebilir."
             )
         )
@@ -117,7 +117,17 @@ val STORY_EVENTS: List<StoryEvent> = listOf(
                 id = "d3-card",
                 label = "Faturaları karta yükle",
                 tone = ChoiceTone.Risky,
-                effect = ChoiceEffect(debt = 4_200, risk = 5),
+                effect = ChoiceEffect(
+                    debt = 4_200, risk = 5,
+                    delayed = listOf(
+                        DelayedEffect(
+                            title = "Fatura faizi",
+                            days = 7,
+                            message = "Karta yüklenen faturaların faizi hesabına eklendi: +250 TL",
+                            debt = 250
+                        )
+                    )
+                ),
                 result = "Faturaları karta yükledin. Bu ay nakit rahatladı ama borç hanesine 4.200 TL daha eklendi."
             )
         )
@@ -152,7 +162,18 @@ val STORY_EVENTS: List<StoryEvent> = listOf(
                 id = "d4-use",
                 label = "Al ve taksit imkânlarını kullan",
                 tone = ChoiceTone.Risky,
-                effect = ChoiceEffect(risk = 12, wellbeing = 4, knowledge = 1, setFlags = listOf("has_card", "card_user")),
+                effect = ChoiceEffect(
+                    risk = 12, wellbeing = 4, knowledge = 1,
+                    setFlags = listOf("has_card", "card_user"),
+                    delayed = listOf(
+                        DelayedEffect(
+                            title = "İlk taksit",
+                            days = 10,
+                            message = "Taksitli alışverişin ilk ödemesi geldi: +900 TL borç",
+                            debt = 900
+                        )
+                    )
+                ),
                 result = "Kartı aldın, ilk taksitli alışverişi de yaptın. \"Nasılsa 12 aya bölünüyor\" cümlesi bütçenin en pahalı cümlelerinden biri olabilir."
             )
         )
@@ -219,7 +240,7 @@ val STORY_EVENTS: List<StoryEvent> = listOf(
                 label = "Dışarıda yemek ye, hepsiyle buluş",
                 hint = "900 TL",
                 tone = ChoiceTone.Social,
-                effect = ChoiceEffect(cash = -900, wellbeing = 8, risk = 1),
+                effect = ChoiceEffect(cash = -900, wellbeing = 8, risk = 1, friend = 3),
                 result = "Mekânda harika bir akşam geçirdin. 900 TL gitti ama moral depolandı; yalnız kalmak da bir maliyettir."
             ),
             StoryChoice(
@@ -227,14 +248,14 @@ val STORY_EVENTS: List<StoryEvent> = listOf(
                 label = "Evde toplanmayı teklif et",
                 hint = "250 TL",
                 tone = ChoiceTone.Safe,
-                effect = ChoiceEffect(cash = -250, wellbeing = 5, knowledge = 2),
+                effect = ChoiceEffect(cash = -250, wellbeing = 5, knowledge = 2, friend = 5),
                 result = "Evde makarna ve film gecesi kurdun. Herkes hem eğlendi hem 650 TL cepte kaldı."
             ),
             StoryChoice(
                 id = "d6-skip",
                 label = "\"Bu ay bütçem yok\" de, gitme",
                 tone = ChoiceTone.Balanced,
-                effect = ChoiceEffect(wellbeing = -6, knowledge = 4),
+                effect = ChoiceEffect(wellbeing = -6, knowledge = 4, friend = -2),
                 result = "Buluşmaya gitmedin. Doğru karar olabilir ama kendini dışarıda bırakmış hissettin; bütçe kadar aidiyet de önemli."
             )
         )
@@ -300,7 +321,17 @@ val STORY_EVENTS: List<StoryEvent> = listOf(
                 id = "d8-new",
                 label = "Yeni telefonu taksitle al",
                 tone = ChoiceTone.Risky,
-                effect = ChoiceEffect(debt = 18_000, wellbeing = 7, risk = 10),
+                effect = ChoiceEffect(
+                    debt = 18_000, wellbeing = 7, risk = 10,
+                    delayed = listOf(
+                        DelayedEffect(
+                            title = "Telefon taksiti",
+                            days = 9,
+                            message = "Telefonun aylık taksiti hesabına yansıdı: +1.500 TL borç",
+                            debt = 1_500
+                        )
+                    )
+                ),
                 result = "Yeni telefon elinde. 18.000 TL borç 12 taksitle gelecek aylara yayıldı; aylık bütçende kalıcı bir delik açtı."
             ),
             StoryChoice(
@@ -410,7 +441,7 @@ val STORY_EVENTS: List<StoryEvent> = listOf(
                 label = "Fazla mesaiyi al",
                 hint = "+4.500 TL",
                 tone = ChoiceTone.Balanced,
-                effect = ChoiceEffect(cash = 4_500, wellbeing = -5, knowledge = 2),
+                effect = ChoiceEffect(cash = 4_500, wellbeing = -5, knowledge = 2, boss = 5),
                 result = "Hafta boyunca geç saate kadar çalıştın. 4.500 TL hesabına geçti ama uyku ve sosyal hayat faturayı ödedi."
             ),
             StoryChoice(
@@ -418,14 +449,25 @@ val STORY_EVENTS: List<StoryEvent> = listOf(
                 label = "Akşam kursuna yazıl",
                 hint = "-1.500 TL",
                 tone = ChoiceTone.Safe,
-                effect = ChoiceEffect(cash = -1_500, knowledge = 8, wellbeing = -2, setFlags = listOf("course")),
+                effect = ChoiceEffect(
+                    cash = -1_500, knowledge = 8, wellbeing = -2,
+                    setFlags = listOf("course"),
+                    delayed = listOf(
+                        DelayedEffect(
+                            title = "Kurs tamamlandı",
+                            days = 5,
+                            message = "Akşam kursunu bitirdin: bütçe ve yatırım bilgin arttı.",
+                            knowledge = 3
+                        )
+                    )
+                ),
                 result = "Kursa başladın. Bu ay para kazanmadın ama bütçe, yatırım ve vergi konularında ciddi bir temel attın."
             ),
             StoryChoice(
                 id = "d11-rest",
                 label = "İkisini de reddet, dinlen",
                 tone = ChoiceTone.Safe,
-                effect = ChoiceEffect(wellbeing = 5, knowledge = -1),
+                effect = ChoiceEffect(wellbeing = 5, knowledge = -1, boss = -3),
                 result = "Bu hafta kendine zaman ayırdın. Tükenmiş bir zihin ne para yönetir ne de öğrenir."
             )
         )
@@ -482,7 +524,7 @@ val STORY_EVENTS: List<StoryEvent> = listOf(
                 id = "d13-accept",
                 label = "Kabul et",
                 tone = ChoiceTone.Balanced,
-                effect = ChoiceEffect(wellbeing = -3, setFlags = listOf("rent_high")),
+                effect = ChoiceEffect(wellbeing = -3, landlord = 2, setFlags = listOf("rent_high")),
                 result = "Artışı kabul ettin. Gelecek ay kira 15.950 TL olacak; bu, bütçendeki en büyük kalemi daha da büyütüyor."
             ),
             StoryChoice(
@@ -491,7 +533,7 @@ val STORY_EVENTS: List<StoryEvent> = listOf(
                 hint = "Bilgi 45+",
                 tone = ChoiceTone.Safe,
                 requires = ChoiceRequirement(minKnowledge = 45, note = "Bilgi 45+"),
-                effect = ChoiceEffect(knowledge = 5, wellbeing = -1, setFlags = listOf("rent_mid")),
+                effect = ChoiceEffect(knowledge = 5, wellbeing = -1, landlord = 4, setFlags = listOf("rent_mid")),
                 result = "Sözleşmedeki artış sınırını ve emsal kiraları gösterdin. Ev sahibi %25'te anlaştı; gelecek ay kira 13.800 TL."
             ),
             StoryChoice(
@@ -499,7 +541,7 @@ val STORY_EVENTS: List<StoryEvent> = listOf(
                 label = "Taşınmayı araştır",
                 hint = "-2.000 TL masraf",
                 tone = ChoiceTone.Risky,
-                effect = ChoiceEffect(cash = -2_000, knowledge = 3, wellbeing = -4, setFlags = listOf("moved")),
+                effect = ChoiceEffect(cash = -2_000, knowledge = 3, wellbeing = -4, landlord = -8, setFlags = listOf("moved")),
                 result = "Yeni ev baktın, depozito ve taşınma için 2.000 TL harcadın. Daha uygun bir ev buldun; gelecek ay kira 10.500 TL olacak."
             )
         )
@@ -556,7 +598,19 @@ val STORY_EVENTS: List<StoryEvent> = listOf(
                 id = "d15-give",
                 label = "5.000 TL ver",
                 tone = ChoiceTone.Social,
-                effect = ChoiceEffect(cash = -5_000, wellbeing = 6, risk = 5, setFlags = listOf("family_helped")),
+                effect = ChoiceEffect(
+                    cash = -5_000, wellbeing = 6, risk = 5,
+                    setFlags = listOf("family_helped"),
+                    delayed = listOf(
+                        DelayedEffect(
+                            title = "Kuzenin ödemesi",
+                            days = 8,
+                            message = "Kuzenin borcunun bir kısmını ödedi: +500 TL",
+                            cash = 500,
+                            friend = 2
+                        )
+                    )
+                ),
                 result = "Parayı verdin. Kuzenin rahatladı; senin bütçende ise 5.000 TL'lik bir boşluk oluştu."
             ),
             StoryChoice(
@@ -666,7 +720,17 @@ val STORY_EVENTS: List<StoryEvent> = listOf(
                 id = "d17-leverage",
                 label = "10.000 TL kredi çekip yatır",
                 tone = ChoiceTone.Risky,
-                effect = ChoiceEffect(cash = 10_000, debt = 10_000, invest = 10_000, risk = 20, wellbeing = 2),
+                effect = ChoiceEffect(
+                    cash = 10_000, debt = 10_000, invest = 10_000, risk = 20, wellbeing = 2,
+                    delayed = listOf(
+                        DelayedEffect(
+                            title = "Kredi taksiti",
+                            days = 10,
+                            message = "Kaldıraçlı yatırımın kredi taksiti geldi: +1.200 TL borç",
+                            debt = 1_200
+                        )
+                    )
+                ),
                 result = "10.000 TL kredi çekip yatırıma yönlendirdin. Aylık kredi taksidi artık bütçende sabit bir gider."
             ),
             StoryChoice(
@@ -711,7 +775,19 @@ val STORY_EVENTS: List<StoryEvent> = listOf(
                 label = "İşi al, vergi verme",
                 hint = "+6.000 TL",
                 tone = ChoiceTone.Risky,
-                effect = ChoiceEffect(cash = 6_000, risk = 12, knowledge = 1, setFlags = listOf("tax_risk")),
+                effect = ChoiceEffect(
+                    cash = 6_000, risk = 12, knowledge = 1,
+                    setFlags = listOf("tax_risk"),
+                    delayed = listOf(
+                        DelayedEffect(
+                            title = "Vergi cezası",
+                            days = 9,
+                            message = "Beyan etmediğin ek gelir tespit edildi: +2.500 TL ceza",
+                            debt = 2_500,
+                            setFlags = listOf("tax_penalty")
+                        )
+                    )
+                ),
                 result = "6.000 TL'yi aldın. Kısa vadede 1.000 TL kârdasın ama ileride vergi cezası ve faiziyle karşılaşma riskin var."
             ),
             StoryChoice(
@@ -740,7 +816,7 @@ val STORY_EVENTS: List<StoryEvent> = listOf(
                 label = "Terfiyi kabul et",
                 hint = "+6.000 TL",
                 tone = ChoiceTone.Balanced,
-                effect = ChoiceEffect(cash = 6_000, wellbeing = 5, knowledge = 3, setFlags = listOf("promoted")),
+                effect = ChoiceEffect(cash = 6_000, wellbeing = 5, knowledge = 3, boss = 5, setFlags = listOf("promoted")),
                 result = "Terfiyi kabul ettin. Bu ay ek 6.000 TL geldi ama sorumluluk ve stres de arttı."
             ),
             StoryChoice(
@@ -748,14 +824,25 @@ val STORY_EVENTS: List<StoryEvent> = listOf(
                 label = "Maaş yerine eğitim bütçesi iste",
                 hint = "+1.500 TL + eğitim",
                 tone = ChoiceTone.Safe,
-                effect = ChoiceEffect(cash = 1_500, knowledge = 10, setFlags = listOf("promoted_edu")),
+                effect = ChoiceEffect(
+                    cash = 1_500, knowledge = 10, boss = 3,
+                    setFlags = listOf("promoted_edu"),
+                    delayed = listOf(
+                        DelayedEffect(
+                            title = "Eğitim bütçesi",
+                            days = 6,
+                            message = "Şirket eğitim bütçesini onayladı: bilgi puanın arttı.",
+                            knowledge = 4
+                        )
+                    )
+                ),
                 result = "Şirket eğitim bütçesini onayladı ve küçük bir iyileştirme yaptı. Uzun vadede bilgi, en yüksek getirili yatırımlardan biri."
             ),
             StoryChoice(
                 id = "d19-decline",
                 label = "Reddet, iş-yaşam dengesini koru",
                 tone = ChoiceTone.Safe,
-                effect = ChoiceEffect(wellbeing = 5, knowledge = -2),
+                effect = ChoiceEffect(wellbeing = 5, knowledge = -2, boss = -5),
                 result = "Teklifi reddettin. Kariyer basamağı bekleyecek ama bu ay kendine ve hayatına yer açtın."
             )
         )
@@ -888,7 +975,17 @@ val STORY_EVENTS: List<StoryEvent> = listOf(
                 id = "d21-invest",
                 label = "Krediyi çek, yatırıma yönlendir",
                 tone = ChoiceTone.Risky,
-                effect = ChoiceEffect(cash = 20_000, debt = 23_000, invest = 20_000, risk = 18, knowledge = 3),
+                effect = ChoiceEffect(
+                    cash = 20_000, debt = 23_000, invest = 20_000, risk = 18, knowledge = 3,
+                    delayed = listOf(
+                        DelayedEffect(
+                            title = "Kredi taksiti",
+                            days = 10,
+                            message = "İhtiyaç kredisinin ilk taksiti geldi: +1.800 TL borç",
+                            debt = 1_800
+                        )
+                    )
+                ),
                 result = "Krediyi çekip yatırıma koydun. 23.000 TL geri ödeme yükü sabit; yatırım getirisi ise hiç garanti değil."
             ),
             StoryChoice(
@@ -976,7 +1073,17 @@ val STORY_EVENTS: List<StoryEvent> = listOf(
                 id = "d23-skip",
                 label = "Ertele, \"bana bir şey olmaz\"",
                 tone = ChoiceTone.Risky,
-                effect = ChoiceEffect(risk = 8, knowledge = -3, wellbeing = 2),
+                effect = ChoiceEffect(
+                    risk = 8, knowledge = -3, wellbeing = 2,
+                    delayed = listOf(
+                        DelayedEffect(
+                            title = "Beklenmedik hasar",
+                            days = 8,
+                            message = "Sigortasız olduğun için küçük bir hasarı kendin ödedin: +1.500 TL borç",
+                            debt = 1_500
+                        )
+                    )
+                ),
                 result = "Sigortayı erteledin. Bu ay 2.500 TL cebinde kaldı; ama olası bir hasarın maliyeti bunun kat kat üstünde."
             )
         )
@@ -1006,7 +1113,18 @@ val STORY_EVENTS: List<StoryEvent> = listOf(
                 label = "Online ders ver",
                 hint = "+4.000 TL",
                 tone = ChoiceTone.Balanced,
-                effect = ChoiceEffect(cash = 4_000, wellbeing = -3, knowledge = 5, setFlags = listOf("side_income")),
+                effect = ChoiceEffect(
+                    cash = 4_000, wellbeing = -3, knowledge = 5,
+                    setFlags = listOf("side_income"),
+                    delayed = listOf(
+                        DelayedEffect(
+                            title = "Ek ders ödemesi",
+                            days = 5,
+                            message = "İkinci ders grubunun ödemesi geldi: +1.000 TL",
+                            cash = 1_000
+                        )
+                    )
+                ),
                 result = "Haftada birkaç saat ders verdin. 4.000 TL kazandın, hem de bildiğin konuları pekiştirdin."
             ),
             StoryChoice(
@@ -1072,7 +1190,7 @@ val STORY_EVENTS: List<StoryEvent> = listOf(
                 label = "2.000 TL takı tak",
                 hint = "-2.000 TL",
                 tone = ChoiceTone.Social,
-                effect = ChoiceEffect(cash = -2_000, wellbeing = 3, risk = 2),
+                effect = ChoiceEffect(cash = -2_000, wellbeing = 3, risk = 2, friend = 3),
                 result = "Düğüne gittin ve 2.000 TL taktın. Arkadaşın çok mutlu oldu; bütçen ise bir süre sıkı geçecek."
             ),
             StoryChoice(
@@ -1080,14 +1198,14 @@ val STORY_EVENTS: List<StoryEvent> = listOf(
                 label = "500 TL ile katıl",
                 hint = "-500 TL",
                 tone = ChoiceTone.Balanced,
-                effect = ChoiceEffect(cash = -500, wellbeing = 1, knowledge = 1),
+                effect = ChoiceEffect(cash = -500, wellbeing = 1, knowledge = 1, friend = 4),
                 result = "Düğüne gittin, gönlünden kopanı taktın. Az ama samimi bir katılım oldu."
             ),
             StoryChoice(
                 id = "d26-skip",
                 label = "Gitme, video mesaj gönder",
                 tone = ChoiceTone.Safe,
-                effect = ChoiceEffect(wellbeing = -5, knowledge = 2),
+                effect = ChoiceEffect(wellbeing = -5, knowledge = 2, friend = -4),
                 result = "Düğüne gitmedin, içten bir video mesaj gönderdin. Arkadaşın anlayış gösterdi; sen yine de biraz mahcup oldun."
             )
         )
@@ -1263,8 +1381,10 @@ val STORY_EVENTS: List<StoryEvent> = listOf(
 /** Verilen gün için aday olaylar (günün senaryosu + aralığa uyan genel senaryolar). */
 fun eventsForDay(day: Int, state: StoryState): List<StoryEvent> {
     val scripted = STORY_EVENTS.filter { it.day == day && it.condition(state) }
-    val generic = (GENERIC_SCENARIOS + EXTRA_SCENARIOS)
-        .filter { day in it.dayRange && it.condition(state) }
+    val generic = (
+        GENERIC_SCENARIOS + EXTRA_SCENARIOS +
+            CHARACTER_SCENARIOS + DILEMMA_SCENARIOS
+        ).filter { day in it.dayRange && it.condition(state) }
     return scripted + generic
 }
 

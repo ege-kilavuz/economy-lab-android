@@ -52,6 +52,12 @@ class StoryEngineTest {
         EXTRA_SCENARIOS.forEach { event ->
             assertTrue("${event.title} için seçenek az", event.choices.size >= 2)
         }
+        CHARACTER_SCENARIOS.forEach { event ->
+            assertTrue("${event.title} için seçenek az", event.choices.size >= 2)
+        }
+        DILEMMA_SCENARIOS.forEach { event ->
+            assertTrue("${event.title} için seçenek az", event.choices.size >= 2)
+        }
     }
 
     // ── Seçim uygulama ──
@@ -379,5 +385,61 @@ class StoryEngineTest {
         val seen = setOf("gen-subscription", "5:Market Günü")
         val state = newStory(Difficulty.Normal, seed = 9, alreadySeen = seen)
         assertTrue(state.seenScenarios.containsAll(seen))
+    }
+
+    // ── Hedef / ilişki / gecikmeli sonuç ──
+
+    @Test
+    fun objectiveIsStoredInNewStory() {
+        val state = newStory(Difficulty.Normal, seed = 1, objective = StoryObjective.Investor)
+        assertEquals(StoryObjective.Investor, state.objective)
+    }
+
+    @Test
+    fun objectiveReachedForDebtFree() {
+        val state = newStory(Difficulty.Normal, seed = 1).copy(
+            objective = StoryObjective.DebtFree,
+            stats = StoryStats(debt = 0)
+        )
+        assertTrue(objectiveReached(state))
+        assertEquals(1f, objectiveProgress(state))
+    }
+
+    @Test
+    fun relationRequirementBlocksChoice() {
+        val requirement = ChoiceRequirement(minBoss = 70, note = "Patron 70+")
+        val state = newStory(Difficulty.Normal, seed = 1)
+            .copy(stats = StoryStats(boss = 50))
+        assertFalse(requirementMet(state, requirement))
+    }
+
+    @Test
+    fun choiceUpdatesRelations() {
+        val state = newStory(Difficulty.Normal, seed = 1).copy(day = 2)
+        val event = eventForDay(2, state)!!
+        val choice = event.choices.first { it.id == "d2-cash" }
+        val after = applyChoice(state, event, choice)
+        assertTrue(after.stats.landlord > state.stats.landlord)
+    }
+
+    @Test
+    fun pendingEffectFiresOnDueDay() {
+        val state = newStory(Difficulty.Normal, seed = 42).copy(
+            day = 1,
+            stats = StoryStats(cash = 10_000),
+            pendingResult = StoryLogEntry(1, "test", "test", "test"),
+            pendingEffects = listOf(
+                PendingEffect(
+                    id = "test-effect",
+                    title = "Test sonucu",
+                    dueDay = 2,
+                    message = "Gecikmeli etki çalıştı.",
+                    cash = 500
+                )
+            )
+        )
+        val next = advanceDay(state)
+        assertTrue(next.notice?.contains("Test sonucu") == true)
+        assertTrue(next.pendingEffects.isEmpty())
     }
 }

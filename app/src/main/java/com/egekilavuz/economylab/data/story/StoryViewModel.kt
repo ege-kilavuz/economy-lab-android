@@ -94,8 +94,11 @@ class StoryViewModel(app: Application) : AndroidViewModel(app) {
         prefs.edit().putBoolean(KEY_QUICK, quickMode).apply()
     }
 
-    fun startNewGame(difficulty: Difficulty) {
-        state = newStory(difficulty, alreadySeen = seenToday())
+    fun startNewGame(
+        difficulty: Difficulty,
+        objective: StoryObjective = StoryObjective.DebtFree
+    ) {
+        state = newStory(difficulty, alreadySeen = seenToday(), objective = objective)
         screen = SCREEN_PLAY
         persist()
     }
@@ -169,6 +172,14 @@ class StoryViewModel(app: Application) : AndroidViewModel(app) {
 
     fun showEndScreen() {
         if (state.finished) screen = SCREEN_END
+    }
+
+    /** Bitirme ve hedef XP'sini yalnızca bir kez verir. */
+    fun claimEndRewards(): Boolean {
+        if (state.endXpAwarded) return false
+        state = state.copy(endXpAwarded = true)
+        persist()
+        return true
     }
 
     fun resetProgress() {
