@@ -23,11 +23,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.egekilavuz.economylab.data.ContentLoader
-import com.egekilavuz.economylab.data.GameViewModel
 import com.egekilavuz.economylab.data.ProgressManager
 import com.egekilavuz.economylab.data.SoundManager
 import com.egekilavuz.economylab.data.XpManager
+import com.egekilavuz.economylab.data.story.StoryViewModel
 import com.egekilavuz.economylab.ui.screens.*
+import com.egekilavuz.economylab.ui.screens.story.StoryScreen
 import com.egekilavuz.economylab.ui.simulations.*
 
 sealed class BottomTab(val route: String, val title: String, val icon: ImageVector) {
@@ -151,8 +152,8 @@ fun AppNavigation() {
             composable(BottomTab.Game.route) {
                 Column {
                     XpBar(xpManager = xpManager)
-                    val gameVm: GameViewModel = viewModel()
-                    GameScreen(gameVm)
+                    val storyVm: StoryViewModel = viewModel()
+                    StoryScreen(storyVm)
                 }
             }
             composable(route = "simulation/{simId}") { entry ->
