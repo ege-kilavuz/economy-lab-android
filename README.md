@@ -5,7 +5,7 @@
     <img src="https://img.shields.io/badge/Kotlin-2.1.0-purple?logo=kotlin" alt="Kotlin" />
     <img src="https://img.shields.io/badge/Compose-BOM_2025.01-blue?logo=jetpackcompose" alt="Compose" />
     <img src="https://img.shields.io/badge/API-24%2B-brightgreen" alt="API" />
-    <img src="https://img.shields.io/badge/sürüm-1.6.0-orange" alt="Version" />
+    <img src="https://img.shields.io/badge/sürüm-1.6.1-orange" alt="Version" />
     <img src="https://img.shields.io/badge/license-MIT-lightgrey" alt="License" />
   </p>
 </div>

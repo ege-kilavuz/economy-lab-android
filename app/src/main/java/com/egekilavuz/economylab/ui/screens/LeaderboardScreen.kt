@@ -1,5 +1,6 @@
 package com.egekilavuz.economylab.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -8,22 +9,23 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.egekilavuz.economylab.data.LeaderboardEntry
 import com.egekilavuz.economylab.data.LeaderboardManager
 import com.egekilavuz.economylab.data.ProgressManager
-import com.egekilavuz.economylab.data.XpManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LeaderboardScreen() {
     val context = LocalContext.current
     val leaderboardManager = remember { LeaderboardManager(context) }
-    val xpManager = remember { XpManager(context) }
     val progressManager = remember { ProgressManager(context) }
 
     var localScores by remember { mutableStateOf(leaderboardManager.getLocalScores()) }
@@ -31,9 +33,8 @@ fun LeaderboardScreen() {
     var showGlobal by remember { mutableStateOf(false) }
     var loading by remember { mutableStateOf(false) }
 
-    val xpSummary = remember { xpManager.getSummary() }
-
     LaunchedEffect(Unit) {
+        localScores = leaderboardManager.getLocalScores()
         loading = true
         leaderboardManager.fetchGlobalScores { scores ->
             globalScores = scores
@@ -47,11 +48,10 @@ fun LeaderboardScreen() {
     } else {
         displayScores.sortedByDescending { it.xp + it.score * 2 }
     }
-    val scoreType = if (showGlobal && globalScores != null) "🌍 Global" else "🏠 XP Sıralaması"
 
-    val playerName = progressManager.userName
+    val playerName = progressManager.userName.trim()
     val playerRank = if (playerName.isNotBlank()) {
-        sortedScores.indexOfFirst { it.name == playerName.trim() }
+        sortedScores.indexOfFirst { it.name == playerName }
     } else -1
 
     Column(
@@ -62,109 +62,131 @@ fun LeaderboardScreen() {
     ) {
         Spacer(Modifier.height(8.dp))
 
-        // XP Card
         Card(
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.08f))
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(18.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.65f)
+            )
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(14.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text("🏆 ", fontSize = 24.sp)
-                Column(Modifier.weight(1f)) {
-                    Text("Seviye ${xpSummary.level} · ${xpSummary.title}", fontWeight = FontWeight.Bold)
-                    Text("${xpSummary.total} XP", style = MaterialTheme.typography.bodySmall)
-                }
-            }
-        }
-
-        Spacer(Modifier.height(12.dp))
-
-        // Header
-        Card(
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.6f))
-        ) {
-            Column(Modifier.padding(14.dp)) {
+            Column(modifier = Modifier.padding(14.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        "$scoreType Sıralama",
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.weight(1f)
-                    )
-                    TextButton(onClick = { showGlobal = !showGlobal }) {
-                        Text(if (showGlobal) "Yerel" else "Global", fontWeight = FontWeight.Bold)
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            "🏆 Liderlik",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            if (showGlobal) "Global oyuncular · skora göre"
+                            else "Yerel oyuncular · XP + skora göre",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    if (loading && showGlobal) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(18.dp),
+                            strokeWidth = 2.dp
+                        )
                     }
                 }
 
-                if (loading && showGlobal) {
-                    Spacer(Modifier.height(8.dp))
-                    LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                Spacer(Modifier.height(10.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    FilterChip(
+                        selected = !showGlobal,
+                        onClick = { showGlobal = false },
+                        label = { Text("Yerel") }
+                    )
+                    FilterChip(
+                        selected = showGlobal,
+                        onClick = { showGlobal = true },
+                        label = { Text("Global") }
+                    )
                 }
-
-                Spacer(Modifier.height(8.dp))
 
                 if (playerRank >= 0 && sortedScores.isNotEmpty()) {
-                    Text(
-                        "Sıran: #${playerRank + 1} / ${sortedScores.size}",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Spacer(Modifier.height(8.dp))
+                    Surface(
+                        shape = RoundedCornerShape(20.dp),
+                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+                    ) {
+                        Text(
+                            "Sıran: #${playerRank + 1} / ${sortedScores.size}",
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                        )
+                    }
                 }
 
-                if (sortedScores.isEmpty()) {
+                Spacer(Modifier.height(12.dp))
+
+                // Sütun başlıkları
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Text(
-                        "Henüz skor yok. İlk sen ol!",
-                        style = MaterialTheme.typography.bodyMedium,
+                        "#",
+                        modifier = Modifier.width(40.dp),
+                        style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(vertical = 16.dp)
+                        textAlign = TextAlign.Center
                     )
+                    Text(
+                        "Oyuncu",
+                        modifier = Modifier.weight(1f),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        if (showGlobal) "Puan" else "XP",
+                        modifier = Modifier.width(96.dp),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.End
+                    )
+                }
+                HorizontalDivider(
+                    modifier = Modifier.padding(top = 6.dp, bottom = 2.dp),
+                    thickness = 0.5.dp,
+                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+                )
+
+                if (sortedScores.isEmpty()) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 24.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text("🏅", fontSize = 34.sp)
+                        Spacer(Modifier.height(6.dp))
+                        Text(
+                            "Henüz skor yok",
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                        Text(
+                            "Oyunu bitirip skorunu kaydet, ilk sen ol!",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 } else {
-                    sortedScores.take(20).forEachIndexed { idx, entry ->
-                        val isPlayer = entry.name == playerName.trim()
-                        Surface(
-                            modifier = Modifier.fillMaxWidth(),
-                            color = if (isPlayer) MaterialTheme.colorScheme.primary.copy(alpha = 0.08f) else Color.Transparent,
-                            shape = RoundedCornerShape(8.dp)
-                        ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                val medal = when (idx) {
-                                    0 -> "🥇"
-                                    1 -> "🥈"
-                                    2 -> "🥉"
-                                    else -> "#${idx + 1}"
-                                }
-                                Text(medal, modifier = Modifier.width(32.dp))
-                                Text(
-                                    "${entry.badge} ${entry.name}",
-                                    modifier = Modifier.weight(1f).padding(horizontal = 4.dp),
-                                    fontWeight = FontWeight.SemiBold,
-                                    maxLines = 1
-                                )
-                                Column(horizontalAlignment = Alignment.End) {
-                                    val scoreText = if (showGlobal) "${entry.score} puan" else "${entry.xp} XP"
-                                    Text(
-                                        scoreText,
-                                        fontWeight = FontWeight.Bold,
-                                        color = MaterialTheme.colorScheme.primary
-                                    )
-                                    Text(
-                                        if (showGlobal) entry.difficulty else "Seviye ${entry.level} ${entry.levelTitle}",
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                }
-                            }
-                        }
-                        if (idx < sortedScores.take(20).lastIndex) {
+                    sortedScores.take(20).forEachIndexed { index, entry ->
+                        LeaderRow(
+                            rank = index,
+                            entry = entry,
+                            isGlobal = showGlobal,
+                            isPlayer = entry.name == playerName
+                        )
+                        if (index < sortedScores.take(20).lastIndex) {
                             HorizontalDivider(
                                 thickness = 0.5.dp,
-                                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
+                                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.18f)
                             )
                         }
                     }
@@ -172,25 +194,144 @@ fun LeaderboardScreen() {
             }
         }
 
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(12.dp))
 
-        // Info card
         Card(
+            modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.4f))
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.4f)
+            )
         ) {
             Column(Modifier.padding(14.dp)) {
-                Text("📊 Nasıl Skor Kazanılır?", fontWeight = FontWeight.Bold)
-                Spacer(Modifier.height(4.dp))
-                Text("• İçerik okuma: +10 XP", style = MaterialTheme.typography.bodySmall)
-                Text("• Quiz tamamlama: +20 XP", style = MaterialTheme.typography.bodySmall)
-                Text("• Mükemmel quiz: +30 XP", style = MaterialTheme.typography.bodySmall)
-                Text("• 30 Gün Oyunu: +50 XP", style = MaterialTheme.typography.bodySmall)
-                Text("• Günlük Quiz: +15 XP", style = MaterialTheme.typography.bodySmall)
-                Text("• Rozet kazanma: +25 XP", style = MaterialTheme.typography.bodySmall)
+                Text("📊 Nasıl XP kazanılır?", fontWeight = FontWeight.Bold)
+                Spacer(Modifier.height(6.dp))
+                XpInfoLine("İçerik okuma", "+10 XP")
+                XpInfoLine("Quiz tamamlama", "+20 XP")
+                XpInfoLine("Mükemmel quiz", "+30 XP")
+                XpInfoLine("Günlük quiz", "+15 XP")
+                XpInfoLine("Mini oyun", "+5 XP")
+                XpInfoLine("Oyun bitirme", "+50 XP")
+                XpInfoLine("Oyun içi bölüm / hedef / rozet", "+5 / +10 / +20 XP")
+                XpInfoLine("Başarım rozeti", "+25 XP")
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    "İpucu: Üstteki seviye barına dokunarak seviye tablosunu ve XP ilerlemeni görebilirsin.",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
 
         Spacer(Modifier.height(24.dp))
+    }
+}
+
+@Composable
+private fun LeaderRow(
+    rank: Int,
+    entry: LeaderboardEntry,
+    isGlobal: Boolean,
+    isPlayer: Boolean
+) {
+    val medal = when (rank) {
+        0 -> "🥇"
+        1 -> "🥈"
+        2 -> "🥉"
+        else -> null
+    }
+    val name = listOf(entry.badge, entry.name)
+        .filter { it.isNotBlank() }
+        .joinToString(" ")
+    val subLine = if (isGlobal) {
+        entry.difficulty.ifBlank { "Global oyuncu" }
+    } else {
+        "Seviye ${entry.level} · ${entry.levelTitle}"
+    }
+    val primary = if (isGlobal) "${entry.score} puan" else "${entry.xp} XP"
+    val secondary = if (isGlobal) {
+        if (entry.xp > 0) "${entry.xp} XP" else ""
+    } else {
+        "${entry.score} puan"
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(10.dp))
+            .background(
+                if (isPlayer) MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)
+                else Color.Transparent
+            )
+            .padding(horizontal = 4.dp, vertical = 7.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(modifier = Modifier.width(40.dp), contentAlignment = Alignment.Center) {
+            if (medal != null) {
+                Text(medal, fontSize = 18.sp)
+            } else {
+                Text(
+                    "#${rank + 1}",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+        Column(modifier = Modifier.weight(1f).padding(horizontal = 4.dp)) {
+            Text(
+                text = name,
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = if (isPlayer) FontWeight.Bold else FontWeight.SemiBold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                text = subLine,
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+        Column(
+            modifier = Modifier.width(96.dp),
+            horizontalAlignment = Alignment.End
+        ) {
+            Text(
+                text = primary,
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary,
+                maxLines = 1
+            )
+            if (secondary.isNotBlank()) {
+                Text(
+                    text = secondary,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun XpInfoLine(label: String, value: String) {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 1.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            "• $label",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Text(
+            value,
+            style = MaterialTheme.typography.bodySmall,
+            fontWeight = FontWeight.SemiBold
+        )
     }
 }

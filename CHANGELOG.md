@@ -1,3 +1,18 @@
+# v1.6.1 — Seviye Detayı & Liderlik Düzeni
+
+## ✨ Yeni
+- Üstteki **seviye barına dokununca** seviye tablosu, XP ilerlemesi, sonraki seviyeye kalan XP, gün serisi ve XP kaynakları açılıyor
+- Seviye barında tıklanabilirlik göstergesi (`›`)
+
+## 🎨 Düzeltmeler
+- **Liderlik ekranı yeniden düzenlendi**: sabit sütunlar (# / Oyuncu / XP-Puan), hizalı satırlar, taşan isimler için ellipsis
+- Liderlikteki gereksiz XP kartı kaldırıldı (üstteki seviye barı ile tekrar ediyordu)
+- Yerel/Global geçişi seçilebilir çiplere dönüştürüldü
+- Boş durum ve yükleniyor göstergesi düzeltildi
+- Sürüm 1.6.1 (versionCode 19)
+
+---
+
 # v1.6.0 — Ritim & Canlı Ekonomi
 
 ## 🎯 Ödül döngüsü

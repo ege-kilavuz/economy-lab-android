@@ -40,6 +40,10 @@ class XpManager(context: Context) {
             LevelInfo(8, "Efsanevi 🏆", 6000),
         )
 
+        fun allLevels(): List<LevelInfo> = LEVELS
+
+        val maxLevel: Int get() = LEVELS.last().level
+
         /** XP değiştiğinde üstteki XP çubuğunun haberdar olması için. */
         var revision by mutableStateOf(0)
             private set
