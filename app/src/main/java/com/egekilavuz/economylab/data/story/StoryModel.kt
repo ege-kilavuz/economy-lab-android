@@ -73,7 +73,9 @@ data class StoryState(
     val checkpointAct: Int = 0,
     // ── Canlı ekonomi ──
     val portfolioDelta: Int = 0,
-    val notice: String? = null
+    val notice: String? = null,
+    // ── Senoryo tekrar kontrolü ──
+    val seenScenarios: List<String> = emptyList()
 ) {
     val isResolved: Boolean get() = pendingResult != null
     val progress: Float get() = ((day - 1).coerceIn(0, 30)) / 30f
@@ -126,7 +128,11 @@ data class StoryEvent(
     val scene: List<String>,
     val choices: List<StoryChoice>,
     val lesson: String? = null,
-    val condition: (StoryState) -> Boolean = { true }
+    val condition: (StoryState) -> Boolean = { true },
+    /** Tekrarı engellemek için benzersiz kimlik. Boşsa gün+başlık kullanılır. */
+    val id: String = "",
+    /** Bu olayın hangi gün aralığında çıkabileceği (genel senaryolar için). */
+    val dayRange: IntRange = day..day
 )
 
 // ─────────────────────────────────────────────────────────────

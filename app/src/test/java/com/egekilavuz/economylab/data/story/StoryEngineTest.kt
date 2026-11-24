@@ -3,6 +3,7 @@ package com.egekilavuz.economylab.data.story
 import com.egekilavuz.economylab.data.Difficulty
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -43,6 +44,12 @@ class StoryEngineTest {
     @Test
     fun everyEventHasAtLeastTwoChoices() {
         STORY_EVENTS.forEach { event ->
+            assertTrue("${event.title} için seçenek az", event.choices.size >= 2)
+        }
+        GENERIC_SCENARIOS.forEach { event ->
+            assertTrue("${event.title} için seçenek az", event.choices.size >= 2)
+        }
+        EXTRA_SCENARIOS.forEach { event ->
             assertTrue("${event.title} için seçenek az", event.choices.size >= 2)
         }
     }
@@ -328,5 +335,49 @@ class StoryEngineTest {
         val summary = actSummaryFor(after, 1)
         assertEquals(1, summary.entries.size)
         assertTrue(summary.xp > 0)
+    }
+
+    // ── Senaryo çeşitliliği / tekrar kontrolü ──
+
+    @Test
+    fun genericScenariosAppearAcrossSeeds() {
+        val keys = (1..80).map { seed ->
+            val state = newStory(Difficulty.Normal, seed).copy(day = 5)
+            eventKey(eventForDay(5, state)!!)
+        }.toSet()
+        assertTrue("Farklı seed'lerde tek senaryo çıkıyor", keys.size > 1)
+        assertTrue("Genel senaryolar hiç seçilmiyor", keys.any { it.startsWith("gen-") })
+    }
+
+    @Test
+    fun scenariosDoNotRepeatWithinRun() {
+        var state = newStory(Difficulty.Normal, seed = 777)
+        var guard = 0
+        while (!state.finished && guard < 60) {
+            guard++
+            val event = eventForDay(state.day, state)!!
+            val choice = event.choices.first { canAffordChoice(state, it) }
+            state = advanceDay(applyChoice(state, event, choice))
+        }
+        assertTrue(state.finished)
+        assertEquals(30, state.seenScenarios.size)
+        assertEquals(30, state.seenScenarios.distinct().size)
+    }
+
+    @Test
+    fun seenScenarioIsSkippedWhenAlternativeExists() {
+        val base = newStory(Difficulty.Normal, seed = 5).copy(day = 5)
+        val scripted = STORY_EVENTS.first { it.day == 5 }
+        val scriptedKey = eventKey(scripted)
+        val state = base.copy(seenScenarios = listOf(scriptedKey))
+        val picked = eventForDay(5, state)!!
+        assertNotEquals(scriptedKey, eventKey(picked))
+    }
+
+    @Test
+    fun alreadySeenScenariosAreCarriedIntoNewRun() {
+        val seen = setOf("gen-subscription", "5:Market Günü")
+        val state = newStory(Difficulty.Normal, seed = 9, alreadySeen = seen)
+        assertTrue(state.seenScenarios.containsAll(seen))
     }
 }

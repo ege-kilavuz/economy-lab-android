@@ -1,3 +1,18 @@
+# v1.6.2 — Senaryo Çeşitliliği & Hafta Özeti Düzeni
+
+## 🎲 Senaryolar
+- **26 genel senaryo** eklendi (abonelik tuzağı, beklenmedik fatura, ikinci el, banka promosyonu, phishing SMS, tatil, check-up, zam pazarlığı, vergi, araç masrafı, yılbaşı, acil tamir, yatırım fırsatı, aile ziyareti, banka masrafı, internet arızası, elden satış, kurs, komşu yardımı, abonelik denetimi…)
+- Toplam **30 hikâye günü + 26 genel senaryo**; her oyunda farklı bir akış
+- Hikâye günleri (kira, dolandırıcılık, kredi, final) ilk oyunda korunur
+- **Aynı oyunda tekrar yok**: görülen senaryolar bir daha seçilmez
+- **Aynı gün içinde tekrar yok**: görülen senaryolar günlük olarak kaydedilir, yeni oyunda atlanır (havuz yetene kadar)
+
+## 🎨 Düzeltmeler
+- Hafta/periyot özeti ekranındaki hizalama düzeltildi: eşit genişlikte özet sütunları, sabit “Gün / Olay / Hedef” sütunları, taşan başlıklar için ellipsis
+- Sürüm 1.6.2 (versionCode 20)
+
+---
+
 # v1.6.1 — Seviye Detayı & Liderlik Düzeni
 
 ## ✨ Yeni

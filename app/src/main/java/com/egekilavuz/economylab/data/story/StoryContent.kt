@@ -1260,8 +1260,56 @@ val STORY_EVENTS: List<StoryEvent> = listOf(
     )
 )
 
-/** Verilen gün için koşulu tutan ilk olayı döndürür. */
-fun eventForDay(day: Int, state: StoryState): StoryEvent? =
-    STORY_EVENTS.firstOrNull { it.day == day && it.condition(state) }
+/** Verilen gün için aday olaylar (günün senaryosu + aralığa uyan genel senaryolar). */
+fun eventsForDay(day: Int, state: StoryState): List<StoryEvent> {
+    val scripted = STORY_EVENTS.filter { it.day == day && it.condition(state) }
+    val generic = (GENERIC_SCENARIOS + EXTRA_SCENARIOS)
+        .filter { day in it.dayRange && it.condition(state) }
+    return scripted + generic
+}
+
+/** Bir olayın tekrar kontrolünde kullanılan benzersiz anahtar. */
+fun eventKey(event: StoryEvent): String =
+    event.id.ifBlank { "${event.day}:${event.title}" }
+
+/** İlk oyunda her zaman gösterilen, hikâyenin omurgası olan günler. */
+private val ANCHOR_DAYS = setOf(1, 2, 3, 10, 12, 13, 19, 20, 27, 30)
+
+/**
+ * Günün olayını seçer.
+ *
+ * - Aynı oyunda veya aynı takvim gününde görülen senaryolar mümkünse atlanır.
+ * - Hikâye günleri (kira, dolandırıcılık, final vb.) ilk oyunda korunur;
+ *   aynı gün tekrar oynanırsa yerine görülmemiş bir genel senaryo seçilir.
+ * - Diğer günlerde günün senaryosu ile genel senaryolar arasında ~yarı yarıya seçim yapılır.
+ */
+fun eventForDay(day: Int, state: StoryState): StoryEvent? {
+    val candidates = eventsForDay(day, state)
+    if (candidates.isEmpty()) return null
+
+    val scripted = candidates.filter { it.day == day }
+    val generic = candidates.filter { it.day == 0 }
+
+    val unseenScripted = scripted.filter { eventKey(it) !in state.seenScenarios }
+    val unseenGeneric = generic.filter { eventKey(it) !in state.seenScenarios }
+
+    val rng = StoryRandom(state.seed + day * 7919 + state.seenScenarios.size * 131)
+
+    fun pick(list: List<StoryEvent>): StoryEvent = list[rng.nextInt(list.size)]
+
+    val chosen = when {
+        // Hikâye günü ve henüz görülmemişse onu koru
+        unseenScripted.any { day in ANCHOR_DAYS } -> pick(unseenScripted.filter { day in ANCHOR_DAYS })
+        unseenScripted.isNotEmpty() && unseenGeneric.isNotEmpty() ->
+            if (rng.next() < 0.5) pick(unseenScripted) else pick(unseenGeneric)
+        unseenScripted.isNotEmpty() -> pick(unseenScripted)
+        unseenGeneric.isNotEmpty() -> pick(unseenGeneric)
+        scripted.isNotEmpty() && generic.isNotEmpty() ->
+            if (rng.next() < 0.5) pick(scripted) else pick(generic)
+        scripted.isNotEmpty() -> pick(scripted)
+        else -> pick(generic)
+    }
+    return chosen.copy(day = day)
+}
 
 fun totalChapters(): Int = 30

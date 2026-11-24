@@ -11,6 +11,9 @@ import com.egekilavuz.economylab.data.Difficulty
 import com.egekilavuz.economylab.data.XpManager
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class StoryViewModel(app: Application) : AndroidViewModel(app) {
 
@@ -68,9 +71,21 @@ class StoryViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     private fun persist() {
-        prefs.edit().putString(KEY_STATE, json.encodeToString(state)).apply()
+        prefs.edit()
+            .putString(KEY_STATE, json.encodeToString(state))
+            .putStringSet(seenTodayKey(), state.seenScenarios.toSet())
+            .apply()
         hasSave = true
     }
+
+    /** Aynı takvim gününde görülen senaryoları hatırlamak için anahtar. */
+    private fun seenTodayKey(): String {
+        val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        return "seen_scenarios_$date"
+    }
+
+    private fun seenToday(): Set<String> =
+        prefs.getStringSet(seenTodayKey(), emptySet()) ?: emptySet()
 
     fun currentEvent(): StoryEvent? = eventForDay(state.day, state)
 
@@ -80,7 +95,7 @@ class StoryViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun startNewGame(difficulty: Difficulty) {
-        state = newStory(difficulty)
+        state = newStory(difficulty, alreadySeen = seenToday())
         screen = SCREEN_PLAY
         persist()
     }

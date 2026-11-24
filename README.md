@@ -5,7 +5,7 @@
     <img src="https://img.shields.io/badge/Kotlin-2.1.0-purple?logo=kotlin" alt="Kotlin" />
     <img src="https://img.shields.io/badge/Compose-BOM_2025.01-blue?logo=jetpackcompose" alt="Compose" />
     <img src="https://img.shields.io/badge/API-24%2B-brightgreen" alt="API" />
-    <img src="https://img.shields.io/badge/sürüm-1.6.1-orange" alt="Version" />
+    <img src="https://img.shields.io/badge/sürüm-1.6.2-orange" alt="Version" />
     <img src="https://img.shields.io/badge/license-MIT-lightgrey" alt="License" />
   </p>
 </div>
@@ -52,6 +52,8 @@ Türkiye'de yeni mezun bir gencin ilk maaş ayını 30 bölümde yaşa:
 - ⚡ **Hızlı mod** — Kısa metin + otomatik geçiş
 - 🔒 **Bilgi kilitleri** — Bazı seçenekler yeterli finans bilgisi veya nakit ister
 - 🔀 **Dallanan olaylar** — Borsa, taşınma, kira pazarlığı gibi seçimler sonraki bölümleri etkiler
+- 🎲 **56+ senaryo** — 30 hikâye günü + 26 genel senaryo; her oyunda farklı olaylar
+- 🔁 **Tekrar kontrolü** — Aynı oyunda ve aynı gün içinde görülen senaryolar tekrar öne çıkmaz
 - 📈 **Canlı ekonomi** — Portföy her gün değişir, kart borcuna haftalık faiz işler, rastgele ara olaylar çıkar
 - 🏁 **3 periyot** — 10. ve 20. günde özet ekranı; oyunu parça parça oynayabilirsin
 - 🏅 **Rozetler & XP** — Bölüm, hedef, seri ve rozetlerden anında XP

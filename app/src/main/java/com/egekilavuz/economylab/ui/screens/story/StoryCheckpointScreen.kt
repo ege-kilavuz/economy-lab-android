@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.egekilavuz.economylab.data.story.*
@@ -75,13 +76,10 @@ fun StoryCheckpointScreen(vm: StoryViewModel) {
             Column(modifier = Modifier.padding(14.dp)) {
                 SectionTitle("Bu periyotta")
                 Spacer(Modifier.height(10.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceAround
-                ) {
-                    SummaryStat("${summary.goals}/${summary.totalGoals}", "hedef")
-                    SummaryStat("${summary.xp}", "XP")
-                    SummaryStat("${summary.badges.size}", "rozet")
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    SummaryStat("${summary.goals}/${summary.totalGoals}", "hedef", Modifier.weight(1f))
+                    SummaryStat("${summary.xp}", "XP", Modifier.weight(1f))
+                    SummaryStat("${summary.badges.size}", "rozet", Modifier.weight(1f))
                 }
             }
         }
@@ -103,21 +101,62 @@ fun StoryCheckpointScreen(vm: StoryViewModel) {
                 Column(modifier = Modifier.padding(14.dp)) {
                     SectionTitle("Öne çıkan kararlar")
                     Spacer(Modifier.height(8.dp))
+
+                    // Hizalı sütun başlıkları
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            "GÜN",
+                            modifier = Modifier.width(48.dp),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text(
+                            "OLAY",
+                            modifier = Modifier.weight(1f),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text(
+                            "🎯",
+                            modifier = Modifier.width(22.dp),
+                            style = MaterialTheme.typography.labelSmall,
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                        )
+                    }
+                    HorizontalDivider(
+                        modifier = Modifier.padding(vertical = 4.dp),
+                        thickness = 0.5.dp,
+                        color = MaterialTheme.colorScheme.outline.copy(alpha = 0.25f)
+                    )
+
                     summary.entries.takeLast(4).forEach { entry ->
-                        Row(modifier = Modifier.padding(vertical = 3.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
                             Text(
                                 "Gün ${entry.day}",
+                                modifier = Modifier.width(48.dp),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.primary,
                                 fontWeight = FontWeight.Bold
                             )
-                            Spacer(Modifier.width(8.dp))
                             Text(
                                 entry.eventTitle,
+                                modifier = Modifier.weight(1f),
                                 style = MaterialTheme.typography.bodySmall,
-                                modifier = Modifier.weight(1f)
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
                             )
-                            if (entry.goalDone) Text("🎯", fontSize = 12.sp)
+                            Box(
+                                modifier = Modifier.width(22.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                if (entry.goalDone) Text("🎯", fontSize = 12.sp)
+                            }
                         }
                     }
                 }
@@ -167,8 +206,11 @@ fun StoryCheckpointScreen(vm: StoryViewModel) {
 }
 
 @Composable
-private fun SummaryStat(value: String, label: String) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+private fun SummaryStat(value: String, label: String, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Text(
             value,
             style = MaterialTheme.typography.titleLarge,

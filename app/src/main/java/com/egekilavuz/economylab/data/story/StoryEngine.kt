@@ -31,7 +31,8 @@ class StoryRandom(seed: Int) {
 
 fun newStory(
     difficulty: Difficulty = Difficulty.Normal,
-    seed: Int = Random.nextInt(1, 1_000_000)
+    seed: Int = Random.nextInt(1, 1_000_000),
+    alreadySeen: Set<String> = emptySet()
 ): StoryState {
     val stats = when (difficulty) {
         Difficulty.Easy -> StoryStats(
@@ -47,7 +48,13 @@ fun newStory(
             knowledge = 20, wellbeing = 50, risk = 20
         )
     }
-    val base = StoryState(day = 1, stats = stats, seed = seed, difficulty = difficulty)
+    val base = StoryState(
+        day = 1,
+        stats = stats,
+        seed = seed,
+        difficulty = difficulty,
+        seenScenarios = alreadySeen.toList()
+    )
     val event = eventForDay(1, base)
     return base.copy(goalText = goalForDay(base, event)?.text ?: "")
 }
@@ -230,7 +237,8 @@ fun applyChoice(state: StoryState, event: StoryEvent, choice: StoryChoice): Stor
         newBadges = unlocked,
         goalDone = goalDone,
         goalStreak = newStreak,
-        goalHits = newGoalHits
+        goalHits = newGoalHits,
+        seenScenarios = (state.seenScenarios + eventKey(event)).distinct()
     )
 }
 
