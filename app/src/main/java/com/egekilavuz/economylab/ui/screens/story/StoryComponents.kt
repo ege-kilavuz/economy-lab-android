@@ -1,5 +1,8 @@
 package com.egekilavuz.economylab.ui.screens.story
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -9,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -76,8 +80,13 @@ fun StoryGauge(
             )
         }
         Spacer(Modifier.height(3.dp))
+        val animated by animateFloatAsState(
+            targetValue = (value.coerceIn(0, 100)) / 100f,
+            animationSpec = tween(450),
+            label = "storyGauge"
+        )
         LinearProgressIndicator(
-            progress = { (value.coerceIn(0, 100)) / 100f },
+            progress = { animated },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(6.dp)
@@ -105,7 +114,27 @@ fun StoryStatsPanel(state: StoryState) {
             ) {
                 MoneyCell("Nakit", formatNumber(stats.cash), cashColor(), Modifier.weight(1f))
                 MoneyCell("Kart Borcu", formatNumber(stats.debt), debtColor(), Modifier.weight(1f))
-                MoneyCell("Yatırım", formatNumber(stats.invested), MaterialTheme.colorScheme.primary, Modifier.weight(1f))
+                MoneyCell(
+                    "Yatırım",
+                    formatNumber(investmentValue(state)),
+                    MaterialTheme.colorScheme.primary,
+                    Modifier.weight(1f)
+                )
+            }
+            if (stats.invested > 0) {
+                Spacer(Modifier.height(4.dp))
+                val delta = state.portfolioDelta
+                val deltaText = if (delta == 0) {
+                    "Portföy bugün değişmedi"
+                } else {
+                    "Portföy bugün ${if (delta > 0) "+" else "-"}${formatNumber(kotlin.math.abs(delta))} TL"
+                }
+                Text(
+                    text = "$deltaText · Maliyet ${formatNumber(stats.invested)} TL",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = if (delta > 0) cashColor() else if (delta < 0) debtColor()
+                    else MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
             Spacer(Modifier.height(12.dp))
             StoryGauge("💡", "Bilgi", stats.knowledge, knowledgeColor())
@@ -147,6 +176,7 @@ fun MarketTicker(market: MarketState) {
         MarketPill("📈 Enflasyon", formatPct(market.inflation))
         MarketPill("💵 Dolar", String.format(Locale.US, "%.2f", market.usd))
         MarketPill("🥇 Gram altın", formatNumber(market.gold))
+        MarketPill("📊 Borsa", formatNumber(market.stockIndex.toInt()))
         MarketPill("🏦 Faiz", formatPct(market.policyRate))
     }
 }
@@ -328,4 +358,100 @@ fun SectionTitle(text: String) {
         style = MaterialTheme.typography.titleSmall,
         fontWeight = FontWeight.Bold
     )
+}
+
+// ─────────────────────────────────────────────────────────────
+//  Ödül / hedef / bildirim bileşenleri
+// ─────────────────────────────────────────────────────────────
+
+@Composable
+fun GoalBanner(goalText: String, done: Boolean, streak: Int) {
+    if (goalText.isBlank()) return
+    Surface(
+        shape = RoundedCornerShape(14.dp),
+        color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.10f),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(if (done) "✅" else "🎯", fontSize = 18.sp)
+            Spacer(Modifier.width(8.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    "Günün hedefi",
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.tertiary
+                )
+                Text(goalText, style = MaterialTheme.typography.bodySmall)
+            }
+            if (streak > 0) {
+                Text(
+                    "🔥 $streak",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.tertiary
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun NoticeBanner(text: String) {
+    Surface(
+        shape = RoundedCornerShape(14.dp),
+        color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.10f),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
+            Text("📌", fontSize = 16.sp)
+            Spacer(Modifier.width(8.dp))
+            Text(text, style = MaterialTheme.typography.bodySmall)
+        }
+    }
+}
+
+@Composable
+fun XpGainChip(xp: Int) {
+    if (xp <= 0) return
+    Surface(
+        shape = RoundedCornerShape(20.dp),
+        color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.16f)
+    ) {
+        Text(
+            "+$xp XP",
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.secondary,
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+        )
+    }
+}
+
+@Composable
+fun BadgeRow(ids: List<String>) {
+    val badges = ids.mapNotNull { badgeById(it) }
+    if (badges.isEmpty()) return
+    Row(
+        modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+        horizontalArrangement = Arrangement.spacedBy(6.dp)
+    ) {
+        badges.forEach { badge ->
+            Surface(
+                shape = RoundedCornerShape(20.dp),
+                color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.16f)
+            ) {
+                Text(
+                    "${badge.emoji} ${badge.title}",
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.tertiary,
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                )
+            }
+        }
+    }
 }

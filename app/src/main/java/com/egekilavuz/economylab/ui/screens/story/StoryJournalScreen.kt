@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.egekilavuz.economylab.data.story.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -78,7 +79,10 @@ private fun JournalCard(entry: StoryLogEntry) {
         )
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Surface(
                     shape = RoundedCornerShape(8.dp),
                     color = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
@@ -95,8 +99,21 @@ private fun JournalCard(entry: StoryLogEntry) {
                 Text(
                     entry.eventTitle,
                     style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    modifier = Modifier.weight(1f)
                 )
+                Spacer(Modifier.width(6.dp))
+                if (entry.goalDone) Text("🎯", fontSize = 12.sp)
+                Spacer(Modifier.width(6.dp))
+                if (entry.xp > 0) {
+                    Text(
+                        "+${entry.xp} XP",
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                }
             }
             Spacer(Modifier.height(6.dp))
             Text(

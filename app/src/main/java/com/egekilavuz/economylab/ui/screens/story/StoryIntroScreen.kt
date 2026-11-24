@@ -85,8 +85,11 @@ fun StoryIntroScreen(vm: StoryViewModel) {
                 IntroBullet("📅", "30 bölüm", "Her gün tek bir olayla karşılaşırsın.")
                 IntroBullet("🧭", "Seçim mekaniği", "2-4 seçenekten birini seçersin; her seçim farklı sonuç doğurur.")
                 IntroBullet("📊", "6 gösterge", "Nakit, kart borcu, yatırım, bilgi, refah ve risk.")
+                IntroBullet("🎯", "Günün hedefi", "Her bölümde bir mikro hedef var; tutturan XP kazanır ve seri yapar.")
+                IntroBullet("📈", "Canlı ekonomi", "Portföyün her gün değişir; kart borcuna haftalık faiz işler.")
+                IntroBullet("🏁", "3 periyot", "10. ve 20. günde özet ekranı; oyunu parça parça oynayabilirsin.")
+                IntroBullet("⚡", "Hızlı mod", "Kısa metin ve otomatik geçişle daha hızlı oyna.")
                 IntroBullet("🔒", "Bilgi kilitleri", "Bazı seçenekler yeterli finans bilgisi veya nakitle açılır.")
-                IntroBullet("🏁", "Ay sonu", "Puan, arketip ve finansal bilanço ile ayı kapatırsın.")
             }
         }
 

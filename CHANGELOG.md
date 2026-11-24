@@ -1,3 +1,33 @@
+# v1.6.0 — Ritim & Canlı Ekonomi
+
+## 🎯 Ödül döngüsü
+- **Bölüm başına XP**: her karar +5 XP, günün hedefi +10, 3’lü seri +15, rozet +20
+- **Günün hedefi**: her bölümde en az bir seçenekle tutturulabilen mikro hedef
+- **Oyun içi rozetler**: İlk Yatırım, Tetikte, Acil Fon, Bilgi Avcısı, Borçsuz, Sigortalı, Seri Karar
+- **Periyot özetleri**: 10. ve 20. günde özet ekranı + 25 XP bonusu
+- XP çubuğu artık oyun sırasında anında güncelleniyor
+
+## 📈 Canlı ekonomi
+- **Günlük portföy değeri**: yatırım tercihine göre (altın/döviz/borsa/kripto) her gün değişir
+- **Haftalık kart faizi**: 7/14/21/28. günlerde borca %1,2 faiz işler
+- **Rastgele ara olaylar**: prim, ceza, ikinci el satışı, beklenmedik masraf
+- Piyasa şeridine borsa endeksi eklendi
+
+## 🎭 Sonuçlar
+- **Çoklu final**: Borç Sarmalı, Pahalı Bir Ders, Yatırımcı, Kariyer Basamağı, Sağlam Temel, Dengeli Hayat, Yolun Başı
+- Ay sonu ekranında final hikâyesi, toplam XP, hedef ve rozet özeti
+
+## ⚡ Tempo
+- **Hızlı mod**: kısa metin, gizlenebilir ekonomi notu ve otomatik geçiş (duraklatılabilir)
+- Seçimlerde tık sesi ve haptik geri bildirim
+- Stat barları animasyonlu
+
+## 🧪 Teknik
+- 28 birim testi (hedef, rozet, faiz, portföy, final, XP)
+- Sürüm 1.6.0 (versionCode 18)
+
+---
+
 # v1.5.0 — 30 Gün: İlk Maaş (Oyun baştan yazıldı)
 
 ## 🎮 Yeni Oyun Modu

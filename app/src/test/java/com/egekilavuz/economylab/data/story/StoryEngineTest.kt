@@ -251,4 +251,82 @@ class StoryEngineTest {
         assertEquals(0, result.stats.debt)
         assertEquals(0, result.stats.cash)
     }
+
+    // ── Hedefler / rozetler / canlı ekonomi ──
+
+    @Test
+    fun goalForDay_isAchievableEveryDay() {
+        for (day in 1..totalChapters()) {
+            val state = newStory(Difficulty.Normal, seed = 100 + day).copy(day = day)
+            val event = eventForDay(day, state)!!
+            val goal = goalForDay(state, event)
+            assertNotNull("Gün $day için hedef yok", goal)
+            val affordable = event.choices.filter { canAffordChoice(state, it) }
+            val achievable = affordable.any { goal!!.check(state, previewStats(state, it), it) }
+            assertTrue("Gün $day hedefi hiçbir seçenekle tutmuyor", achievable)
+        }
+    }
+
+    @Test
+    fun choiceAwardsXp() {
+        val state = newStory(Difficulty.Normal, seed = 3)
+        val event = eventForDay(1, state)!!
+        val result = applyChoice(state, event, event.choices.first { it.id == "d1-debt" })
+        assertTrue(result.lastXpGain >= 5)
+        assertEquals(result.lastXpGain, result.log.last().xp)
+        assertEquals(result.lastXpGain, result.totalXp)
+    }
+
+    @Test
+    fun weeklyInterestIsApplied() {
+        val state = newStory(Difficulty.Normal, seed = 1).copy(
+            day = 6,
+            stats = StoryStats(cash = 20_000, debt = 10_000)
+        ).copy(pendingResult = StoryLogEntry(6, "test", "test", "test"))
+        val next = advanceDay(state)
+        assertEquals(7, next.day)
+        assertTrue(next.stats.debt > 10_000)
+        assertNotNull(next.notice)
+    }
+
+    @Test
+    fun portfolioMovesDaily() {
+        val state = newStory(Difficulty.Normal, seed = 3).copy(
+            day = 5,
+            stats = StoryStats(cash = 10_000, invested = 10_000, portfolioValue = 10_000),
+            flags = setOf("investor", "gold")
+        )
+        val market = nextMarket(state.market, state.seed, 6)
+        val value = nextPortfolio(state, market)
+        assertTrue(value > 0)
+    }
+
+    @Test
+    fun badgesUnlockFromStats() {
+        val state = newStory(Difficulty.Normal, seed = 2).copy(
+            day = 12,
+            stats = StoryStats(knowledge = 65, invested = 1_000, portfolioValue = 1_000, debt = 0)
+        )
+        val ids = evaluateBadges(state)
+        assertTrue(ids.contains("knowledge"))
+        assertTrue(ids.contains("first-invest"))
+        assertTrue(ids.contains("debt-free"))
+    }
+
+    @Test
+    fun endingReflectsDebt() {
+        val state = newStory(Difficulty.Normal, seed = 1)
+            .copy(stats = StoryStats(debt = 40_000))
+        assertEquals("debt-spiral", endingFor(state).id)
+    }
+
+    @Test
+    fun actSummaryAggregates() {
+        val state = newStory(Difficulty.Normal, seed = 3)
+        val event = eventForDay(1, state)!!
+        val after = applyChoice(state, event, event.choices.first())
+        val summary = actSummaryFor(after, 1)
+        assertEquals(1, summary.entries.size)
+        assertTrue(summary.xp > 0)
+    }
 }

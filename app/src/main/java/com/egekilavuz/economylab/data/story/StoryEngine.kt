@@ -34,32 +34,26 @@ fun newStory(
     seed: Int = Random.nextInt(1, 1_000_000)
 ): StoryState {
     val stats = when (difficulty) {
-        // Kolay: borçsuz, daha yüksek bilgi ve refah
         Difficulty.Easy -> StoryStats(
-            cash = 44_000, debt = 0, invested = 0,
+            cash = 44_000, debt = 0, invested = 0, portfolioValue = 0,
             knowledge = 30, wellbeing = 60, risk = 10
         )
-        // Normal: öğrencilikten kalan küçük bir kart borcu
         Difficulty.Normal -> StoryStats(
-            cash = 40_000, debt = 4_000, invested = 0,
+            cash = 40_000, debt = 4_000, invested = 0, portfolioValue = 0,
             knowledge = 25, wellbeing = 55, risk = 15
         )
-        // Zor: daha az nakit, daha yüksek borç, daha düşük bilgi
         Difficulty.Hard -> StoryStats(
-            cash = 36_000, debt = 8_000, invested = 0,
+            cash = 36_000, debt = 8_000, invested = 0, portfolioValue = 0,
             knowledge = 20, wellbeing = 50, risk = 20
         )
     }
-    return StoryState(
-        day = 1,
-        stats = stats,
-        seed = seed,
-        difficulty = difficulty
-    )
+    val base = StoryState(day = 1, stats = stats, seed = seed, difficulty = difficulty)
+    val event = eventForDay(1, base)
+    return base.copy(goalText = goalForDay(base, event)?.text ?: "")
 }
 
 // ─────────────────────────────────────────────────────────────
-//  Seçim uygulama
+//  Nakit / yatırım hesapları
 // ─────────────────────────────────────────────────────────────
 
 fun requirementMet(state: StoryState, requirement: ChoiceRequirement?): Boolean {
@@ -71,11 +65,27 @@ fun requirementMet(state: StoryState, requirement: ChoiceRequirement?): Boolean 
     return true
 }
 
+/** Portföyün güncel değeri (eski kayıtlar için yatırım tutarına düşer). */
+fun portfolioOf(state: StoryState): Int {
+    val value = state.stats.portfolioValue
+    if (value > 0) return value
+    return state.stats.invested.coerceAtLeast(0)
+}
+
+private fun cashFromDivest(state: StoryState, effect: ChoiceEffect): Int {
+    val old = state.stats
+    val divested = effect.divest.coerceIn(0, old.invested)
+    if (divested <= 0) return 0
+    if (old.invested <= 0) return 0
+    val portfolio = portfolioOf(state)
+    return (divested.toLong() * portfolio / old.invested).toInt().coerceAtLeast(0)
+}
+
 /** Seçimin anında gerektirdiği net nakit (yatırım satışı düşülerek). */
 fun requiredCash(state: StoryState, choice: StoryChoice): Int {
     val effect = choice.effect
-    val divested = effect.divest.coerceIn(0, state.stats.invested)
-    val outflow = effect.invest - divested - effect.cash
+    val cashIn = cashFromDivest(state, effect)
+    val outflow = effect.invest - cashIn - effect.cash
     return outflow.coerceAtLeast(0)
 }
 
@@ -92,18 +102,28 @@ fun lockReasonFor(state: StoryState, choice: StoryChoice): String? = when {
     else -> null
 }
 
-fun applyChoice(state: StoryState, event: StoryEvent, choice: StoryChoice): StoryState {
-    if (!requirementMet(state, choice.requires)) return state
-    if (state.pendingResult != null || state.finished) return state
+// ─────────────────────────────────────────────────────────────
+//  Seçim önizlemesi / uygulaması
+// ─────────────────────────────────────────────────────────────
 
+private data class AppliedStats(
+    val stats: StoryStats,
+    val overflowDebt: Int,
+    val cashFromDivest: Int,
+    val investedAdded: Int,
+    val divestedCost: Int
+)
+
+private fun computeStats(state: StoryState, choice: StoryChoice): AppliedStats {
     val old = state.stats
     val effect = choice.effect
 
     var cashDelta = effect.cash
     var debtDelta = effect.debt
 
-    val divested = effect.divest.coerceIn(0, old.invested)
-    cashDelta += divested
+    val divestedCost = effect.divest.coerceIn(0, old.invested)
+    val cashIn = cashFromDivest(state, effect)
+    cashDelta += cashIn
 
     // Yatırım, elde olandan fazlaysa borca düşülmez; yalnızca karşılanabilen kısım yatırılır.
     val investedAdded = effect.invest
@@ -119,33 +139,73 @@ fun applyChoice(state: StoryState, event: StoryEvent, choice: StoryChoice): Stor
     }
 
     val newDebt = (old.debt + debtDelta + overflowDebt).coerceAtLeast(0)
-    val newInvested = old.invested - divested + investedAdded
-    val newKnowledge = clampInt(old.knowledge + effect.knowledge, 0, 100)
-    val newWellbeing = clampInt(old.wellbeing + effect.wellbeing, 0, 100)
-    val newRisk = clampInt(old.risk + effect.risk, 0, 100)
+    val oldPortfolio = portfolioOf(state)
+    val newInvested = (old.invested - divestedCost + investedAdded).coerceAtLeast(0)
+    val newPortfolio = (oldPortfolio - cashIn + investedAdded).coerceAtLeast(0)
 
-    val newStats = old.copy(
-        cash = newCash,
-        debt = newDebt,
-        invested = newInvested,
-        knowledge = newKnowledge,
-        wellbeing = newWellbeing,
-        risk = newRisk
+    return AppliedStats(
+        stats = old.copy(
+            cash = newCash,
+            debt = newDebt,
+            invested = newInvested,
+            portfolioValue = newPortfolio,
+            knowledge = clampInt(old.knowledge + effect.knowledge, 0, 100),
+            wellbeing = clampInt(old.wellbeing + effect.wellbeing, 0, 100),
+            risk = clampInt(old.risk + effect.risk, 0, 100)
+        ),
+        overflowDebt = overflowDebt,
+        cashFromDivest = cashIn,
+        investedAdded = investedAdded,
+        divestedCost = divestedCost
     )
+}
+
+/** Sadece istatistik sonucunu döndürür (hedef kontrolü için). */
+fun previewStats(state: StoryState, choice: StoryChoice): StoryStats =
+    computeStats(state, choice).stats
+
+fun applyChoice(state: StoryState, event: StoryEvent, choice: StoryChoice): StoryState {
+    if (!requirementMet(state, choice.requires)) return state
+    if (state.pendingResult != null || state.finished) return state
+
+    val old = state.stats
+    val applied = computeStats(state, choice)
+    val newStats = applied.stats
+
+    var flags = state.flags
+    if (choice.effect.setFlags.isNotEmpty()) flags = flags + choice.effect.setFlags
+    if (choice.effect.clearFlags.isNotEmpty()) flags = flags - choice.effect.clearFlags.toSet()
+
+    // ── Günün hedefi ──
+    val goal = goalForDay(state, event)
+    val goalDone = goal?.check(state, newStats, choice) == true
+    val newStreak = if (goalDone) state.goalStreak + 1 else 0
+    val newGoalHits = state.goalHits + if (goalDone) 1 else 0
+    val goalXp = if (goalDone) (goal?.rewardXp ?: 0) else 0
+    val streakXp = if (goalDone && newStreak > 0 && newStreak % 3 == 0) 15 else 0
+
+    // ── Rozetler ──
+    val badgeState = state.copy(stats = newStats, flags = flags, goalStreak = newStreak)
+    val unlocked = evaluateBadges(badgeState).filter { it !in state.earnedBadges }
+    val badgeXp = unlocked.size * 20
+
+    val xpGain = 5 + goalXp + streakXp + badgeXp
+    val newBadges = state.earnedBadges + unlocked
 
     val deltas = buildList {
-        if (newCash != old.cash) add(StatDelta("Nakit", newCash - old.cash, money = true))
-        if (newDebt != old.debt) add(StatDelta("Kart borcu", newDebt - old.debt, money = true))
-        if (newInvested != old.invested) add(StatDelta("Yatırım", newInvested - old.invested, money = true))
-        if (newKnowledge != old.knowledge) add(StatDelta("Bilgi", newKnowledge - old.knowledge))
-        if (newWellbeing != old.wellbeing) add(StatDelta("Refah", newWellbeing - old.wellbeing))
-        if (newRisk != old.risk) add(StatDelta("Risk", newRisk - old.risk))
+        if (newStats.cash != old.cash) add(StatDelta("Nakit", newStats.cash - old.cash, money = true))
+        if (newStats.debt != old.debt) add(StatDelta("Kart borcu", newStats.debt - old.debt, money = true))
+        if (newStats.invested != old.invested) add(StatDelta("Yatırım", newStats.invested - old.invested, money = true))
+        if (newStats.knowledge != old.knowledge) add(StatDelta("Bilgi", newStats.knowledge - old.knowledge))
+        if (newStats.wellbeing != old.wellbeing) add(StatDelta("Refah", newStats.wellbeing - old.wellbeing))
+        if (newStats.risk != old.risk) add(StatDelta("Risk", newStats.risk - old.risk))
     }
 
-    val resultText = if (overflowDebt > 0) {
-        choice.result + " (Eksik kalan ${formatTL(overflowDebt)} karta yazıldı.)"
-    } else {
-        choice.result
+    val resultText = buildString {
+        append(choice.result)
+        if (applied.overflowDebt > 0) {
+            append(" (Eksik kalan ${formatTL(applied.overflowDebt)} karta yazıldı.)")
+        }
     }
 
     val entry = StoryLogEntry(
@@ -154,37 +214,89 @@ fun applyChoice(state: StoryState, event: StoryEvent, choice: StoryChoice): Stor
         choiceLabel = choice.label,
         result = resultText,
         deltas = deltas,
-        lesson = event.lesson
+        lesson = event.lesson,
+        xp = xpGain,
+        goalDone = goalDone
     )
-
-    var flags = state.flags
-    if (effect.setFlags.isNotEmpty()) flags = flags + effect.setFlags
-    if (effect.clearFlags.isNotEmpty()) flags = flags - effect.clearFlags.toSet()
 
     return state.copy(
         stats = newStats,
         flags = flags,
         log = state.log + entry,
-        pendingResult = entry
+        pendingResult = entry,
+        lastXpGain = xpGain,
+        totalXp = state.totalXp + xpGain,
+        earnedBadges = newBadges,
+        newBadges = unlocked,
+        goalDone = goalDone,
+        goalStreak = newStreak,
+        goalHits = newGoalHits
     )
 }
 
 // ─────────────────────────────────────────────────────────────
-//  Gün ilerletme
+//  Gün ilerletme + canlı ekonomi
 // ─────────────────────────────────────────────────────────────
 
 fun advanceDay(state: StoryState): StoryState {
     if (state.finished) return state
-    if (state.pendingResult == null) return state // önce seçim yapılmalı
+    if (state.pendingResult == null) return state
     if (state.day >= totalChapters()) {
-        return state.copy(finished = true, pendingResult = null)
+        return state.copy(finished = true, pendingResult = null, checkpointAct = 0)
     }
+
     val nextDay = state.day + 1
-    return state.copy(
+    val newMarket = nextMarket(state.market, state.seed, nextDay)
+    val oldPortfolio = portfolioOf(state)
+    val newPortfolio = nextPortfolio(state, newMarket)
+
+    var stats = state.stats.copy(portfolioValue = newPortfolio)
+    var notice: String? = null
+
+    // Haftalık kart faizi (7, 14, 21, 28. günler)
+    if (nextDay % 7 == 0 && stats.debt > 0) {
+        val interest = (stats.debt * 0.012).roundToInt().coerceAtLeast(25)
+        stats = stats.copy(debt = stats.debt + interest)
+        notice = "💳 Kart faizi işledi: +${formatTL(interest)} borç (haftalık %1,2)"
+    }
+
+    // Rastgele ara olay
+    val rng = StoryRandom(state.seed + nextDay * 3571)
+    if (rng.next() < 0.28) {
+        val event = RANDOM_EVENTS[rng.nextInt(RANDOM_EVENTS.size)]
+        if (event.cash < 0) {
+            val remaining = stats.cash + event.cash
+            stats = if (remaining >= 0) {
+                stats.copy(cash = remaining)
+            } else {
+                stats.copy(cash = 0, debt = stats.debt - remaining)
+            }
+        } else {
+            stats = stats.copy(cash = stats.cash + event.cash)
+        }
+        stats = stats.copy(wellbeing = clampInt(stats.wellbeing + event.wellbeing, 0, 100))
+        val line = "🎲 ${event.text}"
+        notice = if (notice == null) line else "$notice\n$line"
+    }
+
+    var next = state.copy(
         day = nextDay,
         pendingResult = null,
-        market = nextMarket(state.market, state.seed, nextDay)
+        market = newMarket,
+        stats = stats,
+        portfolioDelta = newPortfolio - oldPortfolio,
+        lastXpGain = 0,
+        newBadges = emptyList(),
+        checkpointAct = 0,
+        notice = notice
     )
+
+    val event = eventForDay(nextDay, next)
+    next = next.copy(
+        goalText = goalForDay(next, event)?.text ?: "",
+        goalDone = false
+    )
+    return next
 }
 
 fun nextMarket(current: MarketState, seed: Int, day: Int): MarketState {
@@ -192,27 +304,51 @@ fun nextMarket(current: MarketState, seed: Int, day: Int): MarketState {
     val inflation = (current.inflation + rng.nextBetween(-0.25, 0.85)).coerceIn(15.0, 95.0)
     val usd = (current.usd * (1.0 + rng.nextBetween(-0.004, 0.013))).coerceIn(20.0, 150.0)
     val gold = (current.gold * (1.0 + rng.nextBetween(-0.006, 0.016))).toInt().coerceAtLeast(500)
+    val stockIndex = (current.stockIndex * (1.0 + rng.nextBetween(-0.014, 0.016))).coerceIn(10.0, 10_000.0)
     val btc = (current.btc * (1.0 + rng.nextBetween(-0.035, 0.040))).toInt().coerceAtLeast(100_000)
     return MarketState(
         inflation = (inflation * 10).roundToInt() / 10.0,
         usd = (usd * 100).roundToInt() / 100.0,
         gold = gold,
+        stockIndex = (stockIndex * 100).roundToInt() / 100.0,
         policyRate = current.policyRate,
         btc = btc
     )
+}
+
+/** Portföyün bir sonraki günkü değeri; oyuncunun yatırım tercihlerine göre ağırlıklandırılır. */
+fun nextPortfolio(state: StoryState, newMarket: MarketState): Int {
+    val value = portfolioOf(state)
+    if (value <= 0) return 0
+
+    val old = state.market
+    fun change(newValue: Double, oldValue: Double): Double =
+        if (oldValue <= 0.0) 0.0 else (newValue - oldValue) / oldValue
+
+    val goldReturn = change(newMarket.gold.toDouble(), old.gold.toDouble())
+    val usdReturn = change(newMarket.usd, old.usd)
+    val stockReturn = change(newMarket.stockIndex, old.stockIndex)
+    val btcReturn = change(newMarket.btc.toDouble(), old.btc.toDouble())
+
+    // gold, usd, stock, btc ağırlıkları
+    val weights = when {
+        "crypto" in state.flags -> listOf(0.15, 0.15, 0.15, 0.55)
+        "stocks" in state.flags -> listOf(0.20, 0.15, 0.50, 0.15)
+        "gold" in state.flags -> listOf(0.55, 0.20, 0.15, 0.10)
+        else -> listOf(0.35, 0.30, 0.20, 0.15)
+    }
+
+    val dailyReturn = (goldReturn * weights[0] + usdReturn * weights[1] +
+            stockReturn * weights[2] + btcReturn * weights[3]).coerceIn(-0.10, 0.12)
+
+    return (value * (1.0 + dailyReturn)).roundToInt().coerceAtLeast(1)
 }
 
 // ─────────────────────────────────────────────────────────────
 //  Sonuç: yatırım getirisi, puan, arketip
 // ─────────────────────────────────────────────────────────────
 
-/** Ay sonunda yatırımın ulaştığı değer (deterministik, oyuna göre değişir). */
-fun investmentValue(state: StoryState): Int {
-    if (state.stats.invested <= 0) return 0
-    val rng = StoryRandom(state.seed + 4242)
-    val factor = 0.85 + rng.next() * 0.35 // 0.85 - 1.20
-    return (state.stats.invested * factor).roundToInt()
-}
+fun investmentValue(state: StoryState): Int = portfolioOf(state)
 
 fun storyNetWorth(state: StoryState): Int =
     state.stats.cash + investmentValue(state) - state.stats.debt
@@ -238,19 +374,19 @@ fun archetypeFor(state: StoryState): StoryArchetype {
     return when {
         stats.debt >= 30_000 -> StoryArchetype(
             "🔗", "Borç Sarmalı",
-            "Ayı borçla kapattın. Yüksek faizli borç, gelecek ayların kararlarını senin yerine vermeye başlar; ilk iş borcu küçültmek olmalı."
+            "Ayı borçla kapattın. Yüksek faizli borç, gelecek ayların kararlarını senin yerine vermeye başlar."
         )
         storyScore(state) >= 80 -> StoryArchetype(
             "🏆", "Finansal Özgürlük",
-            "Nakit, bilgi, refah ve riski birlikte yönettin. Bu ay sadece para kazanmadın; parayı yönetmeyi öğrendin."
+            "Nakit, bilgi, refah ve riski birlikte yönettin. Bu ay parayı yönetmeyi öğrendin."
         )
         stats.debt >= 15_000 -> StoryArchetype(
             "😰", "Baskı Altında",
-            "Ayı bitirdin ama kart borcu omzunda kaldı. Borcun faizi, bir sonraki ayın en pahalı gideri olacak."
+            "Ayı bitirdin ama kart borcu omzunda kaldı. Borcun faizi gelecek ayın en pahalı gideri olacak."
         )
         stats.knowledge >= 65 && stats.risk <= 40 -> StoryArchetype(
             "🧠", "Bütçe Stratejisti",
-            "Kararlarını duygularla değil, bilgiyle verdin. Riskin farkında oldun ve planına sadık kaldın."
+            "Kararlarını duygularla değil bilgiyle verdin. Riskin farkında oldun ve planına sadık kaldın."
         )
         stats.debt == 0 && stats.cash >= 25_000 -> StoryArchetype(
             "🐷", "Tasarruf Ustası",
@@ -258,15 +394,15 @@ fun archetypeFor(state: StoryState): StoryArchetype {
         )
         stats.risk >= 60 -> StoryArchetype(
             "🎲", "Risk Avcısı",
-            "Cesur kararlar verdin. Bazıları kazandırdı, bazıları ders oldu; şimdi riski yönetmeyi öğrenme zamanı."
+            "Cesur kararlar verdin. Bazıları kazandırdı, bazıları ders oldu; şimdi riski yönetme zamanı."
         )
         stats.wellbeing >= 70 -> StoryArchetype(
             "🌿", "Dengeli Hayat",
-            "Parayı hayatın merkezine koymadın. Bütçe disiplini ile yaşam kalitesi arasında sağlıklı bir denge kurdun."
+            "Bütçe disiplini ile yaşam kalitesi arasında sağlıklı bir denge kurdun."
         )
         else -> StoryArchetype(
             "🌱", "Yolun Başı",
-            "İlk ayı tamamladın. Her karar bir deneyim; bir sonraki ay aynı hataları yapmadan daha ileri gideceksin."
+            "İlk ayı tamamladın. Bir sonraki ay aynı hataları yapmadan daha ileri gideceksin."
         )
     }
 }
@@ -278,8 +414,5 @@ fun scoreVerdict(score: Int): String = when {
     score >= 35 -> "Zorlu bir ay oldu ama öğrendiklerin gelecek ay işine yarayacak."
     else -> "Bu ay bütçe seni yönetti. Tekrar dene; her seferinde daha iyi olacaksın."
 }
-
-/** Zorluk bir çarpanla puanı etkilemez; zorluk yalnızca başlangıç koşullarını değiştirir. */
-fun storyDifficultyBonus(difficulty: Difficulty): Int = 0
 
 fun randomSeed(): Int = abs(Random.nextInt(1, 1_000_000))

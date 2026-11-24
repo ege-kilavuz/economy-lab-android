@@ -5,7 +5,7 @@
     <img src="https://img.shields.io/badge/Kotlin-2.1.0-purple?logo=kotlin" alt="Kotlin" />
     <img src="https://img.shields.io/badge/Compose-BOM_2025.01-blue?logo=jetpackcompose" alt="Compose" />
     <img src="https://img.shields.io/badge/API-24%2B-brightgreen" alt="API" />
-    <img src="https://img.shields.io/badge/sürüm-1.5.0-orange" alt="Version" />
+    <img src="https://img.shields.io/badge/sürüm-1.6.0-orange" alt="Version" />
     <img src="https://img.shields.io/badge/license-MIT-lightgrey" alt="License" />
   </p>
 </div>
@@ -48,10 +48,15 @@ Her kategoride: **içerik metinleri, QA kartları, taktik/ipuçları, videolar, 
 Türkiye'de yeni mezun bir gencin ilk maaş ayını 30 bölümde yaşa:
 - 📅 **30 bölüm** — Her gün bir olay, 2-4 seçim
 - 🧭 **Seçim mekaniği** — Kararlar Nakit, Kart Borcu, Yatırım, Bilgi, Refah ve Risk'i değiştirir
+- 🎯 **Günün hedefi** — Her bölümde mikro hedef; tutturan XP ve seri kazanır
+- ⚡ **Hızlı mod** — Kısa metin + otomatik geçiş
 - 🔒 **Bilgi kilitleri** — Bazı seçenekler yeterli finans bilgisi veya nakit ister
 - 🔀 **Dallanan olaylar** — Borsa, taşınma, kira pazarlığı gibi seçimler sonraki bölümleri etkiler
+- 📈 **Canlı ekonomi** — Portföy her gün değişir, kart borcuna haftalık faiz işler, rastgele ara olaylar çıkar
+- 🏁 **3 periyot** — 10. ve 20. günde özet ekranı; oyunu parça parça oynayabilirsin
+- 🏅 **Rozetler & XP** — Bölüm, hedef, seri ve rozetlerden anında XP
 - 📓 **Karar günlüğü** — Verdiğin her karar ve sonucu kayıt altında
-- 🏁 **Ay Sonu** — Puan, arketip, bilanço ve liderlik tablosu
+- 🎭 **Çoklu final** — Borç sarmalı, yatırımcı, kariyer, dengeli hayat ve daha fazlası
 
 ### 🏛️ Simülasyonlar (4 Adet)
 

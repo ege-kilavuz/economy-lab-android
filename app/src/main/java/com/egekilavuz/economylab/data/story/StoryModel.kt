@@ -14,6 +14,7 @@ data class StoryStats(
     val cash: Int = 40_000,
     val debt: Int = 4_000,
     val invested: Int = 0,
+    val portfolioValue: Int = 0,
     val knowledge: Int = 25,
     val wellbeing: Int = 55,
     val risk: Int = 15
@@ -24,6 +25,7 @@ data class MarketState(
     val inflation: Double = 38.4,
     val usd: Double = 42.60,
     val gold: Int = 4_350,
+    val stockIndex: Double = 100.0,
     val policyRate: Double = 39.50,
     val btc: Int = 2_850_000
 )
@@ -42,7 +44,9 @@ data class StoryLogEntry(
     val choiceLabel: String,
     val result: String,
     val deltas: List<StatDelta> = emptyList(),
-    val lesson: String? = null
+    val lesson: String? = null,
+    val xp: Int = 0,
+    val goalDone: Boolean = false
 )
 
 @Serializable
@@ -55,7 +59,21 @@ data class StoryState(
     val finished: Boolean = false,
     val seed: Int = 0,
     val difficulty: Difficulty = Difficulty.Normal,
-    val market: MarketState = MarketState()
+    val market: MarketState = MarketState(),
+    // ── Ödül ve ritim ──
+    val lastXpGain: Int = 0,
+    val totalXp: Int = 0,
+    val earnedBadges: List<String> = emptyList(),
+    val newBadges: List<String> = emptyList(),
+    val goalText: String = "",
+    val goalDone: Boolean = false,
+    val goalStreak: Int = 0,
+    val goalHits: Int = 0,
+    val claimedActs: List<Int> = emptyList(),
+    val checkpointAct: Int = 0,
+    // ── Canlı ekonomi ──
+    val portfolioDelta: Int = 0,
+    val notice: String? = null
 ) {
     val isResolved: Boolean get() = pendingResult != null
     val progress: Float get() = ((day - 1).coerceIn(0, 30)) / 30f

@@ -2,6 +2,9 @@ package com.egekilavuz.economylab.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import java.util.Calendar
 
 data class LevelInfo(val level: Int, val title: String, val xpRequired: Int)
@@ -36,6 +39,10 @@ class XpManager(context: Context) {
             LevelInfo(7, "Efsane 🏅", 4000),
             LevelInfo(8, "Efsanevi 🏆", 6000),
         )
+
+        /** XP değiştiğinde üstteki XP çubuğunun haberdar olması için. */
+        var revision by mutableStateOf(0)
+            private set
     }
 
     private val prefs: SharedPreferences = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
@@ -61,6 +68,7 @@ class XpManager(context: Context) {
         val newTotal = (oldTotal + amount).coerceAtMost(LEVELS.last().xpRequired + 9999)
         prefs.edit().putInt(KEY_TOTAL, newTotal).apply()
         updateStreak()
+        revision++
         return getSummary()
     }
 

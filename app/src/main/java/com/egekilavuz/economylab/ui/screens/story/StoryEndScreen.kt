@@ -29,6 +29,8 @@ fun StoryEndScreen(vm: StoryViewModel) {
     val state = vm.state
     val score = storyScore(state)
     val archetype = archetypeFor(state)
+    val ending = endingFor(state)
+    val runBadges = state.earnedBadges.mapNotNull { badgeById(it) }
     val invested = state.stats.invested
     val investedValue = investmentValue(state)
     val context = LocalContext.current
@@ -141,6 +143,88 @@ fun StoryEndScreen(vm: StoryViewModel) {
             }
 
             Spacer(Modifier.height(12.dp))
+
+            // ── Ayın hikâyesi (final) ──
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.10f)
+                )
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(ending.emoji, fontSize = 40.sp)
+                        Spacer(Modifier.width(12.dp))
+                        Column {
+                            Text(
+                                "AYIN HİKÂYESİ",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Text(
+                                ending.title,
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Black,
+                                color = MaterialTheme.colorScheme.tertiary
+                            )
+                            Text(
+                                ending.tagline,
+                                style = MaterialTheme.typography.bodySmall,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
+                    }
+                    Spacer(Modifier.height(10.dp))
+                    ending.paragraphs.forEach { paragraph ->
+                        Text(paragraph, style = MaterialTheme.typography.bodyMedium)
+                        Spacer(Modifier.height(6.dp))
+                    }
+                }
+            }
+
+            Spacer(Modifier.height(12.dp))
+
+            // ── Bu ayın özeti ──
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.55f)
+                )
+            ) {
+                Column(modifier = Modifier.padding(14.dp)) {
+                    SectionTitle("Bu ayın özeti")
+                    Spacer(Modifier.height(10.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceAround
+                    ) {
+                        EndSummaryStat("${state.totalXp}", "XP")
+                        EndSummaryStat("${state.goalHits}/${state.log.size}", "hedef")
+                        EndSummaryStat("${runBadges.size}", "rozet")
+                    }
+                }
+            }
+
+            Spacer(Modifier.height(12.dp))
+
+            if (runBadges.isNotEmpty()) {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.08f)
+                    )
+                ) {
+                    Column(modifier = Modifier.padding(14.dp)) {
+                        SectionTitle("Bu ay kazandığın rozetler")
+                        Spacer(Modifier.height(8.dp))
+                        BadgeRow(state.earnedBadges)
+                    }
+                }
+                Spacer(Modifier.height(12.dp))
+            }
 
             // ── Arketip ──
             Card(
@@ -288,7 +372,7 @@ fun StoryEndScreen(vm: StoryViewModel) {
                                 difficulty = difficultyLabel(state.difficulty),
                                 date = formatScoreDate(),
                                 achievements = unlocked.size,
-                                badge = archetype.emoji,
+                                badge = ending.emoji,
                                 xp = xpManager.getSummary().total,
                                 level = xpManager.getSummary().level,
                                 levelTitle = xpManager.getSummary().title
@@ -419,6 +503,23 @@ private fun EndChip(text: String, color: Color) {
             fontWeight = FontWeight.Bold,
             color = color,
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+        )
+    }
+}
+
+@Composable
+private fun EndSummaryStat(value: String, label: String) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            value,
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Black,
+            color = MaterialTheme.colorScheme.primary
+        )
+        Text(
+            label,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }

@@ -17,13 +17,9 @@ import com.egekilavuz.economylab.data.XpSummary
 
 @Composable
 fun XpBar(xpManager: XpManager) {
-    val summary = remember { xpManager.getSummary() }
-    var currentSummary by remember { mutableStateOf(summary) }
-
-    // Recompute on recomposition (when XP changes)
-    LaunchedEffect(Unit) {
-        currentSummary = xpManager.getSummary()
-    }
+    // global revision değişince yeniden okunur (oyun içi XP kazanımları dahil)
+    val revision = XpManager.revision
+    val currentSummary = remember(revision) { xpManager.getSummary() }
 
     val animatedProgress by animateFloatAsState(
         targetValue = currentSummary.progress,
